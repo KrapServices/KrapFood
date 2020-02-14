@@ -33,7 +33,15 @@ class Home extends Component {
     };
   }
 
-  renderSwitch = userType => {
+  componentDidMount = () => {
+    //mount and check  user Type
+  };
+
+  componentDidUpdate = () => {
+    //any update on user type
+  }
+
+  renderBody = userType => {
     switch (userType) {
       case 0:
         return <Message>Please log in to use our application</Message>;
@@ -42,16 +50,16 @@ class Home extends Component {
         return <Customer></Customer>;
         break;
       case 2:
-       return  <Rider></Rider>;
+        return <Rider></Rider>;
         break;
       case 3:
-       return  <Staff></Staff>;
+        return <Staff></Staff>;
         break;
       case 4:
         return <Manager></Manager>;
         break;
       default:
-       return  <p> an error has occured!</p>
+        return <p> an error has occured!</p>;
         break;
     }
   };
@@ -84,7 +92,7 @@ class Home extends Component {
               </Segment.Inline>
             </Segment>
           )}
-          {this.renderSwitch(userType)}
+          {this.renderBody(userType)}
         </Container>
       </div>
     );
