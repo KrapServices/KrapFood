@@ -27,14 +27,15 @@ class App extends React.Component {
 
     const value = {
       user: this.state.user,
-      logoutUser: this.logout
+      logoutUser: this.logout,
+      test: "DASKUDHAHDIHKSAUHD"
     }
 
     return (
       <UserContext.Provider value={value}>
            <Switch>
         <Route exact path="/" render={props => <TopBar>
-          <Home></Home>
+          <Home ></Home>
         </TopBar>} />
         <Route exact path="/login" render={props => <Login></Login>} />
         <Route exact path="/sign-up" render={props => <Signup></Signup>} />
