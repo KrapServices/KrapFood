@@ -1,71 +1,63 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
-  Grid,
   Container,
-  Form,
   Segment,
   Header,
-  Image,
   Button,
   Message,
-  Loader
-} from "semantic-ui-react";
-import { Link, Switch } from "react-router-dom";
-import { userContext } from "../../../userContext";
-import Rider from "../rider_view/Rider";
-import Customer from "../customer_view/Customer";
-import Manager from "../manager_view/Manager";
-import Staff from "../staff_view/Staff";
+} from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
+import userContext from '../../../userContext';
+import Rider from '../rider_view/Rider';
+import Customer from '../customer_view/Customer';
+import Manager from '../manager_view/Manager';
+import Staff from '../staff_view/Staff';
 
 class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: {},
-      loading: false,
-      initialLoading: false,
-      userType: 0
+      // user: {},
+      // loading: false,
+      // initialLoading: false,
+      userType: 0,
       // 0 is no login
       // 1 is customer
       // 2 is rider
       // 3 is staff
       // 4 is manager
     };
+
+    this.renderBody = (userType) => {
+      switch (userType) {
+        case 0:
+          return <Message>Please log in to use our application</Message>;
+        case 1:
+          return <Customer />;
+        case 2:
+          return <Rider />;
+        case 3:
+          return <Staff />;
+        case 4:
+          return <Manager />;
+        default:
+          return <p> an error has occured!</p>;
+      }
+    };
   }
 
-  componentDidMount = () => {
-    //mount and check  user Type
-  };
-
-  componentDidUpdate = () => {
-    //any update on user type
+  componentDidMount() {
+    // mount and check  user Type
   }
 
-  renderBody = userType => {
-    switch (userType) {
-      case 0:
-        return <Message>Please log in to use our application</Message>;
-        break;
-      case 1:
-        return <Customer></Customer>;
-        break;
-      case 2:
-        return <Rider></Rider>;
-        break;
-      case 3:
-        return <Staff></Staff>;
-        break;
-      case 4:
-        return <Manager></Manager>;
-        break;
-      default:
-        return <p> an error has occured!</p>;
-        break;
-    }
-  };
+  componentDidUpdate() {
+    // any update on user type
+  }
 
   render() {
     const { userType } = this.state;
+    const { user, logout } = this.context;
+    const { email } = user;
 
     return (
       <div>
@@ -85,8 +77,12 @@ class Home extends Component {
           ) : (
             <Segment>
               <Segment.Inline>
-                <Header>Welcome! {this.context.user.email}</Header>
-                <Button primary onClick={this.context.logout}>
+                <Header>
+                  Welcome!
+                  {' '}
+                  {email}
+                </Header>
+                <Button primary onClick={logout}>
                   Log Out
                 </Button>
               </Segment.Inline>

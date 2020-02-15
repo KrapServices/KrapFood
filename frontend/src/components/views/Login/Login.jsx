@@ -1,63 +1,69 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
   Grid,
-  Container,
   Form,
   Segment,
   Header,
-  Image,
   Button,
   Message,
-  Icon
-} from "semantic-ui-react";
-import { userContext } from "../../../userContext";
-import { Link } from "react-router-dom";
+  Icon,
+} from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
+import userContext from '../../../userContext';
 
 class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: "",
-      password: "",
-      error: ""
+      email: '',
+      password: '',
+      error: '',
+    };
+
+    this.redirectHome = () => {
+      const { history } = this.props;
+      history.push('/');
+    };
+
+    this.handleChange = (event) => {
+      const { name, value } = event.target;
+      this.setState({
+        [name]: value,
+      });
+    };
+
+    this.handleSubmit = (event) => {
+      event.preventDefault();
+      // const { username, email, password } = this.state;
+
+      // const user = {
+      //   username,
+      //   email,
+      //   password,
+      // };
+
+      const { login } = this.context;
+
+      // call login here
+      login();
     };
   }
 
-  redirectHome = () => {
-    this.props.history.push("/");
-  };
-
-  handleChange = event => {
-    const { name, value } = event.target;
-    this.setState({
-      [name]: value
-    });
-  };
-
-  handleSubmit = event => {
-    event.preventDefault();
-    const { username, email, password } = this.state;
-
-    let user = {
-      username: username,
-      email: email,
-      password: password
-    };
-    //call login here
-    this.context.login();
-  };
   render() {
-    const { username, email, password } = this.state;
+    const {
+      email, password, error,
+    } = this.state;
     return (
       <div>
         <Grid
           textAlign="center"
-          style={{ height: "100vh" }}
+          style={{ height: '100vh' }}
           verticalAlign="middle"
         >
           <Grid.Column style={{ maxWidth: 450 }}>
             <Header as="h1" to="/">
-              <Icon name="road" size="large"></Icon>
+              <Icon name="road" size="large" />
               KrapFood
             </Header>
             <Header as="h2" color="teal" textAlign="center">
@@ -91,9 +97,9 @@ class Login extends Component {
               </Segment>
             </Form>
             <Message>
-              <Message.Header>new to us?</Message.Header>
+              <Message.Header>New to us?</Message.Header>
               <Message.Content>
-                <br></br>
+                <br />
                 <Button as={Link} color="red" to="/">
                   Back to Home
                 </Button>
@@ -102,13 +108,13 @@ class Login extends Component {
                 </Button>
               </Message.Content>
             </Message>
-            {this.state.error ? (
+            {error ? (
               <Message negative>
                 <Message.Header>We can't log you in:</Message.Header>
-                <p>{this.state.error}</p>
+                <p>{error}</p>
               </Message>
             ) : (
-              <span></span>
+              <span />
             )}
           </Grid.Column>
         </Grid>
@@ -118,4 +124,9 @@ class Login extends Component {
 }
 
 Login.contextType = userContext;
+
+Login.propTypes = {
+  history: PropTypes.arrayOf(PropTypes.string).isRequired,
+};
+
 export default Login;

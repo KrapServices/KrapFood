@@ -1,17 +1,19 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { userContext } from '../../../userContext';
+import React, { Component } from 'react';
+import userContext from '../../../userContext';
 
 class Manager extends Component {
+  constructor() {
+    super();
+    this.state = {};
+  }
 
-
-    render() {
-        return (
-            <React.Fragment>
-                <p>i am a Manager</p>
-            </React.Fragment>
-        )
-    }
+  render() {
+    return (
+      <>
+        <p>i am a Manager</p>
+      </>
+    );
+  }
 }
 
 Manager.contextType = userContext;
