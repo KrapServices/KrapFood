@@ -1,6 +1,6 @@
 ## Postgres database instructions
 
-## Setup database locally
+### Setup database locally
 
 Follow this link to set up your local databse. The guide assumes you installed postgres already.
 
