@@ -32,7 +32,6 @@ export default class TopBar extends Component {
             <Grid
               style={{
                 minHeight: 20,
-
                 backgroundColor: '#fc475f',
                 marginBottom: '1rem',
               }}
