@@ -1,23 +1,20 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import {
-  Button,
   Container,
   Grid,
   Header,
   Icon,
-  Image,
-  List,
   Menu,
   Responsive,
   Segment,
-  Sidebar,
-  Visibility
-} from "semantic-ui-react";
-import "./layout.css";
+  Visibility,
+} from 'semantic-ui-react';
+import './layout.css';
 
 const getWidth = () => {
-  const isSSR = typeof window === "undefined";
+  const isSSR = typeof window === 'undefined';
   return isSSR ? Responsive.onlyTablet.minWidth : window.innerWidth;
 };
 
@@ -31,34 +28,33 @@ export default class TopBar extends Component {
           getWidth={getWidth}
           minWidth={Responsive.onlyTablet.minWidth}
         >
-          <Visibility once={true} onBottomPassedReverse={this.hideFixedMenu}>
+          <Visibility once onBottomPassedReverse={this.hideFixedMenu}>
             <Grid
               style={{
                 minHeight: 20,
-
-                backgroundColor: "#fc475f",
-                marginBottom: "1rem"
+                backgroundColor: '#fc475f',
+                marginBottom: '1rem',
               }}
               columns={3}
               centered
             >
               <Grid.Row centered>
                 <Grid.Column textAlign="left" verticalAlign="bottom">
-                  <p style={{ marginLeft: "1em" }}>
-                    <Header as={Link} to ="/" >
-                      <Icon name="road"></Icon>
+                  <p style={{ marginLeft: '1em' }}>
+                    <Header as={Link} to="/">
+                      <Icon name="road" />
                       KrapFood
                     </Header>
                   </p>
                 </Grid.Column>
                 <Grid.Column textAlign="center">
-                  {" "}
+                  {' '}
                   <Menu
                     borderless
                     secondary
                     size="small"
                     compact
-                    style={{ marginleft: "auto", marginRight: "auto" }}
+                    style={{ marginleft: 'auto', marginRight: 'auto' }}
                   >
                     <Menu.Item as={Link} to="/" fitted>
                       Home
@@ -74,11 +70,15 @@ export default class TopBar extends Component {
           </Container>
           {/* footer */}
           <Segment
-            style={{ margin: "5em 0em 0em", padding: "5em 0em" }}
+            style={{ margin: '5em 0em 0em', padding: '5em 0em' }}
             vertical
-          ></Segment>
+          />
         </Responsive>
       </div>
     );
   }
 }
+
+TopBar.propTypes = {
+  children: PropTypes.node.isRequired,
+};

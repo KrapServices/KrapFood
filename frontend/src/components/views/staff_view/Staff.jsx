@@ -1,17 +1,19 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { userContext } from '../../../userContext';
+import React, { Component } from 'react';
+import userContext from '../../../userContext';
 
 class Staff extends Component {
+  constructor() {
+    super();
+    this.state = {};
+  }
 
-
-    render() {
-        return (
-            <React.Fragment>
-                <p>i am a Staff</p>
-            </React.Fragment>
-        )
-    }
+  render() {
+    return (
+      <>
+        <p>i am a Staff</p>
+      </>
+    );
+  }
 }
 
 Staff.contextType = userContext;
