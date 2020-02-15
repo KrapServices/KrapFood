@@ -1,52 +1,68 @@
-import React from "react";
-import logo from "./logo.svg";
-import "./jquery-loader";
-import "./App.css";
-import { Container, Header } from "semantic-ui-react";
-import { Switch, Route } from "react-router-dom";
-import TopBar from "./layout/TopBar";
-import Home from "./pages/Home";
-import Login from './pages/Login/Login';
-import Signup from "./pages/Login/Signup";
-import {UserContext} from './userContext';
+import React from 'react';
+import './jquery-loader';
+import './App.css';
+import { Loader } from 'semantic-ui-react';
+import { Switch, Route } from 'react-router-dom';
+import TopBar from './components/layout/TopBar';
+import Home from './components/views/home/Home';
+import Login from './components/views/Login/Login';
+import Signup from './components/views/Login/Signup';
+import userContext from './userContext';
 
 class App extends React.Component {
   constructor(props) {
-  super(props);
-  this.state = {
-    user: {}
-  };
-}
+    super(props);
+    this.state = {
+      user: {},
+    };
 
+    this.getLoggedInStatus = () => {
+      // TODO
+    };
 
-  logout = () => {
-    this.setState({user:{}});
+    this.signup = () => {
+      // TODO
+    };
+
+    this.login = () => {
+      // TODO
+    };
+
+    this.logout = () => {
+      console.log('DAAHSKASHKDASHLADHS');
+      this.setState({ user: {} });
+    };
   }
 
   render() {
-
     const value = {
-      user: this.state.user,
-      logoutUser: this.logout
-    }
+      ...this.state,
+      logout: this.logout,
+      signup: this.signup,
+      login: this.login,
+    };
+
+    const { loading } = this.state;
 
     return (
-      <UserContext.Provider value={value}>
-           <Switch>
-        <Route exact path="/" render={props => <TopBar>
-          <Home></Home>
-        </TopBar>} />
-        <Route exact path="/login" render={props => <Login></Login>} />
-        <Route exact path="/sign-up" render={props => <Signup></Signup>} />
-      </Switch>
-      </UserContext.Provider>
-   
+      <userContext.Provider value={value}>
+        {loading ? <Loader /> : <span />}
+        <Switch>
+          <Route
+            exact
+            path="/"
+            render={() => (
+              <TopBar>
+                <Home />
+              </TopBar>
+            )}
+          />
+          <Route exact path="/login" render={() => <Login />} />
+          <Route exact path="/sign-up" render={() => <Signup />} />
+        </Switch>
+      </userContext.Provider>
     );
   }
 }
-
-
-
-
 
 export default App;
