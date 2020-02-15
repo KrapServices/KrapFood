@@ -35,7 +35,6 @@ export default class TopBar extends Component {
             <Grid
               style={{
                 minHeight: 20,
-
                 backgroundColor: "#fc475f",
                 marginBottom: "1rem"
               }}
@@ -45,7 +44,7 @@ export default class TopBar extends Component {
               <Grid.Row centered>
                 <Grid.Column textAlign="left" verticalAlign="bottom">
                   <p style={{ marginLeft: "1em" }}>
-                    <Header as={Link} to ="/" >
+                    <Header as={Link} to="/">
                       <Icon name="road"></Icon>
                       KrapFood
                     </Header>
