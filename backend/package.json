@@ -17,5 +17,8 @@
     "morgan": "~1.9.1",
     "passport": "^0.4.1",
     "pg": "^7.18.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
   }
 }

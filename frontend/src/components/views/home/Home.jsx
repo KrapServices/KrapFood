@@ -1,17 +1,11 @@
-import React, { Component } from 'react';
-import {
-  Container,
-  Segment,
-  Header,
-  Button,
-  Message,
-} from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
-import userContext from '../../../userContext';
-import Rider from '../rider_view/Rider';
-import Customer from '../customer_view/Customer';
-import Manager from '../manager_view/Manager';
-import Staff from '../staff_view/Staff';
+import React, { Component } from "react";
+import { Container, Segment, Header, Button, Message } from "semantic-ui-react";
+import { Link } from "react-router-dom";
+import userContext from "../../../userContext";
+import Rider from "../rider_view/Rider";
+import Customer from "../customer_view/Customer";
+import Manager from "../manager_view/Manager";
+import Staff from "../staff_view/Staff";
 
 class Home extends Component {
   constructor(props) {
@@ -20,7 +14,7 @@ class Home extends Component {
       // user: {},
       // loading: false,
       // initialLoading: false,
-      userType: 0,
+      userType: 0
       // 0 is no login
       // 1 is customer
       // 2 is rider
@@ -28,7 +22,7 @@ class Home extends Component {
       // 4 is manager
     };
 
-    this.renderBody = (userType) => {
+    this.renderBody = userType => {
       switch (userType) {
         case 0:
           return <Message>Please log in to use our application</Message>;
@@ -77,11 +71,7 @@ class Home extends Component {
           ) : (
             <Segment>
               <Segment.Inline>
-                <Header>
-                  Welcome!
-                  {' '}
-                  {email}
-                </Header>
+                <Header>Welcome! {email}</Header>
                 <Button primary onClick={logout}>
                   Log Out
                 </Button>

@@ -8,7 +8,6 @@ require("dotenv").config();
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
-var testRouter = require("./routes/testAPI");
 var registrationRouter = require("./routes/registration");
 
 var app = express();
@@ -25,7 +24,6 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(cors());
 
 //app.use('/', indexRouter);
-app.use("/", testRouter);
 app.use("/registrations", registrationRouter);
 app.use("/users", usersRouter);
 
@@ -45,7 +43,7 @@ app.use(function(err, req, res, next) {
   res.render("error");
 });
 
-var port = process.env.port || 3000;
+var port = process.env.DATABASE_PORT || 3000;
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 //app.get("/", (req, res) => res.send("Hello World!"));
