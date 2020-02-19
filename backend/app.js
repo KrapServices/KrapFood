@@ -1,16 +1,15 @@
 var createError = require("http-errors");
 var express = require("express");
 var path = require("path");
+var cors = require("cors");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
-if (process.env.NODE_ENV !== "production") {
-  require("dotenv").config();
-  console.log(process.env);
-}
+require("dotenv").config();
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var testRouter = require("./routes/testAPI");
+var registrationRouter = require("./routes/registration");
 
 var app = express();
 
@@ -23,10 +22,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+app.use(cors());
 
 //app.use('/', indexRouter);
-app.use("/users", usersRouter);
 app.use("/", testRouter);
+app.use("/registrations", registrationRouter);
+app.use("/users", usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -47,6 +48,6 @@ app.use(function(err, req, res, next) {
 var port = process.env.port || 3000;
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
-app.get("/", (req, res) => res.send("Hello World!"));
+//app.get("/", (req, res) => res.send("Hello World!"));
 
 module.exports = app;
