@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import userContext from '../../../userContext';
+import React, { Component } from "react";
+import userContext from "../../../userContext";
 
 class Customer extends Component {
   constructor() {
@@ -8,11 +8,7 @@ class Customer extends Component {
   }
 
   render() {
-    return (
-      <>
-        <p>I am a customer</p>
-      </>
-    );
+    return <p>I am a customer</p>;
   }
 }
 

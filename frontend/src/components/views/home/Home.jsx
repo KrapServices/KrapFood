@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Container, Segment, Header, Button, Message } from "semantic-ui-react";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import userContext from "../../../userContext";
 import Rider from "../rider_view/Rider";
 import Customer from "../customer_view/Customer";
@@ -24,24 +24,31 @@ class Home extends Component {
 
     this.renderBody = userType => {
       switch (userType) {
-        case 0:
-          return <Message>Please log in to use our application</Message>;
-        case 1:
+        case "customer":
           return <Customer />;
-        case 2:
+        case "rider":
           return <Rider />;
-        case 3:
+        case "staff":
           return <Staff />;
-        case 4:
+        case "Manager":
           return <Manager />;
         default:
-          return <p> an error has occured!</p>;
+          return <Message>Please log in to use our application</Message>;
       }
     };
   }
 
+  onLogout = () => {
+    const { logout } = this.context;
+    logout();
+    this.props.history.push("/");
+  };
+
   componentDidMount() {
     // mount and check  user Type
+    if (this.context.isLoggedIn) {
+      this.setState({ userType: this.context.user.type });
+    }
   }
 
   componentDidUpdate() {
@@ -57,7 +64,7 @@ class Home extends Component {
       <div>
         <Container text textAlign="center">
           <Header>Welcome to KrapFood</Header>
-          {userType === 0 ? (
+          {!this.context.isLoggedIn ? (
             <Segment>
               <Segment.Inline>
                 <Button primary as={Link} to="/login">
@@ -72,7 +79,7 @@ class Home extends Component {
             <Segment>
               <Segment.Inline>
                 <Header>Welcome! {email}</Header>
-                <Button primary onClick={logout}>
+                <Button primary onClick={this.onLogout}>
                   Log Out
                 </Button>
               </Segment.Inline>
@@ -86,4 +93,4 @@ class Home extends Component {
 }
 
 Home.contextType = userContext;
-export default Home;
+export default withRouter(Home);

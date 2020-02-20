@@ -9,9 +9,10 @@ import {
   Message,
   Icon
 } from "semantic-ui-react";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import userContext from "../../../userContext";
 import Axios from "axios";
+import config from "../../../config.json";
 
 class Signup extends Component {
   constructor(props) {
@@ -45,15 +46,24 @@ class Signup extends Component {
     };
   }
 
-  handleSubmitCx = event => {
+  handleSubmitCx = async event => {
+    const { email, password } = this.state;
+    const { login } = this.context;
     event.preventDefault();
-    Axios.post(
-      "http://localhost:5000/registrations/sign-up",
-      {},
+    const res = await Axios.post(
+      config.localhost + "registrations/customer/sign-up",
+      { email: email, password: password },
       {
         headers: { "Access-Control-Allow-Origin": true }
       }
-    ).then(res => console.log(res.data));
+    );
+    try {
+      await login(email, password, "customer");
+      this.props.history.push("/");
+    } catch (error) {
+      console.log(error);
+      alert("error has occured");
+    }
   };
 
   componentDidMount() {
@@ -180,4 +190,4 @@ Signup.propTypes = {
   history: PropTypes.arrayOf(PropTypes.string).isRequired
 };
 
-export default Signup;
+export default withRouter(Signup);

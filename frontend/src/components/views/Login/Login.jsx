@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
 import {
   Grid,
   Form,
@@ -7,58 +7,56 @@ import {
   Header,
   Button,
   Message,
-  Icon,
-} from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
-import userContext from '../../../userContext';
+  Icon
+} from "semantic-ui-react";
+import { Link, withRouter } from "react-router-dom";
+import userContext from "../../../userContext";
+import Axios from "axios";
+import config from "../../../config.json";
+//import login from "./registration";
 
 class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: '',
-      password: '',
-      error: '',
+      email: "",
+      password: "",
+      error: ""
     };
 
     this.redirectHome = () => {
       const { history } = this.props;
-      history.push('/');
+      history.push("/");
     };
 
-    this.handleChange = (event) => {
+    this.handleChange = event => {
       const { name, value } = event.target;
       this.setState({
-        [name]: value,
+        [name]: value
       });
     };
 
-    this.handleSubmit = (event) => {
+    this.handleLoginCx = async event => {
       event.preventDefault();
-      // const { username, email, password } = this.state;
-
-      // const user = {
-      //   username,
-      //   email,
-      //   password,
-      // };
-
+      const { email, password } = this.state;
       const { login } = this.context;
-
-      // call login here
-      login();
+      try {
+        await login(email, password, "customer");
+        this.props.history.push("/");
+      } catch (error) {
+        console.log(error);
+        alert("error has occured");
+      }
     };
   }
 
   render() {
-    const {
-      email, password, error,
-    } = this.state;
+    const { email, password, error } = this.state;
     return (
       <div>
         <Grid
           textAlign="center"
-          style={{ height: '100vh' }}
+          style={{ height: "100vh" }}
           verticalAlign="middle"
         >
           <Grid.Column style={{ maxWidth: 450 }}>
@@ -91,9 +89,49 @@ class Login extends Component {
                   onChange={this.handleChange}
                 />
 
-                <Button color="teal" fluid size="large">
-                  Login
-                </Button>
+                <Header>loging</Header>
+                <Button.Group>
+                  <Button
+                    color="blue"
+                    size="large"
+                    compact
+                    animated="fade"
+                    onClick={this.handleLoginCx}
+                  >
+                    <Button.Content visible>Customer</Button.Content>
+                    <Button.Content hidden>Login!</Button.Content>
+                  </Button>
+                  <Button
+                    color="green"
+                    size="large"
+                    compact
+                    animated="fade"
+                    onClick={this.handleSubmit}
+                  >
+                    <Button.Content visible>Rider</Button.Content>
+                    <Button.Content hidden>Login!</Button.Content>
+                  </Button>
+                  <Button
+                    color="yellow"
+                    size="large"
+                    compact
+                    animated="fade"
+                    onClick={this.handleSubmit}
+                  >
+                    <Button.Content visible>Staff</Button.Content>
+                    <Button.Content hidden>Login!</Button.Content>
+                  </Button>
+                  <Button
+                    color="teal"
+                    size="large"
+                    compact
+                    animated="fade"
+                    onClick={this.handleSubmit}
+                  >
+                    <Button.Content visible>Manager</Button.Content>
+                    <Button.Content hidden>Login!</Button.Content>
+                  </Button>
+                </Button.Group>
               </Segment>
             </Form>
             <Message>
@@ -126,7 +164,7 @@ class Login extends Component {
 Login.contextType = userContext;
 
 Login.propTypes = {
-  history: PropTypes.arrayOf(PropTypes.string).isRequired,
+  //history: PropTypes.arrayOf(PropTypes.string).isRequired
 };
 
-export default Login;
+export default withRouter(Login);

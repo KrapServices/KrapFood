@@ -49,21 +49,64 @@ const getUserById = (request, response) => {
   });
 };
 
-// create single user
-const createUser = (request, response) => {
+// create single user for customer
+const createCustomerUser = async (request, response) => {
   // should we store password?
-  const { email, password } = request.body;
 
-  pool.query(
-    "INSERT INTO users (email , password) VALUES ($1,$2)",
-    [email, password],
-    (error, result) => {
-      if (error) {
-        throw error;
-      }
-      response.status(201).send(`User added with ID: ${result.insertId}`);
+  try {
+    const { email, password } = request.body;
+    const result = await pool.query(
+      "INSERT INTO users (email , password) VALUES ($1,$2) RETURNING user_id",
+      [email, password]
+    );
+    console.log(result);
+    const resultCx = await pool.query(
+      "INSERT INTO customers (customer_id,card,num_orders) VALUES ($1,$2,$3) RETURNING customer_id",
+      [result.rows[0]["user_id"], null, 0]
+    );
+    response.status(201).send(`user created`);
+  } catch (error) {
+    console.log(error);
+    return response.status(500).send("error occured");
+  }
+};
+
+const customerLogin = async (request, response) => {
+  try {
+    const { email, password } = request.body;
+    console.log(request.body);
+    const result = await pool.query(
+      "SELECT * FROM users WHERE email = $1 and password = $2 ",
+      [email, password]
+    );
+
+    console.table(result.rows);
+    result.rows[0]["type"] = "customer";
+    console.log(result.rows[0]);
+    response.status(200).json({ user: result.rows[0] });
+  } catch (error) {
+    console.log(error);
+    return response.status(500).send("user cannot be found");
+  }
+};
+
+const login = async (request, response) => {
+  try {
+    const { email, password, type } = request.body;
+    const result = await pool.query(
+      "SELECT * FROM users WHERE email = $1 and password = $2 ",
+      [email, password]
+    );
+    console.table(result.rows);
+    if (type === "customer") {
+      result.rows[0]["type"] = "customer";
     }
-  );
+    console.log(result.rows[0]);
+    response.status(200).json({ user: result.rows[0] });
+  } catch (error) {
+    console.log(error);
+    return response.status(500).send("user cannot be found");
+  }
 };
 
 // update single user
@@ -98,9 +141,11 @@ const deleteUser = (request, response) => {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 module.exports = {
+  login,
   getUsers,
   getUserById,
-  createUser,
+  customerLogin,
+  createCustomerUser,
   updateUser,
   deleteUser
 };
