@@ -19,7 +19,7 @@ pool.query("SELECT NOW()", (err, res) => {
   } else {
     console.log("Connection successful");
   }
-  pool.end();
+  //pool.end();
 });
 
 ////////////////////////////////////////////////////////////////
@@ -29,13 +29,13 @@ pool.query("SELECT NOW()", (err, res) => {
  */
 
 //get users
-const getUsers = (request, response) => {
-  pool.query("SELECT * FROM users ORDER BY id ASC", (error, results) => {
-    if (error) {
-      throw error;
-    }
-    response.status(200).json(results.rows);
-  });
+const getUsers = async (request, response) => {
+  try {
+    const result = await pool.query("SELECT * FROM users ORDER BY id ASC");
+    response.status(200).json(result.rows);
+  } catch (error) {
+    throw error;
+  }
 };
 // get a single user
 const getUserById = (request, response) => {
@@ -45,7 +45,7 @@ const getUserById = (request, response) => {
     if (error) {
       throw error;
     }
-    response.status(200).json(results.rows);
+    response.status(200).json(result.rows);
   });
 };
 
@@ -88,7 +88,7 @@ const updateUser = (request, response) => {
 const deleteUser = (request, response) => {
   const id = parseInt(request.params.id);
 
-  pool.query("DELETE FROM users WHERE id = $1", [id], (error, results) => {
+  pool.query("DELETE FROM users WHERE id = $1", [id], (error, result) => {
     if (error) {
       throw error;
     }
@@ -97,8 +97,7 @@ const deleteUser = (request, response) => {
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-exports.modules = {
+module.exports = {
   getUsers,
   getUserById,
   createUser,
