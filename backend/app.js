@@ -40,7 +40,7 @@ app.use(function(err, req, res, next) {
   res.render("error");
 });
 
-var port = process.env.SERVER_PORT || 3000;
+var port = process.env.SERVER_PORT || 5000;
 
 app.listen(port, () => console.log(`KrapFood listening on port ${port}!`));
 //app.get("/", (req, res) => res.send("Hello World!"));
