@@ -28,7 +28,7 @@ class App extends React.Component {
     };
 
     this.logout = () => {
-      this.setState({ user: {}, isLoggedIn: false });
+      this.setState({ user: {}, isLoggedIn: false});
     };
 
     this.login = async (email, password, type) => {

@@ -1,5 +1,13 @@
-import React, { Component } from "react";
-import userContext from "../../../userContext";
+import React, { Component } from 'react';
+import {
+  Grid,
+  Header,
+  Tab,
+  Segment,
+} from 'semantic-ui-react';
+import userContext from '../../../userContext';
+import CustomerOrderFood from './CustomerOrderFood';
+import CustomerOrderView from './CustomerOrderView';
 
 class Customer extends Component {
   constructor() {
@@ -8,7 +16,29 @@ class Customer extends Component {
   }
 
   render() {
-    return <p>I am a customer</p>;
+    const panes = [
+      { menuItem: 'Your Orders', render: () => <Tab.Pane><CustomerOrderView /></Tab.Pane> },
+      { menuItem: 'Order Food', render: () => <Tab.Pane><CustomerOrderFood /></Tab.Pane> },
+      { menuItem: 'Summary', render: () => <Tab.Pane></Tab.Pane> },
+    ];
+    return (
+      <Segment>
+        <Header dividing size="huge" as="h1">
+          Welcome, Customer
+        </Header>
+        <Grid padded>
+          <Grid.Column
+            mobile={16}
+            tablet={16}
+            computer={16}
+            floated="right"
+            id="content"
+          >
+            <Tab menu={{ fluid: true, vertical: true, tabular: true }} panes={panes} />
+          </Grid.Column>
+        </Grid>
+      </Segment>
+    );
   }
 }
 

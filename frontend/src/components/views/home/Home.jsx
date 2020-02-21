@@ -3,7 +3,7 @@ import {
   Container, Segment, Header, Button, Message,
 } from 'semantic-ui-react';
 import { Link, withRouter } from 'react-router-dom';
-import PropTypes from 'prop-types';
+import ReactRouterPropTypes from 'react-router-prop-types';
 import userContext from '../../../userContext';
 import Rider from '../rider_view/Rider';
 import Customer from '../customer_view/Customer';
@@ -44,6 +44,7 @@ class Home extends Component {
       const { logout } = this.context;
       logout();
       const { history } = this.props;
+      this.setState({ userType: '' });
       history.push('/');
     };
   }
@@ -68,7 +69,7 @@ class Home extends Component {
 
     return (
       <div>
-        <Container text textAlign="center">
+        <Container fluid textAlign="center">
           <Header>Welcome to KrapFood</Header>
           {!isLoggedIn ? (
             <Segment>
@@ -86,6 +87,8 @@ class Home extends Component {
               <Segment.Inline>
                 <Header>
                   Welcome!
+                </Header>
+                <Header>
                   {email}
                 </Header>
                 <Button primary onClick={this.onLogout}>
@@ -101,7 +104,7 @@ class Home extends Component {
   }
 }
 Home.propTypes = {
-  history: PropTypes.arrayOf(PropTypes.string).isRequired,
+  history: ReactRouterPropTypes.history.isRequired,
 };
 
 Home.contextType = userContext;

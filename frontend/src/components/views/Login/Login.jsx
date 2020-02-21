@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import {
   Grid,
   Form,
@@ -10,7 +9,9 @@ import {
   Icon,
 } from 'semantic-ui-react';
 import { Link, withRouter } from 'react-router-dom';
+import ReactRouterPropTypes from 'react-router-prop-types';
 import userContext from '../../../userContext';
+
 // import login from "./registration";
 
 class Login extends Component {
@@ -154,7 +155,7 @@ class Login extends Component {
 Login.contextType = userContext;
 
 Login.propTypes = {
-  history: PropTypes.arrayOf(PropTypes.string).isRequired,
+  history: ReactRouterPropTypes.history.isRequired,
 };
 
 export default withRouter(Login);
