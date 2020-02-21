@@ -34,7 +34,7 @@ class Customer extends Component {
             floated="right"
             id="content"
           >
-            <Tab menu={{ fluid: true, vertical: true, tabular: true }} panes={panes} />
+            <Tab menu={{ fluid: true, vertical: true, compact: true }} panes={panes} />
           </Grid.Column>
         </Grid>
       </Segment>

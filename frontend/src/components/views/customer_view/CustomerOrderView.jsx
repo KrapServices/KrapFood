@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Grid, Header } from 'semantic-ui-react';
 import userContext from '../../../userContext';
 
 class CustomerOrderView extends Component {
@@ -11,9 +12,29 @@ class CustomerOrderView extends Component {
 
 
   render() {
+    const { user } = this.context;
+    const numOfOrder = user.customer.num_orders;
     return (
       <div>
-        <p>Your Past Orders</p>
+        <Grid>
+          <Grid.Column>
+            <Grid.Row centered>
+              <Header>
+                Order num:
+                $
+                {numOfOrder}
+              </Header>
+            </Grid.Row>
+            <Grid.Row centered>
+              <br />
+            </Grid.Row>
+            <Grid.Row centered>
+              <Header>
+                Current_order:
+              </Header>
+            </Grid.Row>
+          </Grid.Column>
+        </Grid>
       </div>
     );
   }
