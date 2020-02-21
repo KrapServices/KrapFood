@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
   Grid,
   Form,
@@ -7,36 +7,36 @@ import {
   Header,
   Button,
   Message,
-  Icon
-} from "semantic-ui-react";
-import { Link, withRouter } from "react-router-dom";
-import userContext from "../../../userContext";
-import Axios from "axios";
-import config from "../../../config.json";
+  Icon,
+} from 'semantic-ui-react';
+import { Link, withRouter } from 'react-router-dom';
+import Axios from 'axios';
+import userContext from '../../../userContext';
+import config from '../../../config.json';
 
 class Signup extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: "",
-      password: "",
-      error: ""
+      email: '',
+      password: '',
+      error: '',
     };
 
-    this.handleChange = event => {
+    this.handleChange = (event) => {
       event.preventDefault();
       const { name, value } = event.target;
       this.setState({
-        [name]: value
+        [name]: value,
       });
     };
 
     this.redirectHome = () => {
       const { history } = this.props;
-      history.push("/");
+      history.push('/');
     };
 
-    this.handleSubmit = event => {
+    this.handleSubmit = (event) => {
       // TODO: pass user type e.g customer to here to submit to correct endpoint;
       event.preventDefault();
       console.table(this.state);
@@ -44,40 +44,41 @@ class Signup extends Component {
       const { signup } = this.context;
       signup();
     };
+    this.handleSubmitCx = async (event) => {
+      const { email, password } = this.state;
+      const { login } = this.context;
+      event.preventDefault();
+      await Axios.post(
+        `${config.localhost}registrations/customer/sign-up`,
+        { email, password },
+        {
+          headers: { 'Access-Control-Allow-Origin': true },
+        },
+      );
+      try {
+        await login(email, password, 'customer');
+        const { history } = this.props;
+        history.push('/');
+      } catch (error) {
+        console.log(error);
+        alert('error has occured');
+      }
+    };
   }
 
-  handleSubmitCx = async event => {
-    const { email, password } = this.state;
-    const { login } = this.context;
-    event.preventDefault();
-    const res = await Axios.post(
-      config.localhost + "registrations/customer/sign-up",
-      { email: email, password: password },
-      {
-        headers: { "Access-Control-Allow-Origin": true }
-      }
-    );
-    try {
-      await login(email, password, "customer");
-      this.props.history.push("/");
-    } catch (error) {
-      console.log(error);
-      alert("error has occured");
-    }
-  };
 
   componentDidMount() {
     // console.log(this.context.test);
   }
 
   render() {
-    const { email, password, error } = this.state;
+    const { email, password } = this.state;
     return (
       <>
         <Grid
           container
           textAlign="center"
-          style={{ height: "100vh" }}
+          style={{ height: '100vh' }}
           verticalAlign="middle"
         >
           <Grid.Column>
@@ -168,14 +169,6 @@ class Signup extends Component {
                   </Button>
                 </Message.Content>
               </Message>
-              {error ? (
-                <Message negative>
-                  <Message.Header>We can't sign you up:</Message.Header>
-                  <p>{error}</p>
-                </Message>
-              ) : (
-                <span />
-              )}
             </Segment>
           </Grid.Column>
         </Grid>
@@ -187,7 +180,7 @@ class Signup extends Component {
 Signup.contextType = userContext;
 
 Signup.propTypes = {
-  history: PropTypes.arrayOf(PropTypes.string).isRequired
+  history: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default withRouter(Signup);
