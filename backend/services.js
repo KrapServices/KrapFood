@@ -93,9 +93,64 @@ const exampleTransaction = async () => {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//CUSTOMER
+
+// create single user for customer
+const customerCreate = async (request, response) => {
+  try {
+    const { email, password } = request.body;
+    const result = await transact(async (query) => {
+      const user = (await query(
+        "INSERT INTO users (email , password) VALUES ($1,$2) RETURNING user_id",
+        [email, password]
+      )).rows[0];
+      (await query(
+        "INSERT INTO customers (customer_id,card,num_orders) VALUES ($1,$2,$3) RETURNING customer_id",
+        [user["user_id"], null, 0]
+      ));
+      return user;
+    });
+    response.status(201).send(`user created`);
+  } catch (error) {
+    console.log(error);
+    return response.status(500).send("error occured");
+  }
+};
+
+const customerLogin = async (request, response) => {
+  try {
+    const { email, password } = request.body;
+
+    const result = await transact(async (query) => { 
+      let user = (await query(
+        "SELECT user_id, email, password FROM users WHERE email = $1 and password = $2",
+        [email, password]
+      )).rows[0];
+      const customer = (await query(
+        "SELECT customer_id, card, num_orders FROM customers WHERE customer_id = $1",
+        [user["user_id"]]
+      )).rows[0];
+          //append info to user object
+      user["type"] = "customer";
+      user = { ...user, customer: customer};
+      return user 
+    });
+    response.status(200).json({ user: result });
+  } catch (error) {
+    console.log(error);
+    return response.status(500).send("user cannot be found");
+  }
+};
+
+
+
+
 module.exports = {
   getUsers,
   getUserById,
+  customerLogin,
+  customerCreate,
   createUser,
   updateUser,
   deleteUser

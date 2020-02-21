@@ -1,10 +1,10 @@
 var express = require("express");
-const db = require("../database");
+const services = require("../services");
 var router = express.Router();
 
-router.post("/customer/sign-up", db.createCustomerUser);
+router.post("/customer/sign-up", services.customerCreate);
 
-router.post("/customer/login", db.customerLogin);
+router.post("/customer/login", services.customerLogin);
 
 //router.post("/rider/sign-up", );
 
