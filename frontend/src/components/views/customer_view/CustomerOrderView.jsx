@@ -13,7 +13,7 @@ class CustomerOrderView extends Component {
 
   render() {
     const { user } = this.context;
-    const numOfOrder = user.customer.num_orders;
+    const numOfOrder = user.num_orders;
     return (
       <div>
         <Grid>
@@ -21,7 +21,6 @@ class CustomerOrderView extends Component {
             <Grid.Row centered>
               <Header>
                 Order num:
-                $
                 {numOfOrder}
               </Header>
             </Grid.Row>
