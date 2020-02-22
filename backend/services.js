@@ -63,9 +63,10 @@ const customerLogin = async (request, response) => {
         "SELECT customer_id, card, num_orders FROM customers WHERE customer_id = $1",
         [user["user_id"]]
       )).rows[0];
-          //append info to user object
+      //append info to user object
       user["type"] = "customer";
-      user = { ...user, customer: customer};
+      user = { ...user, ...customer };
+      console.log(user);
       return user 
     });
     response.status(200).json({ user: result });
