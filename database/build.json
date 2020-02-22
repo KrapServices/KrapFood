@@ -1,0 +1,7 @@
+{
+  "queries": [
+    "drop_customer.sql",
+    "drop_user.sql",
+    "create_user.sql"
+  ]
+}
