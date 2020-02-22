@@ -38,8 +38,8 @@ const customerCreate = async (request, response) => {
         [email, password]
       )).rows[0];
       (await query(
-        "INSERT INTO customers (customer_id,card,num_orders) VALUES ($1,$2,$3) RETURNING customer_id",
-        [user["user_id"], null, 0]
+        "INSERT INTO customers (customer_id) VALUES ($1) RETURNING customer_id",
+        [user["user_id"]]
       ));
       return user;
     });
