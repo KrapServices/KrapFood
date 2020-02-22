@@ -1,11 +1,14 @@
-import React, { Component } from "react";
-import { Container, Segment, Header, Button, Message } from "semantic-ui-react";
-import { Link } from "react-router-dom";
-import userContext from "../../../userContext";
-import Rider from "../rider_view/Rider";
-import Customer from "../customer_view/Customer";
-import Manager from "../manager_view/Manager";
-import Staff from "../staff_view/Staff";
+import React, { Component } from 'react';
+import {
+  Container, Segment, Header, Button, Message,
+} from 'semantic-ui-react';
+import { Link, withRouter } from 'react-router-dom';
+import ReactRouterPropTypes from 'react-router-prop-types';
+import userContext from '../../../userContext';
+import Rider from '../rider_view/Rider';
+import Customer from '../customer_view/Customer';
+import Manager from '../manager_view/Manager';
+import Staff from '../staff_view/Staff';
 
 class Home extends Component {
   constructor(props) {
@@ -14,7 +17,7 @@ class Home extends Component {
       // user: {},
       // loading: false,
       // initialLoading: false,
-      userType: 0
+      userType: 0,
       // 0 is no login
       // 1 is customer
       // 2 is rider
@@ -22,26 +25,37 @@ class Home extends Component {
       // 4 is manager
     };
 
-    this.renderBody = userType => {
+    this.renderBody = (userType) => {
       switch (userType) {
-        case 0:
-          return <Message>Please log in to use our application</Message>;
-        case 1:
+        case 'customer':
           return <Customer />;
-        case 2:
+        case 'rider':
           return <Rider />;
-        case 3:
+        case 'staff':
           return <Staff />;
-        case 4:
+        case 'Manager':
           return <Manager />;
         default:
-          return <p> an error has occured!</p>;
+          return <Message>Please log in to use our application</Message>;
       }
+    };
+
+    this.onLogout = () => {
+      const { logout } = this.context;
+      logout();
+      const { history } = this.props;
+      this.setState({ userType: '' });
+      history.push('/');
     };
   }
 
+
   componentDidMount() {
     // mount and check  user Type
+    const { isLoggedIn, user } = this.context;
+    if (isLoggedIn) {
+      this.setState({ userType: user.type });
+    }
   }
 
   componentDidUpdate() {
@@ -50,14 +64,14 @@ class Home extends Component {
 
   render() {
     const { userType } = this.state;
-    const { user, logout } = this.context;
+    const { user, isLoggedIn } = this.context;
     const { email } = user;
 
     return (
       <div>
-        <Container text textAlign="center">
+        <Container fluid textAlign="center">
           <Header>Welcome to KrapFood</Header>
-          {userType === 0 ? (
+          {!isLoggedIn ? (
             <Segment>
               <Segment.Inline>
                 <Button primary as={Link} to="/login">
@@ -71,8 +85,13 @@ class Home extends Component {
           ) : (
             <Segment>
               <Segment.Inline>
-                <Header>Welcome! {email}</Header>
-                <Button primary onClick={logout}>
+                <Header>
+                  Welcome!
+                </Header>
+                <Header>
+                  {email}
+                </Header>
+                <Button primary onClick={this.onLogout}>
                   Log Out
                 </Button>
               </Segment.Inline>
@@ -84,6 +103,9 @@ class Home extends Component {
     );
   }
 }
+Home.propTypes = {
+  history: ReactRouterPropTypes.history.isRequired,
+};
 
 Home.contextType = userContext;
-export default Home;
+export default withRouter(Home);

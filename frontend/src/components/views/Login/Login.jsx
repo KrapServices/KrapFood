@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import {
   Grid,
   Form,
@@ -9,8 +8,11 @@ import {
   Message,
   Icon,
 } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
+import ReactRouterPropTypes from 'react-router-prop-types';
 import userContext from '../../../userContext';
+
+// import login from "./registration";
 
 class Login extends Component {
   constructor(props) {
@@ -18,7 +20,6 @@ class Login extends Component {
     this.state = {
       email: '',
       password: '',
-      error: '',
     };
 
     this.redirectHome = () => {
@@ -33,27 +34,23 @@ class Login extends Component {
       });
     };
 
-    this.handleSubmit = (event) => {
+    this.handleLoginCx = async (event) => {
       event.preventDefault();
-      // const { username, email, password } = this.state;
-
-      // const user = {
-      //   username,
-      //   email,
-      //   password,
-      // };
-
+      const { email, password } = this.state;
       const { login } = this.context;
-
-      // call login here
-      login();
+      try {
+        await login(email, password, 'customer');
+        const { history } = this.props;
+        history.push('/');
+      } catch (error) {
+        console.log(error);
+        alert('error has occured');
+      }
     };
   }
 
   render() {
-    const {
-      email, password, error,
-    } = this.state;
+    const { email, password } = this.state;
     return (
       <div>
         <Grid
@@ -91,9 +88,49 @@ class Login extends Component {
                   onChange={this.handleChange}
                 />
 
-                <Button color="teal" fluid size="large">
-                  Login
-                </Button>
+                <Header>loging</Header>
+                <Button.Group>
+                  <Button
+                    color="blue"
+                    size="large"
+                    compact
+                    animated="fade"
+                    onClick={this.handleLoginCx}
+                  >
+                    <Button.Content visible>Customer</Button.Content>
+                    <Button.Content hidden>Login!</Button.Content>
+                  </Button>
+                  <Button
+                    color="green"
+                    size="large"
+                    compact
+                    animated="fade"
+                    onClick={this.handleSubmit}
+                  >
+                    <Button.Content visible>Rider</Button.Content>
+                    <Button.Content hidden>Login!</Button.Content>
+                  </Button>
+                  <Button
+                    color="yellow"
+                    size="large"
+                    compact
+                    animated="fade"
+                    onClick={this.handleSubmit}
+                  >
+                    <Button.Content visible>Staff</Button.Content>
+                    <Button.Content hidden>Login!</Button.Content>
+                  </Button>
+                  <Button
+                    color="teal"
+                    size="large"
+                    compact
+                    animated="fade"
+                    onClick={this.handleSubmit}
+                  >
+                    <Button.Content visible>Manager</Button.Content>
+                    <Button.Content hidden>Login!</Button.Content>
+                  </Button>
+                </Button.Group>
               </Segment>
             </Form>
             <Message>
@@ -108,14 +145,6 @@ class Login extends Component {
                 </Button>
               </Message.Content>
             </Message>
-            {error ? (
-              <Message negative>
-                <Message.Header>We can't log you in:</Message.Header>
-                <p>{error}</p>
-              </Message>
-            ) : (
-              <span />
-            )}
           </Grid.Column>
         </Grid>
       </div>
@@ -126,7 +155,7 @@ class Login extends Component {
 Login.contextType = userContext;
 
 Login.propTypes = {
-  history: PropTypes.arrayOf(PropTypes.string).isRequired,
+  history: ReactRouterPropTypes.history.isRequired,
 };
 
-export default Login;
+export default withRouter(Login);

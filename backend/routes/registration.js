@@ -1,23 +1,23 @@
 var express = require("express");
+const services = require("../services");
 var router = express.Router();
 
-router.post("/sign-up", function(req, res) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  res.send("This is the signup api");
-});
+router.post("/customer/sign-up", services.customerCreate);
 
-router.post("/login", function(req, res) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  res.send("This is the login");
-});
+router.post("/customer/login", services.customerLogin);
+
+//router.post("/rider/sign-up", );
+
+//router.post("/rider/login", );
+
+//router.post("/manager/sign-up", );
+
+//router.post("/manager/login", );
+
+//router.post("/staff/sign-up", );
+
+//router.post("/staff/login", );
+
 
 router.get("/", function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
