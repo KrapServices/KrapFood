@@ -1,6 +1,7 @@
 {
   "queries": [
     "drop_tables.sql",
-    "create_user.sql"
+    "create_user.sql",
+    "create_restaurants.sql"
   ]
 }
