@@ -53,9 +53,6 @@ const customerCreate = async (request, response) => {
 const customerLogin = async (request, response) => {
   try {
     const { email, password } = request.body;
-
-    const result = await transact(async (query) => { 
-
       let user = (await query(
         "SELECT customer_id ,card, num_orders FROM customers where exists( select 1 from users u where email = $1 and password = $2 and customer_id = u.user_id)",
         [email, password]
@@ -63,9 +60,7 @@ const customerLogin = async (request, response) => {
       //append info to user object
       user["type"] = "customer";
       console.log(user);
-      return user 
-    });
-    response.status(200).json({ user: result });
+    return response.status(200).json({ user: user });
   } catch (error) {
     console.log(error);
     return response.status(500).send("user cannot be found");
@@ -101,8 +96,7 @@ const managerCreate = async (request, response) => {
 const managerLogin = async (request, response) => {
   try {
     const { email, password } = request.body;
-
-    const result = await transact(async (query) => { 
+   
       let user = (await query(
         "SELECT manager_id FROM managers where exists( select 1 from users u where email = $1 and password = $2 and manager_id = u.user_id)",
         [email, password]
@@ -111,9 +105,7 @@ const managerLogin = async (request, response) => {
       user["type"] = "manager";
       //user = { ...user, ...manager };
       console.log(user);
-      return user 
-    });
-    response.status(200).json({ user: result });
+    return response.status(200).json({ user: user });
   } catch (error) {
     console.log(error);
     return response.status(500).send("user cannot be found");
