@@ -13,6 +13,11 @@ CREATE TABLE customers
     card text DEFAULT '0000',
     num_orders int DEFAULT 0,
     FOREIGN KEY (customer_id) REFERENCES users (user_id)
-)
+);
 
+CREATE TABLE managers
+(
+    manager_id SERIAL PRIMARY KEY,
+    FOREIGN KEY (manager_id) REFERENCES users (user_id)
+);
  

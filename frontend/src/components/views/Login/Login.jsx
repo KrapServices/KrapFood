@@ -47,6 +47,20 @@ class Login extends Component {
         alert('error has occured');
       }
     };
+
+    this.handleLoginMg = async (event) => {
+      event.preventDefault();
+      const { email, password } = this.state;
+      const { login } = this.context;
+      try {
+        await login(email, password, 'manager');
+        const { history } = this.props;
+        history.push('/');
+      } catch (error) {
+        console.log(error);
+        alert('error has occured');
+      }
+    };
   }
 
   render() {
@@ -125,7 +139,7 @@ class Login extends Component {
                     size="large"
                     compact
                     animated="fade"
-                    onClick={this.handleSubmit}
+                    onClick={this.handleLoginMg}
                   >
                     <Button.Content visible>Manager</Button.Content>
                     <Button.Content hidden>Login!</Button.Content>

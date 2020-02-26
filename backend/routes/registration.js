@@ -10,9 +10,9 @@ router.post("/customer/login", services.customerLogin);
 
 //router.post("/rider/login", );
 
-//router.post("/manager/sign-up", );
+router.post("/manager/sign-up", services.managerCreate);
 
-//router.post("/manager/login", );
+router.post("/manager/login", services.managerLogin);
 
 //router.post("/staff/sign-up", );
 
