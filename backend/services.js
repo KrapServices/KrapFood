@@ -1,28 +1,8 @@
 const { query, transact } = require('./database');
 
-query("SELECT NOW()", (err, res) => {
-  if (err) {
-    console.error(err);
-  } else {
-    console.log("Connection successful");
-  }
-});
-
-////////////////////////////////////////////////////////////////
-
 /**
  * QUERIES THAT DEAL WITH USERS
  */
-
-const exampleTransaction = async () => {
-  const result = await transact(async (query) => {
-    const time = (await query('SELECT NOW()')).rows[0];
-    console.log(`Time: ${JSON.stringify(time)}`);
-    const t = await query('SELECT 1');
-    return t;
-  });
-  console.log(result.rows[0]);
-}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
