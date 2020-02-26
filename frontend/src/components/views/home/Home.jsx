@@ -54,6 +54,7 @@ class Home extends Component {
     // mount and check  user Type
     const { isLoggedIn, user } = this.context;
     if (isLoggedIn) {
+      console.log(user.type);
       this.setState({ userType: user.type });
     }
   }

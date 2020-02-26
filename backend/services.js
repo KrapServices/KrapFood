@@ -55,17 +55,13 @@ const customerLogin = async (request, response) => {
     const { email, password } = request.body;
 
     const result = await transact(async (query) => { 
+
       let user = (await query(
-        "SELECT user_id, email, password FROM users WHERE email = $1 and password = $2",
+        "SELECT customer_id ,card, num_orders FROM customers where exists( select 1 from users u where email = $1 and password = $2 and customer_id = u.user_id)",
         [email, password]
-      )).rows[0];
-      const customer = (await query(
-        "SELECT customer_id, card, num_orders FROM customers WHERE customer_id = $1",
-        [user["user_id"]]
       )).rows[0];
       //append info to user object
       user["type"] = "customer";
-      user = { ...user, ...customer };
       console.log(user);
       return user 
     });
@@ -108,16 +104,12 @@ const managerLogin = async (request, response) => {
 
     const result = await transact(async (query) => { 
       let user = (await query(
-        "SELECT user_id, email, password FROM users WHERE email = $1 and password = $2",
+        "SELECT manager_id FROM managers where exists( select 1 from users u where email = $1 and password = $2 and manager_id = u.user_id)",
         [email, password]
-      )).rows[0];
-      const manager = (await query(
-        "SELECT manager_id FROM managers WHERE manager_id = $1",
-        [user["user_id"]]
       )).rows[0];
       //append info to user object
       user["type"] = "manager";
-      user = { ...user, ...manager };
+      //user = { ...user, ...manager };
       console.log(user);
       return user 
     });

@@ -87,8 +87,6 @@ class Signup extends Component {
       }
     };
   }
-  
-
 
   componentDidMount() {
     // console.log(this.context.test);
