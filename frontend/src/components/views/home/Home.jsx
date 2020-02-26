@@ -33,7 +33,7 @@ class Home extends Component {
           return <Rider />;
         case 'staff':
           return <Staff />;
-        case 'Manager':
+        case 'manager':
           return <Manager />;
         default:
           return <Message>Please log in to use our application</Message>;
@@ -54,6 +54,7 @@ class Home extends Component {
     // mount and check  user Type
     const { isLoggedIn, user } = this.context;
     if (isLoggedIn) {
+      console.log(user.type);
       this.setState({ userType: user.type });
     }
   }

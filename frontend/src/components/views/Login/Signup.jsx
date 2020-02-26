@@ -44,6 +44,7 @@ class Signup extends Component {
       const { signup } = this.context;
       signup();
     };
+
     this.handleSubmitCx = async (event) => {
       const { email, password } = this.state;
       const { login } = this.context;
@@ -64,8 +65,28 @@ class Signup extends Component {
         alert('error has occured');
       }
     };
-  }
 
+    this.handleSubmitMg = async (event) => {
+      const { email, password } = this.state;
+      const { login } = this.context;
+      event.preventDefault();
+      await Axios.post(
+        `${config.localhost}registrations/manager/sign-up`,
+        { email, password },
+        {
+          headers: { 'Access-Control-Allow-Origin': true },
+        },
+      );
+      try {
+        await login(email, password, 'manager');
+        const { history } = this.props;
+        history.push('/');
+      } catch (error) {
+        console.log(error);
+        alert('error has occured');
+      }
+    };
+  }
 
   componentDidMount() {
     // console.log(this.context.test);
@@ -148,7 +169,7 @@ class Signup extends Component {
                     size="large"
                     compact
                     animated="fade"
-                    onClick={this.handleSubmit}
+                    onClick={this.handleSubmitMg}
                   >
                     <Button.Content visible>Manager</Button.Content>
                     <Button.Content hidden>Sign-up!</Button.Content>
