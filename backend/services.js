@@ -133,9 +133,11 @@ const getAllRestaurant = async (request, response) => {
 
 const getRestaurantById = async (request, response) => {
   try {
-    const { restaurant_id } = request.body;
+ 
+    const { id } = request.params;
+  
     let restaurants = (await query(
-      "SELECT 1 FROM restaurants r where r.resturant_id = $1", [restaurant_id]
+      "SELECT * FROM restaurants r where r.restaurant_id = $1", [id]
     )).rows[0];
     console.log(`Single restaurant: ${restaurants}`);
     if (restaurants === null) {
