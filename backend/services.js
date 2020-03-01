@@ -136,23 +136,16 @@ const getRestaurantById = async (request, response) => {
  
     const { id } = request.params;
   
-    let restaurants = (await query(
-      "SELECT * FROM restaurants r where r.restaurant_id = $1", [id]
+    let restaurant = (await query(
+      "SELECT * FROM restaurants where restaurant_id = $1", [id]
     )).rows[0];
-    console.log(`Single restaurant: ${restaurants}`);
-    if (restaurants === null) {
-      throw error;
-    }
-    
-    return response.status(200).json({ restaurants: restaurants });
+    console.log(`Single restaurant: ${restaurant}`);
+    return response.status(200).json({ restaurant: restaurant });
   } catch (error) {
     console.log(error);
     return response.status(500).send("restaurant could not be found");
   }
 };
-
-
-
 
 module.exports = {
   customerLogin,

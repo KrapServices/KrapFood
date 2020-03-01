@@ -1,3 +1,5 @@
+/* eslint-disable no-plusplus */
+/* eslint-disable no-await-in-loop */
 import React, { Component } from 'react';
 import {
   Container, Segment, Header, Button, Message,
@@ -9,13 +11,13 @@ import Rider from '../rider_view/Rider';
 import Customer from '../customer_view/Customer';
 import Manager from '../manager_view/Manager';
 import Staff from '../staff_view/Staff';
+import GenerateData from '../../utils/GenerateData';
 
 class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
       // user: {},
-      // loading: false,
       // initialLoading: false,
       userType: 0,
       // 0 is no login
@@ -99,6 +101,11 @@ class Home extends Component {
             </Segment>
           )}
           {this.renderBody(userType)}
+          { /** *********** */
+            // use this to generate data
+            // remember to run npm run build before using this.
+          }
+          <GenerateData />
         </Container>
       </div>
     );
