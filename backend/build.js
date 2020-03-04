@@ -1,7 +1,6 @@
 const fs = require('fs');
 const { transact } = require('./database');
 const services = require("./services");
-const axios = require('axios');
 
 const DATABASE_DIRECTORY = '../database';
 const { queries } = require(`${DATABASE_DIRECTORY}/build.json`);
@@ -18,7 +17,6 @@ async function build(queries) {
       for (const query of queries) {
         await execute(query);
       }
-     
     })
     console.log('Successfully built database.');
     process.exit(0);
