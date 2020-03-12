@@ -124,7 +124,7 @@ const getAllRestaurant = async (request, response) => {
       "SELECT restaurant_id, restaurant_name, restaurant_location from restaurants",
     )).rows;
     console.log(`restaurants: ${restaurants}`);
-    return response.status(200).json({ restaurants: restaurants});
+    return response.status(200).json({ restaurants });
   } catch (error) {
     console.log(error);
     return response.status(500).send("An error occured with getting the restaurants");
