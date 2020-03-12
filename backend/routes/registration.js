@@ -19,7 +19,7 @@ router.post("/manager/login", services.managerLogin);
 //router.post("/staff/login", );
 
 
-router.get("/", function(req, res, next) {
+router.get("/registrations", function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header(
     "Access-Control-Allow-Headers",
