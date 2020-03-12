@@ -35,22 +35,19 @@ class CustomerOrderFood extends Component {
     return (
       <div>
         <List large divided relaxed>
-          { listOfRestaurants === [] ? <div /> : listOfRestaurants.map((res) => {
-            console.log(res);
-            return (
-              <List.Item>
-                <List.Content floated="left">
-                  <List.Header as="h2">
-                    { `Shop name: ${res.restaurant_name}`}
-                  </List.Header>
-                  {`Located at ${res.restaurant_location}`}
-                </List.Content>
-                <List.Content floated="right">
-                  <Button primary> order</Button>
-                </List.Content>
-              </List.Item>
-            );
-          })}
+          {listOfRestaurants === [] ? <div /> : listOfRestaurants.map((res) => (
+            <List.Item>
+              <List.Content floated="left">
+                <List.Header as="h2">
+                  {`Shop name: ${res.restaurant_name}`}
+                </List.Header>
+                {`Located at ${res.restaurant_location}`}
+              </List.Content>
+              <List.Content floated="right">
+                <Button primary> order</Button>
+              </List.Content>
+            </List.Item>
+          ))}
         </List>
       </div>
     );

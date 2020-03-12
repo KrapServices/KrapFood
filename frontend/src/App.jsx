@@ -28,7 +28,8 @@ class App extends React.Component {
     };
 
     this.logout = () => {
-      this.setState({ user: {}, isLoggedIn: false});
+      this.setState({ user: {}, isLoggedIn: false });
+      window.localStorage.clear();
     };
 
     this.login = async (email, password, type) => {
@@ -43,9 +44,17 @@ class App extends React.Component {
         },
       );
       if (result.status === 200) {
+        window.localStorage.setItem('user', JSON.stringify(result.data.user));
         this.setState({ user: result.data.user, isLoggedIn: true });
       }
     };
+  }
+
+  componentDidMount() {
+    const user = JSON.parse(window.localStorage.getItem('user'));
+    if (user) {
+      this.setState({ user, isLoggedIn: true });
+    }
   }
 
   render() {
@@ -60,6 +69,7 @@ class App extends React.Component {
 
     const { loading } = this.state;
 
+    console.log(value);
     return (
       <userContext.Provider value={value}>
         {loading ? <Loader /> : <span />}
@@ -69,7 +79,10 @@ class App extends React.Component {
             path="/"
             render={() => (
               <TopBar>
+
                 <Home />
+
+
               </TopBar>
             )}
           />
