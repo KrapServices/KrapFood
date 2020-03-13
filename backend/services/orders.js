@@ -8,12 +8,19 @@ const { query, transact } = require('../database');
 // -----------------------------------------------------------------------------
 const createOrder = async (request, response) => {
   try {
-   // const { threshold, restaurant_name, restaurant_location, delivery_fee } = request.body;
+   const { total_cost, status, listOfFood } = request.body;
    // console.log(restaurant_name);
-    let result = (await query(
-      "INSERT INTO orders (total_cost, price, status, delivery_fee) VALUES ($1,$2,$3,$4) RETURNING order_id",
-      [threshold, restaurant_name, restaurant_location, delivery_fee]
+    const result = (await query(
+      "INSERT INTO orders (total_cost, status) VALUES ($1,$2) RETURNING order_id",
+      [total_cost, status]
     )).rows[0];
+    for await (const x of listOfFood) {
+      const order_id = result['order_id'];
+      const {food_id, quantity} = x;
+      query(
+        "INSERT INTO contain (order_id, food_id, quantity) VALUES ($1 $2 $3)", [order_id, food_id, quantity]
+      );
+    }
     //console.log(result);
     return response.status(200).json({ created_order_id: result });
   } catch (error) {

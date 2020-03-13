@@ -1,6 +1,5 @@
 const fs = require('fs');
 const { transact } = require('./database');
-const services = require("./services");
 
 const DATABASE_DIRECTORY = '../database';
 const { queries } = require(`${DATABASE_DIRECTORY}/build.json`);
