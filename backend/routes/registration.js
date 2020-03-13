@@ -1,18 +1,20 @@
 var express = require("express");
-const services = require("../services");
+const cxServices = require("../services/customer");
+const managerServices = require("../services/manager");
+
 var router = express.Router();
 
-router.post("/customer/sign-up", services.customerCreate);
+router.post("/customer/sign-up", cxServices.customerCreate);
 
-router.post("/customer/login", services.customerLogin);
+router.post("/customer/login", cxServices.customerLogin);
 
 //router.post("/rider/sign-up", );
 
 //router.post("/rider/login", );
 
-router.post("/manager/sign-up", services.managerCreate);
+router.post("/manager/sign-up", managerServices.managerCreate);
 
-router.post("/manager/login", services.managerLogin);
+router.post("/manager/login", managerServices.managerLogin);
 
 //router.post("/staff/sign-up", );
 
