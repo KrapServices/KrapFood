@@ -81,8 +81,6 @@ class App extends React.Component {
               <TopBar>
 
                 <Home />
-
-
               </TopBar>
             )}
           />

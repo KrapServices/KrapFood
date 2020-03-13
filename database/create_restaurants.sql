@@ -7,22 +7,24 @@ CREATE TABLE restaurants (
   created_at TIMESTAMP DEFAULT current_timestamp,
   modified_at TIMESTAMP DEFAULT current_timestamp
 );
-
+/*
 CREATE TABLE menus (
   menu_id SERIAL PRIMARY KEY,
   restaurant_id INTEGER UNIQUE,
   FOREIGN KEY (restaurant_id) REFERENCES restaurants (restaurant_id),
   created_at TIMESTAMP DEFAULT current_timestamp,
   modified_at TIMESTAMP DEFAULT current_timestamp
-);
+);*/
 
 CREATE TABLE foods (
   food_id SERIAL PRIMARY KEY,
   category TEXT,
   food_name TEXT,
+  daily_limit int, 
+  availability boolean DEFAULT TRUE,
   price NUMERIC(10, 2),
-  menu_id INTEGER NOT NULL,
-  FOREIGN KEY (menu_id) REFERENCES menus (menu_id),
+  restaurant_id INTEGER NOT NULL,
+  FOREIGN KEY (restaurant_id) REFERENCES restaurants (restaurant_id),
   created_at TIMESTAMP DEFAULT current_timestamp,
   modified_at TIMESTAMP DEFAULT current_timestamp
 );
