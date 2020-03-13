@@ -69,7 +69,7 @@ class App extends React.Component {
 
     const { loading } = this.state;
 
-    console.log(value);
+
     return (
       <userContext.Provider value={value}>
         {loading ? <Loader /> : <span />}

@@ -51,3 +51,9 @@ const getRestaurantById = async (request, response) => {
     return response.status(500).send("restaurant could not be found");
   }
 };
+
+module.exports = {
+  createRestaurant,
+  getAllRestaurant,
+  getRestaurantById,
+}
