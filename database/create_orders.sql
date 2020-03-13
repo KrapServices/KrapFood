@@ -2,7 +2,6 @@ CREATE TABLE orders
 (
     order_id SERIAL PRIMARY KEY,
     total_cost NUMERIC(10,2),
-    price NUMERIC(10,2),
     status text , 
     created_at TIMESTAMP DEFAULT current_timestamp,
     modified_at TIMESTAMP DEFAULT current_timestamp
@@ -23,5 +22,15 @@ CREATE TABLE locations
 (
     order_id SERIAL PRIMARY KEY,
     address text,
+    FOREIGN KEY (order_id) REFERENCES orders(order_id)
+);
+
+CREATE TABLE contain
+(
+    order_id SERIAL, 
+    food_id SERIAL,
+    quantity int,
+    PRIMARY KEY (order_id, food_id),
+    FOREIGN KEY (food_id) REFERENCES foods(food_id),
     FOREIGN KEY (order_id) REFERENCES orders(order_id)
 );

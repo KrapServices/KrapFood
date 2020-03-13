@@ -7,14 +7,6 @@ CREATE TABLE restaurants (
   created_at TIMESTAMP DEFAULT current_timestamp,
   modified_at TIMESTAMP DEFAULT current_timestamp
 );
-/*
-CREATE TABLE menus (
-  menu_id SERIAL PRIMARY KEY,
-  restaurant_id INTEGER UNIQUE,
-  FOREIGN KEY (restaurant_id) REFERENCES restaurants (restaurant_id),
-  created_at TIMESTAMP DEFAULT current_timestamp,
-  modified_at TIMESTAMP DEFAULT current_timestamp
-);*/
 
 CREATE TABLE foods (
   food_id SERIAL PRIMARY KEY,
