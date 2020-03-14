@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import {
-  Grid,
   Header,
   Tab,
-  Segment,
 } from 'semantic-ui-react';
 import userContext from '../../../userContext';
 import CustomerOrderFood from './CustomerOrderFood';
@@ -26,8 +24,11 @@ class Customer extends Component {
         <Header size="huge" as="h1">
           Welcome, Customer
         </Header>
-        <Tab menu={{ horizontal: true, compact: true }} 
-        panes={panes}  style={{marginLeft: "50px", marginRight: "50px"}}/>
+        <Tab
+          menu={{ horizontal: true, compact: true }}
+          panes={panes}
+          style={{ marginLeft: '50px', marginRight: '50px' }}
+        />
       </>
 
     );

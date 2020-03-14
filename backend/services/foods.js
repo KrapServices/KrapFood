@@ -1,10 +1,11 @@
 const { query, transact } = require('../database');
 
+//TODO: add validator for restaurant id here
+
 const createFood = async (request, response) => {
     try {
       const { category, food_name,  daily_limit, availability, price, restaurant_id} = request.body;
       console.log(request.body);
-      //console.log(restaurant_name);
       const food = (await query(
         "INSERT INTO foods (category, food_name,  daily_limit, availability, price, restaurant_id) VALUES ($1,$2,$3,$4,$5,$6) RETURNING food_id",
         [category, food_name,  daily_limit, availability, price, restaurant_id]
@@ -20,3 +21,21 @@ const createFood = async (request, response) => {
 module.exports = {
     createFood
 }
+
+
+
+
+/*
+example request body to create food: 
+
+{key : value }
+
+category:fast food
+food_name:chicken burger
+daily_limit:200
+availability:true
+price:2.00
+restaurant_id:1
+
+
+*/
