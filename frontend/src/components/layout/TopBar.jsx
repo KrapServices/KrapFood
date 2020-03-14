@@ -13,21 +13,13 @@ import {
 } from 'semantic-ui-react';
 import './layout.css';
 
-const getWidth = () => {
-  const isSSR = typeof window === 'undefined';
-  return isSSR ? Responsive.onlyTablet.minWidth : window.innerWidth;
-};
-
 export default class TopBar extends Component {
   render() {
     const { children } = this.props;
 
     return (
       <div>
-        <Responsive
-          getWidth={getWidth}
-          minWidth={Responsive.onlyTablet.minWidth}
-        >
+        <Responsive>
           <Visibility once onBottomPassedReverse={this.hideFixedMenu}>
             <Grid
               style={{

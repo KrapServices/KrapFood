@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  List, Button,
+  List, Button, Rail, Segment, Grid, Input, Header
 } from 'semantic-ui-react';
 import Axios from 'axios';
 import config from '../../../config.json';
@@ -11,6 +11,7 @@ class CustomerOrderFood extends Component {
     super(props);
     this.state = {
       listOfRestaurants: [],
+      shoppingCart: []
     };
 
     this.loadRestaurants = async () => {
@@ -33,8 +34,27 @@ class CustomerOrderFood extends Component {
     const { listOfRestaurants } = this.state;
 
     return (
-      <div>
-        <List large divided relaxed>
+      <Grid columns={2}>   
+<Grid.Column width={4}>
+<Rail>
+<Segment attached="top">
+  <Header as="h2">Your Cart</Header>
+   </Segment>  
+      <Segment attached> shoping cart items </Segment>
+      <Segment attached="bottom">
+      <Button.Group>
+    <Button  icon='delete' content='clear' />
+    <Button.Or />
+    <Button content='Order' color="green" />
+  </Button.Group>
+      </Segment>
+  
+    </Rail>
+  </Grid.Column>
+      <Grid.Column width={12} >
+        <Segment>
+        <Input icon='search' placeholder='Search...' />
+    <List large divided relaxed>
           {listOfRestaurants === [] ? <div /> : listOfRestaurants.map((res) => (
             <List.Item>
               <List.Content floated="left">
@@ -49,7 +69,10 @@ class CustomerOrderFood extends Component {
             </List.Item>
           ))}
         </List>
-      </div>
+          </Segment>
+
+        </Grid.Column> 
+      </Grid>
     );
   }
 }
