@@ -11,7 +11,7 @@ const createRestaurant = async (request, response) => {
   try {
     const { threshold, restaurant_name, restaurant_location, delivery_fee } = request.body;
     console.log(restaurant_name);
-    let result = (await query(
+    const result = (await query(
       "INSERT INTO restaurants (threshold, restaurant_name, restaurant_location, delivery_fee) VALUES ($1,$2,$3,$4) RETURNING restaurant_id",
       [threshold, restaurant_name, restaurant_location, delivery_fee]
     )).rows[0];

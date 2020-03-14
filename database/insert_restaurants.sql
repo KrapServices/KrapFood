@@ -1,27 +1,28 @@
 INSERT INTO restaurants
     (threshold, restaurant_name, restaurant_location, delivery_fee)
 VALUES
-    (5, 'test name 0' , 'test location 0' , 0);
+    (5, 'Macdonner' , 'test location 0' , 0);
 INSERT INTO restaurants
     (threshold, restaurant_name, restaurant_location, delivery_fee)
 VALUES
-    (6, 'test name 1' , 'test location 1' , 1);
+    (6, 'Burger prince' , 'test location 1' , 1);
 INSERT INTO restaurants
     (threshold, restaurant_name, restaurant_location, delivery_fee)
 VALUES
-    (7, 'test name 2' , 'test location 2' , 2);
+    (7, 'Long John Xddd' , 'test location 2' , 2);
 INSERT INTO restaurants
     (threshold, restaurant_name, restaurant_location, delivery_fee)
 VALUES
-    (8, 'test name 3' , 'test location 3' , 3);
+    (8, 'fine f00d' , 'test location 3' , 3);
 INSERT INTO restaurants
     (threshold, restaurant_name, restaurant_location, delivery_fee)
 VALUES
-    (9, 'test name 4' , 'test location 4' , 4);
+    (9, 'sushi' , 'test location 4' , 4);
 INSERT INTO restaurants
     (threshold, restaurant_name, restaurant_location, delivery_fee)
 VALUES
-    (10, 'test name 5' , 'test location 5' , 5);
+    (10, 'pizza' , 'test location 5' , 5);
+    /*
 INSERT INTO restaurants
     (threshold, restaurant_name, restaurant_location, delivery_fee)
 VALUES
@@ -198,3 +199,4 @@ INSERT INTO restaurants
     (threshold, restaurant_name, restaurant_location, delivery_fee)
 VALUES
     (54, 'test name 49' , 'test location 49' , 49);
+*/
