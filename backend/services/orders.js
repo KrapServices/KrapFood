@@ -31,14 +31,14 @@ const createOrder = async (request, response) => {
 
 const getAllOrders = async (request, response) => {
   try {
-    let restaurants = (await query(
-     // "SELECT restaurant_id, restaurant_name, restaurant_location from restaurants",
+    const orders = (await query(
+     "SELECT  order_id, total_cost, status FROM orders ",
     )).rows;
-    console.log(`restaurants: ${restaurants}`);
-    return response.status(200).json({ restaurants });
+    console.log(`orders: ${orders}`);
+    return response.status(200).json({ orders});
   } catch (error) {
     console.log(error);
-    return response.status(500).send("An error occured with getting the restaurants");
+    return response.status(500).send("An error occured with getting the orders");
   }
 };
 
@@ -47,14 +47,14 @@ const getOrderById = async (request, response) => {
  
     const { id } = request.params;
   
-    let restaurant = (await query(
-     // "SELECT * FROM restaurants where restaurant_id = $1", [id]
+    const order = (await query(
+      "SELECT * FROM orders where order_id = $1", [id]
     )).rows[0];
-    console.log(`Single restaurant: ${restaurant}`);
-    return response.status(200).json({ restaurant: restaurant });
+    console.log(`Single order: ${order}`);
+    return response.status(200).json({ order: order });
   } catch (error) {
     console.log(error);
-    return response.status(500).send("restaurant could not be found");
+    return response.status(500).send("order could not be found");
   }
 };
 
