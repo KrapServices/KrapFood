@@ -86,6 +86,50 @@ class Signup extends Component {
         alert('error has occured');
       }
     };
+
+    this.handleSubmitRd = async (event) => {
+      const { email, password } = this.state;
+      const { login } = this.context;
+      event.preventDefault();
+      await Axios.post(
+        `${config.localhost}registrations/rider/sign-up`,
+        { email, password },
+        {
+          headers: { 'Access-Control-Allow-Origin': true },
+        },
+      );
+      try {
+        await login(email, password, 'rider');
+        const { history } = this.props;
+        history.push('/');
+      } catch (error) {
+        console.log(error);
+        alert('error has occured');
+      }
+    };
+
+    this.handleSubmitStaff = async (event) => {
+      const { email, password } = this.state;
+      const { login } = this.context;
+      event.preventDefault();
+      await Axios.post(
+        `${config.localhost}registrations/staff/sign-up`,
+        { email, password },
+        {
+          headers: { 'Access-Control-Allow-Origin': true },
+        },
+      );
+      try {
+        await login(email, password, 'staff');
+        const { history } = this.props;
+        history.push('/');
+      } catch (error) {
+        console.log(error);
+        alert('error has occured');
+      }
+    };
+
+
   }
 
   componentDidMount() {
@@ -149,7 +193,7 @@ class Signup extends Component {
                     size="large"
                     compact
                     animated="fade"
-                    onClick={this.handleSubmit}
+                    onClick={this.handleSubmitRd}
                   >
                     <Button.Content visible>Rider</Button.Content>
                     <Button.Content hidden>Sign-up!</Button.Content>
@@ -159,7 +203,7 @@ class Signup extends Component {
                     size="large"
                     compact
                     animated="fade"
-                    onClick={this.handleSubmit}
+                    onClick={this.handleSubmitStaff}
                   >
                     <Button.Content visible>Staff</Button.Content>
                     <Button.Content hidden>Sign-up!</Button.Content>

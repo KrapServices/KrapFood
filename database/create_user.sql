@@ -20,4 +20,18 @@ CREATE TABLE managers
     manager_id SERIAL PRIMARY KEY,
     FOREIGN KEY (manager_id) REFERENCES users (user_id)
 );
+
+
+CREATE TABLE riders
+(
+    rider_id SERIAL PRIMARY KEY,
+    FOREIGN KEY (rider_id) REFERENCES users (user_id)
+);
+
+
+CREATE TABLE staff
+(
+    staff_id SERIAL PRIMARY KEY,
+    FOREIGN KEY (staff_id) REFERENCES users (user_id)
+);
  
