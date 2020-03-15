@@ -61,6 +61,34 @@ class Login extends Component {
         alert('error has occured');
       }
     };
+
+    this.handleLoginRd = async (event) => {
+      event.preventDefault();
+      const { email, password } = this.state;
+      const { login } = this.context;
+      try {
+        await login(email, password, 'rider');
+        const { history } = this.props;
+        history.push('/');
+      } catch (error) {
+        console.log(error);
+        alert('error has occured');
+      }
+    };
+
+    this.handleLoginStaff = async (event) => {
+      event.preventDefault();
+      const { email, password } = this.state;
+      const { login } = this.context;
+      try {
+        await login(email, password, 'staff');
+        const { history } = this.props;
+        history.push('/');
+      } catch (error) {
+        console.log(error);
+        alert('error has occured');
+      }
+    };
   }
 
   render() {
@@ -119,7 +147,7 @@ class Login extends Component {
                     size="large"
                     compact
                     animated="fade"
-                    onClick={this.handleSubmit}
+                    onClick={this.handleLoginRd}
                   >
                     <Button.Content visible>Rider</Button.Content>
                     <Button.Content hidden>Login!</Button.Content>
@@ -129,7 +157,7 @@ class Login extends Component {
                     size="large"
                     compact
                     animated="fade"
-                    onClick={this.handleSubmit}
+                    onClick={this.handleLoginStaff}
                   >
                     <Button.Content visible>Staff</Button.Content>
                     <Button.Content hidden>Login!</Button.Content>
