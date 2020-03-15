@@ -1,11 +1,10 @@
-const { query, transact } = require('../database');
-
+const { query, transact } = require('../../database');
 // =============================================================================
-// CUSTOMERs
+// RIDERS
 // =============================================================================
 
-// create single user for customer
-const customerCreate = async (request, response) => {
+// create single user for rider
+const riderCreate = async (request, response) => {
     try {
       const { email, password } = request.body;
       const result = await transact(async (query) => {
@@ -14,7 +13,7 @@ const customerCreate = async (request, response) => {
           [email, password]
         )).rows[0];
         (await query(
-          "INSERT INTO customers (customer_id) VALUES ($1) RETURNING customer_id",
+          "INSERT INTO riders (rider_id) VALUES ($1) RETURNING rider_id",
           [user["user_id"]]
         ));
         return user;
@@ -26,24 +25,35 @@ const customerCreate = async (request, response) => {
     }
   };
   
-  const customerLogin = async (request, response) => {
+  
+  const riderLogin = async (request, response) => {
     try {
       const { email, password } = request.body;
+  
+      const result = await transact(async (query) => { 
         let user = (await query(
-          "SELECT customer_id, order_count, point FROM customers where exists( select 1 from users u where email = $1 and password = $2 and customer_id = u.user_id)",
+          "SELECT user_id, email, password FROM users WHERE email = $1 and password = $2",
           [email, password]
         )).rows[0];
+        const rider = (await query(
+          "SELECT rider_id FROM riders WHERE rider_id = $1",
+          [user["user_id"]]
+        )).rows[0];
         //append info to user object
-        user["type"] = "customer";
+        user["type"] = "rider";
+        user = { ...user, ...rider };
         console.log(user);
-      return response.status(200).json({ user: user });
+        return user 
+      });
+      response.status(200).json({ user: result });
     } catch (error) {
       console.log(error);
       return response.status(500).send("user cannot be found");
     }
   };
-
-  module.exports = {
-    customerLogin,
-    customerCreate,
-  }
+  
+  
+module.exports = {
+    riderCreate,
+    riderLogin,
+}
