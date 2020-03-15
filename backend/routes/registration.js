@@ -8,17 +8,17 @@ router.post("/customer/sign-up", cxServices.customerCreate);
 
 router.post("/customer/login", cxServices.customerLogin);
 
-//router.post("/rider/sign-up", );
+router.post("/rider/sign-up", services.riderCreate);
 
-//router.post("/rider/login", );
+router.post("/rider/login", services.riderLogin);
 
 router.post("/manager/sign-up", managerServices.managerCreate);
 
 router.post("/manager/login", managerServices.managerLogin);
 
-//router.post("/staff/sign-up", );
+router.post("/staff/sign-up", services.staffCreate);
 
-//router.post("/staff/login", );
+router.post("/staff/login", services.staffLogin);
 
 
 router.get("/registrations", function(req, res, next) {
