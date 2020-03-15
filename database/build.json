@@ -3,6 +3,7 @@
     "drop_tables.sql",
     "create_user.sql",
     "create_restaurants.sql",
-    "insert_restaurants.sql"
+    "insert_restaurants.sql",
+    "initialize_timeslots.sql"
   ]
 }
