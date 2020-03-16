@@ -14,13 +14,13 @@ import Axios from 'axios';
 import userContext from '../../../userContext';
 import config from '../../../config.json';
 
+// @flow
 class Signup extends Component {
   constructor(props) {
     super(props);
     this.state = {
       email: '',
       password: '',
-      error: '',
     };
 
     this.handleChange = (event) => {
@@ -39,13 +39,12 @@ class Signup extends Component {
     this.handleSubmit = (event) => {
       // TODO: pass user type e.g customer to here to submit to correct endpoint;
       event.preventDefault();
-      console.table(this.state);
       // call sign up function
       const { signup } = this.context;
       signup();
     };
 
-    this.handleSubmitCx = async (event) => {
+    this.handleSubmitCx = async (event : Event) => {
       const { email, password } = this.state;
       const { login } = this.context;
       event.preventDefault();
@@ -87,7 +86,7 @@ class Signup extends Component {
       }
     };
 
-    this.handleSubmitRd = async (event) => {
+    this.handleSubmitRd = async (event : Event) => {
       const { email, password } = this.state;
       const { login } = this.context;
       event.preventDefault();
@@ -108,7 +107,7 @@ class Signup extends Component {
       }
     };
 
-    this.handleSubmitStaff = async (event) => {
+    this.handleSubmitStaff = async (event : Event) => {
       const { email, password } = this.state;
       const { login } = this.context;
       event.preventDefault();
@@ -128,8 +127,6 @@ class Signup extends Component {
         alert('error has occured');
       }
     };
-
-
   }
 
   componentDidMount() {
