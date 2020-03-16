@@ -8,6 +8,8 @@ require("dotenv").config();
 var indexRouter = require("./routes/index");
 var registrationRouter = require("./routes/registration");
 var restaurantsRouter = require("./routes/restaurants");
+var ordersRouter = require("./routes/orders");
+var foodRouter = require("./routes/food");
 
 var app = express();
 
@@ -25,6 +27,8 @@ app.use(cors());
 app.use("/", indexRouter);
 app.use("/registrations", registrationRouter);
 app.use("/restaurants", restaurantsRouter);
+app.use("/orders" , ordersRouter);
+app.use("/food" , foodRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

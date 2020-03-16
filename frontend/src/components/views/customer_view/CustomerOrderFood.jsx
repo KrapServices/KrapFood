@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
 import {
-  List, Button,
+  List, Button, Segment, Grid, Input, Header,
 } from 'semantic-ui-react';
 import Axios from 'axios';
+import Cart from './Cart';
 import config from '../../../config.json';
-import userContext from '../../../userContext';
+import customerCartContext from './customerCartContext';
 
 class CustomerOrderFood extends Component {
   constructor(props) {
     super(props);
     this.state = {
       listOfRestaurants: [],
+      shoppingCart: ['1', '2', '3'],
     };
 
     this.loadRestaurants = async () => {
@@ -30,30 +32,53 @@ class CustomerOrderFood extends Component {
 
 
   render() {
-    const { listOfRestaurants } = this.state;
-
+    const { listOfRestaurants, shoppingCart } = this.state;
+    console.log(shoppingCart);
     return (
-      <div>
-        <List large divided relaxed>
-          {listOfRestaurants === [] ? <div /> : listOfRestaurants.map((res) => (
-            <List.Item>
-              <List.Content floated="left">
-                <List.Header as="h2">
-                  {`Shop name: ${res.restaurant_name}`}
-                </List.Header>
-                {`Located at ${res.restaurant_location}`}
-              </List.Content>
-              <List.Content floated="right">
-                <Button primary> order</Button>
-              </List.Content>
-            </List.Item>
-          ))}
-        </List>
-      </div>
+      <customerCartContext.Provider value={shoppingCart}>
+        <Grid columns={2} stackable>
+          <Grid.Column>
+            <Segment attached="top">
+              <Header as="h2">Your Cart</Header>
+            </Segment>
+            <Segment attached>
+              <Cart />
+            </Segment>
+            <Segment attached="bottom">
+              <Button.Group>
+                <Button icon="delete" content="clear" />
+                <Button.Or />
+                <Button content="Order" color="green" />
+              </Button.Group>
+            </Segment>
+          </Grid.Column>
+          <Grid.Column>
+            <Segment>
+              <Input icon="search" placeholder="Search..." />
+              <List large divided relaxed>
+                {listOfRestaurants === [] ? <div /> : listOfRestaurants.map((res) => (
+                  <List.Item>
+                    <List.Content floated="left">
+                      <List.Header as="h2">
+                        {`Shop name: ${res.restaurant_name}`}
+                      </List.Header>
+                      {`Located at ${res.restaurant_location}`}
+                    </List.Content>
+                    <List.Content floated="right">
+                      <Button primary> order</Button>
+                    </List.Content>
+                  </List.Item>
+                ))}
+              </List>
+            </Segment>
+
+          </Grid.Column>
+        </Grid>
+      </customerCartContext.Provider>
+
     );
   }
 }
 
-CustomerOrderFood.contextType = userContext;
-
+CustomerOrderFood.contextType = customerCartContext;
 export default CustomerOrderFood;

@@ -48,7 +48,7 @@ class Login extends Component {
       }
     };
 
-    this.handleLoginMg = async (event) => {
+    this.handleLoginManager = async (event) => {
       event.preventDefault();
       const { email, password } = this.state;
       const { login } = this.context;
@@ -62,7 +62,7 @@ class Login extends Component {
       }
     };
 
-    this.handleLoginRd = async (event) => {
+    this.handleLoginRider = async (event) => {
       event.preventDefault();
       const { email, password } = this.state;
       const { login } = this.context;
@@ -147,7 +147,7 @@ class Login extends Component {
                     size="large"
                     compact
                     animated="fade"
-                    onClick={this.handleLoginRd}
+                    onClick={this.handleLoginRider}
                   >
                     <Button.Content visible>Rider</Button.Content>
                     <Button.Content hidden>Login!</Button.Content>
@@ -167,7 +167,7 @@ class Login extends Component {
                     size="large"
                     compact
                     animated="fade"
-                    onClick={this.handleLoginMg}
+                    onClick={this.handleLoginManager}
                   >
                     <Button.Content visible>Manager</Button.Content>
                     <Button.Content hidden>Login!</Button.Content>

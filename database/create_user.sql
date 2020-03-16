@@ -10,9 +10,16 @@ CREATE TABLE users
 CREATE TABLE customers
 (
     customer_id SERIAL PRIMARY KEY,
-    card text DEFAULT '0000',
-    num_orders int DEFAULT 0,
+    order_count int DEFAULT 0,
+    point int DEFAULT 0,
     FOREIGN KEY (customer_id) REFERENCES users (user_id)
+);
+
+CREATE TABLE cards  
+(
+    customer_id SERIAL,
+    card_number text PRIMARY KEY,
+    FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
 );
 
 CREATE TABLE managers
