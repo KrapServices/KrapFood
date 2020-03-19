@@ -7,6 +7,7 @@ import userContext from '../../../userContext';
 import CustomerOrderFood from './CustomerOrderFood';
 import CustomerOrderView from './CustomerOrderView';
 
+// @flow 
 class Customer extends Component {
   constructor() {
     super();
