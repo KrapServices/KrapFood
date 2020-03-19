@@ -9,8 +9,8 @@ CREATE TABLE orders
     customer_id INTEGER NOT NULL,
     rating INTEGER,
     CONSTRAINT valid_rating CHECK (rating IN (1, 2, 3, 4, 5)),
-    created_at TIMESTAMP DEFAULT current_timestamp,
-    modified_at TIMESTAMP DEFAULT current_timestamp,
+    created_at TIMESTAMP NOT NULL DEFAULT current_timestamp,
+    modified_at TIMESTAMP NOT NULL DEFAULT current_timestamp,
     PRIMARY KEY (order_id),
     FOREIGN KEY (customer_id) REFERENCES customers (customer_id)
 );
