@@ -1,8 +1,8 @@
 {
   "queries": [
     "drop_tables.sql",
-    "create_user.sql",
     "create_restaurants.sql",
+    "create_user.sql",
     "create_orders.sql",
     "insert_restaurants.sql",
     "initialize_timeslots.sql"

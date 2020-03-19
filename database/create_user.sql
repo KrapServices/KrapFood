@@ -39,10 +39,10 @@ CREATE TABLE manages
 (
     manager_id INTEGER,
     rider_id INTEGER,
-    PRIMARY KEY (manager_id, rider_id)
+    PRIMARY KEY (manager_id, rider_id),
     FOREIGN KEY (manager_id) REFERENCES managers (manager_id),
     FOREIGN KEY (rider_id) REFERENCES riders (rider_id)
-)
+);
 
 CREATE TABLE staff
 (
