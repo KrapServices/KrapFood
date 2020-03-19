@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS timeslots;
+
 CREATE TABLE timeslots (
   day INTEGER,
   hour INTEGER,
