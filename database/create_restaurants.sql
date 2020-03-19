@@ -3,7 +3,6 @@ CREATE TABLE restaurants (
   price_threshold NUMERIC(10, 2) NOT NULL DEFAULT 0.00,
   restaurant_name TEXT NOT NULL DEFAULT '',
   restaurant_location TEXT NOT NULL,
-  delivery_fee NUMERIC(10, 2) NOT NULL,
   created_at TIMESTAMP DEFAULT current_timestamp,
   modified_at TIMESTAMP DEFAULT current_timestamp
 );

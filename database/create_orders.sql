@@ -18,10 +18,17 @@ CREATE TABLE orders
 CREATE TABLE promotions
 (
     promo_id SERIAL PRIMARY KEY,
-    order_id INTEGER NOT NULL,
     discount INTEGER NOT NULL,
     start_time TIMESTAMP NOT NULL,
-    end_time TIMESTAMP NOT NULL,
+    end_time TIMESTAMP NOT NULL
+);
+
+CREATE TABLE applies
+(
+    promo_id INTEGER,
+    order_id INTEGER,
+    PRIMARY KEY (promo_id, order_id),
+    FOREIGN KEY (promo_id) REFERENCES promotions (promo_id),
     FOREIGN KEY (order_id) REFERENCES orders (order_id)
 );
 
@@ -41,6 +48,11 @@ CREATE TABLE delivers
     delivery_id SERIAL,
     rider_id INTEGER NOT NULL,
     order_id INTEGER NOT NULL UNIQUE,
+    delivery_fee NUMERIC(10, 2) NOT NULL,
+    departure_time TIME,
+    arrival_time TIME,
+    completion_time TIME,
+    collection_time TIME,
     PRIMARY KEY (delivery_id),
     FOREIGN KEY (rider_id) REFERENCES riders (rider_id),
     FOREIGN KEY (order_id) REFERENCES orders (order_id)
