@@ -52,4 +52,3 @@ CREATE TABLE staff
     FOREIGN KEY (staff_id) REFERENCES users (user_id),
     FOREIGN KEY (restaurant_id) REFERENCES restaurants (restaurant_id)
 );
- 
