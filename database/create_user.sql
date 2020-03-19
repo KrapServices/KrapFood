@@ -123,3 +123,26 @@ CREATE TABLE staff
     FOREIGN KEY (staff_id) REFERENCES users (user_id),
     FOREIGN KEY (restaurant_id) REFERENCES restaurants (restaurant_id)
 );
+
+CREATE TABLE shift
+(
+    shift_id SERIAL,
+    shift_date DATE NOT NULL,
+    day_of_week INTEGER NOT NULL,
+    CONSTRAINT valid_day_of_week CHECK (day_of_week >= 0 AND day_of_week <= 7),
+    start_hour INTEGER NOT NULL,
+    CHECK (start_hour >= 0 AND start_hour <= 23),
+    end_hour INTEGER NOT NULL,
+    CHECK (end_hour >= 0 AND end_hour <= 23),
+    CONSTRAINT valid_duration CHECK (end_hour - start_hour < 5),
+    PRIMARY KEY (shift_id)
+);
+
+CREATE TABLE follows
+(
+    rider_id INTEGER,
+    shift_id INTEGER,
+    PRIMARY KEY (rider_id, shift_id),
+    FOREIGN KEY (rider_id) REFERENCES riders (rider_id),
+    FOREIGN KEY (shift_id) REFERENCES shift (shift_id)
+)
