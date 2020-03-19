@@ -1,10 +1,11 @@
 CREATE TABLE restaurants (
-  restaurant_id SERIAL PRIMARY KEY,
+  restaurant_id SERIAL,
   price_threshold NUMERIC(10, 2) NOT NULL DEFAULT 0.00,
   restaurant_name TEXT NOT NULL DEFAULT '',
   restaurant_location TEXT NOT NULL,
   created_at TIMESTAMP DEFAULT current_timestamp,
-  modified_at TIMESTAMP DEFAULT current_timestamp
+  modified_at TIMESTAMP DEFAULT current_timestamp,
+  PRIMARY KEY (restaurant_id)
 );
 
 CREATE TABLE foods (
@@ -16,8 +17,8 @@ CREATE TABLE foods (
   price NUMERIC(10, 2) NOT NULL,
   CONSTRAINT positive_price CHECK (price > 0),
   restaurant_id INTEGER NOT NULL,
-  PRIMARY KEY (restaurant_id, food_id),
-  FOREIGN KEY (restaurant_id) REFERENCES restaurants (restaurant_id),
   created_at TIMESTAMP DEFAULT current_timestamp,
-  modified_at TIMESTAMP DEFAULT current_timestamp
+  modified_at TIMESTAMP DEFAULT current_timestamp,
+  PRIMARY KEY (restaurant_id, food_id),
+  FOREIGN KEY (restaurant_id) REFERENCES restaurants (restaurant_id)
 );
