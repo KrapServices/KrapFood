@@ -1,11 +1,12 @@
-var express = require("express");
-const orderServices = require("../services/orders");
-var router = express.Router();
+const express = require('express');
+const orderServices = require('../services/orders');
 
-router.get("/", orderServices.getAllOrders);
+const router = express.Router();
 
-router.get("/:id", orderServices.getOrderById);
+router.get('/', orderServices.getAllOrders);
 
-router.post("/", orderServices.createOrder);
+router.get('/:id', orderServices.getOrderById);
+
+router.post('/', orderServices.createOrder);
 
 module.exports = router;

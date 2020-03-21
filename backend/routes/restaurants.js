@@ -1,12 +1,13 @@
-var express = require("express");
-const services = require("../services/restaurants");
-var router = express.Router();
+const express = require('express');
+const services = require('../services/restaurants');
+
+const router = express.Router();
 
 
-router.get("/", services.getAllRestaurant);
+router.get('/', services.getAllRestaurant);
 
-router.get("/:id", services.getRestaurantById);
+router.get('/:id', services.getRestaurantById);
 
-router.post("/", services.createRestaurant);
+router.post('/', services.createRestaurant);
 
 module.exports = router;

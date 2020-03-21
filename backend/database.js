@@ -1,5 +1,5 @@
-require("dotenv").config();
-const { Pool } = require("pg");
+require('dotenv').config();
+const { Pool } = require('pg');
 
 // Documentation for pg: https://node-postgres.com/
 
@@ -9,7 +9,7 @@ const config = {
   host: process.env.DATABASE_HOST,
   database: process.env.DATABASE_NAME,
   password: process.env.DATABASE_PASSWORD,
-  port: process.env.DATABASE_PORT
+  port: process.env.DATABASE_PORT,
 };
 
 const pool = new Pool(config);
@@ -31,5 +31,5 @@ const transact = async (callback) => {
 
 module.exports = {
   query: pool.query.bind(pool),
-  transact, 
-}
+  transact,
+};
