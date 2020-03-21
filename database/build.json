@@ -5,6 +5,7 @@
     "create_user.sql",
     "create_orders.sql",
     "initialize_timeslots.sql",
-    "insert_restaurants.sql"
+    "insert_restaurants.sql",
+    "insert_food.sql"
   ]
 }

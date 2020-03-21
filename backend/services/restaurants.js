@@ -28,7 +28,7 @@ const createRestaurant = async (request, response) => {
 const getAllRestaurant = async (request, response) => {
   try {
     const restaurants = (await query(
-      'SELECT restaurant_id, restaurant_name, restaurant_location from restaurants',
+      'SELECT r.restaurant_id, restaurant_name, restaurant_location from restaurants r',
     )).rows;
     console.log(`restaurants: ${restaurants}`);
     return response.status(200).json({ restaurants });
@@ -45,8 +45,12 @@ const getRestaurantById = async (request, response) => {
     const restaurant = (await query(
       'SELECT * FROM restaurants where restaurant_id = $1', [id],
     )).rows[0];
+    const food = (await query(
+      'SELECT * FROM foods where restaurant_id = $1', [id],
+    )).rows;
+    const restaurantWithFood = { ...restaurant, food };
     console.log(`Single restaurant: ${restaurant}`);
-    return response.status(200).json({ restaurant });
+    return response.status(200).json({ restaurant: restaurantWithFood });
   } catch (error) {
     console.log(error);
     return response.status(500).send('restaurant could not be found');
