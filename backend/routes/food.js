@@ -1,8 +1,8 @@
-var express = require("express");
-const foodServices = require("../services/foods");
-var router = express.Router();
+const express = require('express');
+const foodServices = require('../services/foods');
 
-router.post("/create", foodServices.createFood);
+const router = express.Router();
+
+router.post('/create', foodServices.createFood);
 
 module.exports = router;
-

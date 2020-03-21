@@ -1,60 +1,60 @@
-const { query, transact } = require('../database');
+/* eslint-disable camelcase */
+const { query } = require('../database');
 
 // -----------------------------------------------------------------------------
-// Orders 
+// Orders
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 // Services for Orders
 // -----------------------------------------------------------------------------
 const createOrder = async (request, response) => {
   try {
-   const { total_cost, status, listOfFood } = request.body;
-   // console.log(restaurant_name);
+    const { total_cost, status, listOfFood } = request.body;
+    // console.log(restaurant_name);
     const result = (await query(
-      "INSERT INTO orders (total_cost, status) VALUES ($1,$2) RETURNING order_id",
-      [total_cost, status]
+      'INSERT INTO orders (total_cost, status) VALUES ($1,$2) RETURNING order_id',
+      [total_cost, status],
     )).rows[0];
     for await (const x of listOfFood) {
-      const order_id = result['order_id'];
-      const {food_id, quantity} = x;
+      const { order_id } = result;
+      const { food_id, quantity } = x;
       query(
-        "INSERT INTO contain (order_id, food_id, quantity) VALUES ($1 $2 $3)", [order_id, food_id, quantity]
+        'INSERT INTO contain (order_id, food_id, quantity) VALUES ($1 $2 $3)', [order_id, food_id, quantity],
       );
     }
-    //console.log(result);
+    // console.log(result);
     return response.status(200).json({ created_order_id: result });
   } catch (error) {
     console.log(error);
-    return response.status(500).send("An error occured with creating the order. please try again");
+    return response.status(500).send('An error occured with creating the order. please try again');
   }
 };
 
 const getAllOrders = async (request, response) => {
   try {
     const orders = (await query(
-     "SELECT  order_id, total_cost, status FROM orders ",
+      'SELECT  order_id, total_cost, status FROM orders ',
     )).rows;
     console.log(`orders: ${orders}`);
-    return response.status(200).json({ orders});
+    return response.status(200).json({ orders });
   } catch (error) {
     console.log(error);
-    return response.status(500).send("An error occured with getting the orders");
+    return response.status(500).send('An error occured with getting the orders');
   }
 };
 
 const getOrderById = async (request, response) => {
   try {
- 
     const { id } = request.params;
-  
+
     const order = (await query(
-      "SELECT * FROM orders where order_id = $1", [id]
+      'SELECT * FROM orders where order_id = $1', [id],
     )).rows[0];
     console.log(`Single order: ${order}`);
-    return response.status(200).json({ order: order });
+    return response.status(200).json({ order });
   } catch (error) {
     console.log(error);
-    return response.status(500).send("order could not be found");
+    return response.status(500).send('order could not be found');
   }
 };
 
@@ -69,7 +69,7 @@ module.exports = {
  * Example crud
  */
 
- /*
+/*
  //get users
 const getUsers = async (request, response) => {
   try {
