@@ -1,36 +1,61 @@
 CREATE TABLE orders 
 (
-    order_id SERIAL PRIMARY KEY,
-    total_cost NUMERIC(10,2),
-    status text , 
-    created_at TIMESTAMP DEFAULT current_timestamp,
-    modified_at TIMESTAMP DEFAULT current_timestamp
-);
-/*Order can have multiple promotions*/
-CREATE TABLE promotions
-(
-    promo_id SERIAL PRIMARY KEY,
     order_id SERIAL,
-    discount DECIMAL(5,2), 
-    start_time DATE,
-    end_time DATE,
-    FOREIGN KEY (order_id) REFERENCES orders(order_id)
+    total_cost NUMERIC(10, 2) NOT NULL,
+    CONSTRAINT positive_total_cost CHECK (total_cost > 0),
+    status TEXT NOT NULL DEFAULT 'preparing', -- 'preparing' | 'delivering' | 'completed' 
+    CHECK (status IN ('preparing', 'delivering', 'completed')),
+    delivery_location TEXT NOT NULL,
+    customer_id INTEGER NOT NULL,
+    rating INTEGER,
+    CONSTRAINT valid_rating CHECK (rating IN (1, 2, 3, 4, 5)),
+    created_at TIMESTAMP NOT NULL DEFAULT current_timestamp,
+    modified_at TIMESTAMP NOT NULL DEFAULT current_timestamp,
+    PRIMARY KEY (order_id),
+    FOREIGN KEY (customer_id) REFERENCES customers (customer_id)
 );
 
-/*Order can only have one location*/
-CREATE TABLE locations 
+-- Order can have multiple promotions
+CREATE TABLE promotions
 (
-    order_id SERIAL PRIMARY KEY,
-    address text,
-    FOREIGN KEY (order_id) REFERENCES orders(order_id)
+    promo_id SERIAL,
+    discount INTEGER NOT NULL,
+    start_time TIMESTAMP NOT NULL,
+    end_time TIMESTAMP NOT NULL,
+    PRIMARY KEY (promo_id)
+);
+
+CREATE TABLE applies
+(
+    promo_id INTEGER,
+    order_id INTEGER,
+    PRIMARY KEY (promo_id, order_id),
+    FOREIGN KEY (promo_id) REFERENCES promotions (promo_id),
+    FOREIGN KEY (order_id) REFERENCES orders (order_id)
 );
 
 CREATE TABLE contain
 (
-    order_id SERIAL, 
-    food_id SERIAL,
-    quantity int,
+    order_id INTEGER, 
+    food_id INTEGER,
+    quantity INTEGER NOT NULL,
+    CONSTRAINT positive_quantity CHECK (quantity > 0),
     PRIMARY KEY (order_id, food_id),
-    FOREIGN KEY (food_id) REFERENCES foods(food_id),
-    FOREIGN KEY (order_id) REFERENCES orders(order_id)
+    FOREIGN KEY (food_id) REFERENCES foods (food_id),
+    FOREIGN KEY (order_id) REFERENCES orders (order_id)
+);
+
+CREATE TABLE delivers
+(
+    delivery_id SERIAL,
+    rider_id INTEGER NOT NULL,
+    order_id INTEGER NOT NULL UNIQUE,
+    delivery_fee NUMERIC(10, 2) NOT NULL,
+    departure_time TIME,
+    arrival_time TIME,
+    completion_time TIME,
+    collection_time TIME,
+    PRIMARY KEY (delivery_id),
+    FOREIGN KEY (rider_id) REFERENCES riders (rider_id),
+    FOREIGN KEY (order_id) REFERENCES orders (order_id)
 );

@@ -1,9 +1,3 @@
-CREATE TABLE timeslots (
-  day INTEGER,
-  hour INTEGER,
-  PRIMARY KEY (day, hour)
-);
-
 INSERT INTO timeslots VALUES (1, 0);
 INSERT INTO timeslots VALUES (1, 1);
 INSERT INTO timeslots VALUES (1, 2);
