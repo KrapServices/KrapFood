@@ -4,48 +4,98 @@ const { query, transact } = require('../../database');
 // MANAGERS
 // =============================================================================
 
-// create single user for manager
-const managerCreate = async (request, response) => {
+// Create manager
+const managerCreate = async (req, res) => {
   try {
-    const { email, password } = request.body;
-    const result = await transact(async (query) => {
-      const user = (await query(
-        'INSERT INTO users (email , password) VALUES ($1,$2) RETURNING user_id',
+    const { email, password } = req.body;
+
+    await transact(async (transactQuery) => {
+      const user = (await transactQuery(
+        `
+          INSERT INTO users (email, password)
+          VALUES ($1, $2)
+          RETURNING user_id
+        `,
         [email, password],
       )).rows[0];
-      (await query(
-        'INSERT INTO managers (manager_id) VALUES ($1) RETURNING manager_id',
+
+      (await transactQuery(
+        `
+          INSERT INTO managers (manager_id) 
+          VALUES ($1)
+        `,
         [user.user_id],
       ));
-      return user;
     });
-    response.status(201).send('user created');
+
+    res.status(201).send('Manager created');
   } catch (error) {
-    console.log(error);
-    return response.status(500).send('error occured');
+    console.error(error);
+    res.status(500).send('error occured');
   }
 };
 
-const managerLogin = async (request, response) => {
+const managerLogin = async (req, res) => {
   try {
-    const { email, password } = request.body;
+    const { email, password } = req.body;
 
     const user = (await query(
-      'SELECT manager_id FROM managers where exists( select 1 from users u where email = $1 and password = $2 and manager_id = u.user_id)',
+      `
+        SELECT manager_id FROM managers 
+        WHERE EXISTS ( 
+          SELECT 1
+          FROM users 
+          WHERE email = $1 
+          AND password = $2
+          AND manager_id = user_id
+        )
+      `,
       [email, password],
     )).rows[0];
-    // append info to user object
-    user.type = 'manager';
-    // user = { ...user, ...manager };
-    console.log(user);
-    return response.status(200).json({ user });
+
+    return res.status(200).json({
+      user: {
+        ...user,
+        type: 'manager',
+      },
+    });
   } catch (error) {
-    console.log(error);
-    return response.status(500).send('user cannot be found');
+    console.error(error);
+    return res.status(500).send('Manager cannot be found');
+  }
+};
+
+const updateManagerPassword = async (req, res) => {
+  const { manager_id: managerId, password } = req.body;
+  console.log(managerId);
+  console.log(password);
+
+  if (managerId === undefined || password === undefined) {
+    res.status(400).send('Invalid details');
+    return;
+  }
+
+  try {
+    await query(
+      `
+        UPDATE users
+        SET
+          password = $2,
+          modified_at = DEFAULT
+        WHERE user_id = $1
+      `,
+      [managerId, password],
+    );
+
+    res.status(200).send('Password updated.');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Password update failed.');
   }
 };
 
 module.exports = {
   managerLogin,
   managerCreate,
+  updateManagerPassword,
 };
