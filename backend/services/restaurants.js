@@ -46,7 +46,7 @@ const getRestaurantById = async (request, response) => {
       'SELECT * FROM restaurants where restaurant_id = $1', [id],
     )).rows[0];
     const food = (await query(
-      'SELECT * FROM foods where restaurant_id = $1', [id],
+      'SELECT food_id, category, food_name, daily_limit, availability, price, price_threshold FROM foods f NATURAL JOIN restaurants where f.restaurant_id = $1', [id],
     )).rows;
     const restaurantWithFood = { ...restaurant, food };
     console.log(`Single restaurant: ${restaurant}`);
