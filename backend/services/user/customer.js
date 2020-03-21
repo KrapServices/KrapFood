@@ -30,7 +30,7 @@ const customerLogin = async (request, response) => {
   try {
     const { email, password } = request.body;
     const user = (await query(
-      'SELECT customer_id, order_count, point FROM customers where exists( select 1 from users u where email = $1 and password = $2 and customer_id = u.user_id)',
+      'SELECT customer_id, order_count, points FROM customers where exists( select 1 from users u where email = $1 and password = $2 and customer_id = u.user_id)',
       [email, password],
     )).rows[0];
     // append info to user object
