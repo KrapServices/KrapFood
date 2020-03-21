@@ -67,8 +67,6 @@ const managerLogin = async (req, res) => {
 
 const updateManagerPassword = async (req, res) => {
   const { manager_id: managerId, password } = req.body;
-  console.log(managerId);
-  console.log(password);
 
   if (managerId === undefined || password === undefined) {
     res.status(400).send('Invalid details');
@@ -94,8 +92,49 @@ const updateManagerPassword = async (req, res) => {
   }
 };
 
+const getRiders = async (req, res) => {
+  const { id: managerId } = req.params;
+
+  if (Number.isNaN(managerId) || !Number.isInteger(parseInt(managerId, 10))) {
+    res.status(400).send('Invalid request');
+    return;
+  }
+
+  try {
+    const partTimeRiders = (await query(
+      `
+        SELECT rider_id
+        FROM managers NATURAL JOIN manages NATURAL JOIN riders NATURAL JOIN part_time_riders
+        WHERE manager_id = $1
+      `,
+      [managerId],
+    )).rows.map((rider) => ({
+      id: rider.rider_id,
+      status: 'part-time',
+    }));
+
+    const fullTimeRiders = (await query(
+      `
+        SELECT rider_id
+        FROM managers NATURAL JOIN manages NATURAL JOIN riders NATURAL JOIN full_time_riders
+        WHERE manager_id = $1
+      `,
+      [managerId],
+    )).rows.map((rider) => ({
+      id: rider.rider_id,
+      status: 'full-time',
+    }));
+
+    res.status(200).send({ riders: partTimeRiders.concat(fullTimeRiders) });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Failed to retrieve riders.');
+  }
+};
+
 module.exports = {
   managerLogin,
   managerCreate,
   updateManagerPassword,
+  getRiders,
 };
