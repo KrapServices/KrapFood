@@ -39,3 +39,24 @@ INSERT INTO foods
     (food_name,price, restaurant_id)
 VALUES
     ('2 test 5', 2, 2);
+
+    INSERT INTO foods
+    (food_name,price, restaurant_id)
+VALUES
+    ('3 test 4', 4, 3);
+INSERT INTO foods
+    (food_name,price, restaurant_id)
+VALUES
+    ('3 test 5', 212, 3);
+
+
+    INSERT INTO foods
+    (food_name,price, restaurant_id)
+VALUES
+    ('4 test 5', 512, 4);
+
+
+    INSERT INTO foods
+    (food_name,price, restaurant_id)
+VALUES
+    ('5 test 521', 12, 5);

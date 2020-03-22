@@ -27,9 +27,10 @@ const createRestaurant = async (request, response) => {
 
 const getAllRestaurant = async (request, response) => {
   try {
-    const restaurants = (await query(
+    let restaurants = (await query(
       'SELECT r.restaurant_id, restaurant_name, restaurant_location from restaurants r',
     )).rows;
+    restaurants = await getAllRestaurantWithFood(restaurants);
     console.log(`restaurants: ${restaurants}`);
     return response.status(200).json({ restaurants });
   } catch (error) {
@@ -41,12 +42,11 @@ const getAllRestaurant = async (request, response) => {
 const getRestaurantById = async (request, response) => {
   try {
     const { id } = request.params;
-
     const restaurant = (await query(
       'SELECT * FROM restaurants where restaurant_id = $1', [id],
     )).rows[0];
     const food = (await query(
-      'SELECT food_id, category, food_name, daily_limit, availability, price, price_threshold FROM foods f NATURAL JOIN restaurants where f.restaurant_id = $1', [id],
+      'SELECT food_id, category, food_name, daily_limit, availability, price, price_threshold FROM foods f RIGHT JOIN restaurants where f.restaurant_id = $1', [id],
     )).rows;
     const restaurantWithFood = { ...restaurant, food };
     console.log(`Single restaurant: ${restaurant}`);
@@ -56,6 +56,30 @@ const getRestaurantById = async (request, response) => {
     return response.status(500).send('restaurant could not be found');
   }
 };
+
+// -----------------------------------------------------------------------------
+// Utilty functions
+// -----------------------------------------------------------------------------
+
+const getAllRestaurantWithFood = async (restaurants ) =>  {
+  let result = [];
+  for ( let eachRestaurant of restaurants) {
+    const id = eachRestaurant['restaurant_id'];
+    const foodQuery = await query(
+      'SELECT * FROM FOODS where restaurant_id = $1' , [id]
+    );
+    if (!(foodQuery == undefined)) {
+      const eachRestaurantFood = foodQuery.rows;
+      eachRestaurant['foods'] = eachRestaurantFood;
+    } else {
+      eachRestaurant['foods'] = [];
+    }
+    result.push(eachRestaurant);
+  }
+  return result;
+}
+
+
 
 module.exports = {
   createRestaurant,
