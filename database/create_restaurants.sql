@@ -20,5 +20,5 @@ CREATE TABLE foods (
   created_at TIMESTAMP NOT NULL DEFAULT current_timestamp,
   modified_at TIMESTAMP NOT NULL DEFAULT current_timestamp,
   PRIMARY KEY (restaurant_id, food_id),
-  FOREIGN KEY (restaurant_id) REFERENCES restaurants (restaurant_id)
+  FOREIGN KEY (restaurant_id) REFERENCES restaurants (restaurant_id) ON DELETE CASCADE,
 );
