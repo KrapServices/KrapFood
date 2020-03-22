@@ -50,7 +50,7 @@ class RestaurantCard extends Component {
                 <Modal trigger={<Button color="green">Order</Button>}>
                   <Modal.Header>{`${res.restaurant_name}`}</Modal.Header>
                   <Modal.Header>{`Located at: ${res.restaurant_location}`}</Modal.Header>
-                  <Modal.Content s>
+                  <Modal.Content>
                     <Modal.Description>
                       <Header>Available Menu</Header>
                       <Item.Group divided>

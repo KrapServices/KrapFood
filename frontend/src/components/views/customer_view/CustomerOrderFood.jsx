@@ -49,6 +49,17 @@ class CustomerOrderFood extends Component {
     this.createOrder = async () => {
       const { shoppingCart } = this.state;
       const { customer_id } = this.props.user;
+      // get ID
+      const listOfFoods = [];
+
+      const listOfFoodId = new Set();
+      shoppingCart.forEach((x) => listOfFoodId.add(x.food_id));
+      listOfFoodId.forEach((id) => {
+        const count = shoppingCart.filter((x) => x.food_id === id).length;
+        const qtyAndID = { food_id: id, quantity: count };
+        listOfFoods.push(qtyAndID);
+      });
+
       const price = this.calculateTotal();
       try {
         const result = await Axios.post(
@@ -57,7 +68,7 @@ class CustomerOrderFood extends Component {
             customer_id,
             total_cost: price,
             status: 'preparing',
-            listOfFoods: shoppingCart,
+            listOfFoods,
             delivery_location: 'test location',
           },
           {
