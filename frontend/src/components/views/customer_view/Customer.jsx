@@ -27,7 +27,7 @@ class Customer extends Component {
           Welcome, Customer
         </Header>
         <Tab
-          menu={{ horizontal: true, compact: true }}
+          menu={{ compact: true }}
           panes={panes}
           style={{ marginLeft: '50px', marginRight: '50px' }}
         />

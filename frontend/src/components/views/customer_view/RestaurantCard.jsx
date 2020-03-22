@@ -33,7 +33,7 @@ class RestaurantCard extends Component {
               <Card.Content>
                 <Item.Group divided>
                   {res.foods.map((food) => (
-                    <Item>
+                    <Item key={food.food_id}>
                       <Item.Content verticalAlign="middle">
                         <Item.Header as="a">
                           {' '}
@@ -55,7 +55,7 @@ class RestaurantCard extends Component {
                       <Header>Available Menu</Header>
                       <Item.Group divided>
                         {res.foods.map((food) => (
-                          <Item>
+                          <Item key={food.food_id}>
                             <Item.Content verticalAlign="middle">
                               <Item.Header as="a">
                                 {' '}

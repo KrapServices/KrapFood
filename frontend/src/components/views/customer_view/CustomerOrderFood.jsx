@@ -122,7 +122,7 @@ class CustomerOrderFood extends Component {
               <Button.Group>
                 <Button icon="delete" content="clear" onClick={() => this.clearCart()} />
                 <Button.Or />
-                <Button content="Confirm Order" color="green" onClick={this.createOrder} />
+                <Button content="Confirm Order" color="green" onClick={() => this.createOrder()} />
               </Button.Group>
             </Segment>
           </Grid.Column>
@@ -131,8 +131,10 @@ class CustomerOrderFood extends Component {
               <Input icon="search" placeholder="Search..." />
               <Header as="h1"> List Of Restaurants </Header>
               <List divided relaxed>
-                {listOfRestaurants === [] ? <div /> : listOfRestaurants.map((restaurant) => (
-                  <RestaurantCard res={restaurant} />
+                {listOfRestaurants.map((restaurant) => (
+                  <React.Fragment key={restaurant.restaurant_id}>
+                    <RestaurantCard res={restaurant} />
+                  </React.Fragment>
                 ))}
               </List>
             </Segment>
@@ -144,5 +146,5 @@ class CustomerOrderFood extends Component {
   }
 }
 
-CustomerOrderFood.contextTypes = customerCartContext;
+CustomerOrderFood.contextType = customerCartContext;
 export default CustomerOrderFood;
