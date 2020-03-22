@@ -8,6 +8,7 @@ import config from '../../../config.json';
 import customerCartContext from './customerCartContext';
 import RestaurantCard from './RestaurantCard';
 
+
 class CustomerOrderFood extends Component {
   constructor(props) {
     super(props);
@@ -35,6 +36,41 @@ class CustomerOrderFood extends Component {
       shoppingCart = shoppingCart.filter((x, current) => current !== index);
       this.setState({ shoppingCart });
     };
+    this.clearCart = () => {
+      this.setState({ shoppingCart: [] });
+    };
+    this.calculateTotal = () => {
+      const { shoppingCart } = this.state;
+      const priceList = shoppingCart.map((x) => Number(x.price));
+      const result = priceList.reduce((prev, curr) => prev + curr, 0);
+      console.log(result);
+      return result;
+    };
+    this.createOrder = async () => {
+      const { shoppingCart } = this.state;
+      const { customer_id } = this.props.user;
+      const price = this.calculateTotal();
+      try {
+        const result = await Axios.post(
+          `${config.localhost}orders/`,
+          {
+            customer_id,
+            total_cost: price,
+            status: 'preparing',
+            listOfFoods: shoppingCart,
+            delivery_location: 'test location',
+          },
+          {
+            headers: { 'Access-Control-Allow-Origin': true },
+          },
+        );
+        this.clearCart();
+        alert('order created!');
+      } catch (error) {
+        console.log(error);
+        alert('error has occured');
+      }
+    };
   }
 
   componentDidMount() {
@@ -49,6 +85,7 @@ class CustomerOrderFood extends Component {
       addToCart: this.addToCart,
       removeFromCart: this.removeFromCart,
     };
+    const price = this.calculateTotal();
 
     return (
       <customerCartContext.Provider value={value}>
@@ -59,12 +96,22 @@ class CustomerOrderFood extends Component {
             </Segment>
             <Segment attached>
               <Cart />
+
+              <div style={{ marginBottom: '30px' }}>
+                <Header floated="left">Total</Header>
+                <Header floated="right">
+                  {' '}
+                  $
+                  {price}
+                </Header>
+              </div>
+
             </Segment>
             <Segment attached="bottom">
               <Button.Group>
-                <Button icon="delete" content="clear" />
+                <Button icon="delete" content="clear" onClick={() => this.clearCart()} />
                 <Button.Or />
-                <Button content="Order" color="green" />
+                <Button content="Confirm Order" color="green" onClick={this.createOrder} />
               </Button.Group>
             </Segment>
           </Grid.Column>

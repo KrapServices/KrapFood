@@ -9,19 +9,27 @@ const { query } = require('../database');
 // -----------------------------------------------------------------------------
 const createOrder = async (request, response) => {
   try {
-    const { total_cost, status, listOfFood } = request.body;
+    const { total_cost, status, listOfFoods, delivery_location, customer_id } = request.body;
     // console.log(restaurant_name);
     const result = (await query(
-      'INSERT INTO orders (total_cost, status) VALUES ($1,$2) RETURNING order_id',
-      [total_cost, status],
+      'INSERT INTO orders (customer_id, delivery_location, total_cost, status) VALUES ($1,$2, $3,$4) RETURNING order_id',
+      [customer_id, delivery_location, total_cost, status],
     )).rows[0];
-    for await (const x of listOfFood) {
-      const { order_id } = result;
-      const { food_id, quantity } = x;
-      query(
-        'INSERT INTO contain (order_id, food_id, quantity) VALUES ($1 $2 $3)', [order_id, food_id, quantity],
-      );
-    }
+    console.log(listOfFoods);
+      try {
+        await Promise.all(listOfFoods.map(async (x) => {
+          const { order_id } = result;
+          const { food_id, quantity } = x;
+         query(
+            'INSERT INTO contain (order_id, food_id, quantity) VALUES ($1 $2 $3)', [order_id, food_id, quantity],
+          );
+        }));
+      } catch (error) {
+        console.log(error);
+        return response.status(500).send('An error occured with creating the order. please try again');
+      }
+    
+  
     // console.log(result);
     return response.status(200).json({ created_order_id: result });
   } catch (error) {
