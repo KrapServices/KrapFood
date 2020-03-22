@@ -27,14 +27,14 @@ class Login extends Component {
       history.push('/');
     };
 
-    this.handleChange = (event : Event ) => {
+    this.handleChange = (event ) => {
       const { name, value } = event.target;
       this.setState({
         [name]: value,
       });
     };
 
-    this.handleLoginCx = async (event : Event) => {
+    this.handleLoginCx = async (event) => {
       event.preventDefault();
       const { email, password } = this.state;
       const { login } = this.context;
@@ -48,7 +48,7 @@ class Login extends Component {
       }
     };
 
-    this.handleLoginManager = async (event : Event) => {
+    this.handleLoginManager = async (event ) => {
       event.preventDefault();
       const { email, password } = this.state;
       const { login } = this.context;

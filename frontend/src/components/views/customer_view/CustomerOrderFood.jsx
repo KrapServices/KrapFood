@@ -6,23 +6,34 @@ import Axios from 'axios';
 import Cart from './Cart';
 import config from '../../../config.json';
 import customerCartContext from './customerCartContext';
+import RestaurantCard from './RestaurantCard';
 
 class CustomerOrderFood extends Component {
   constructor(props) {
     super(props);
     this.state = {
       listOfRestaurants: [],
-      shoppingCart: ['1', '2', '3'],
+      shoppingCart: [],
     };
 
     this.loadRestaurants = async () => {
       const result = await Axios.get(`${config.localhost}restaurants/`);
       if (result.status === 200) {
-        console.log(result.data.restaurants);
         this.setState({ listOfRestaurants: result.data.restaurants });
       } else {
         alert('cannot load restaurant');
       }
+    };
+    this.addToCart = (food) => {
+      const { shoppingCart } = this.state;
+      shoppingCart.push(food);
+      this.setState({ shoppingCart });
+    };
+
+    this.removeFromCart = (index) => {
+      let { shoppingCart } = this.state;
+      shoppingCart = shoppingCart.filter((x, current) => current !== index);
+      this.setState({ shoppingCart });
     };
   }
 
@@ -33,9 +44,14 @@ class CustomerOrderFood extends Component {
 
   render() {
     const { listOfRestaurants, shoppingCart } = this.state;
-    console.log(shoppingCart);
+    const value = {
+      shoppingCart,
+      addToCart: this.addToCart,
+      removeFromCart: this.removeFromCart,
+    };
+
     return (
-      <customerCartContext.Provider value={shoppingCart}>
+      <customerCartContext.Provider value={value}>
         <Grid columns={2} stackable>
           <Grid.Column>
             <Segment attached="top">
@@ -55,23 +71,13 @@ class CustomerOrderFood extends Component {
           <Grid.Column>
             <Segment>
               <Input icon="search" placeholder="Search..." />
-              <List large divided relaxed>
-                {listOfRestaurants === [] ? <div /> : listOfRestaurants.map((res) => (
-                  <List.Item>
-                    <List.Content floated="left">
-                      <List.Header as="h2">
-                        {`Shop name: ${res.restaurant_name}`}
-                      </List.Header>
-                      {`Located at ${res.restaurant_location}`}
-                    </List.Content>
-                    <List.Content floated="right">
-                      <Button primary> order</Button>
-                    </List.Content>
-                  </List.Item>
+              <Header as="h1"> List Of Restaurants </Header>
+              <List divided relaxed>
+                {listOfRestaurants === [] ? <div /> : listOfRestaurants.map((restaurant) => (
+                  <RestaurantCard res={restaurant} />
                 ))}
               </List>
             </Segment>
-
           </Grid.Column>
         </Grid>
       </customerCartContext.Provider>
@@ -80,5 +86,5 @@ class CustomerOrderFood extends Component {
   }
 }
 
-CustomerOrderFood.contextType = customerCartContext;
+CustomerOrderFood.contextTypes = customerCartContext;
 export default CustomerOrderFood;
