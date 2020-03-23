@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import userContext from '../../../userContext';
+import FoodForm from './FoodForm';
 
 class Staff extends Component {
   constructor() {
@@ -8,11 +9,7 @@ class Staff extends Component {
   }
 
   render() {
-    return (
-      <>
-        <p>i am a Staff</p>
-      </>
-    );
+    return FoodForm;
   }
 }
 
