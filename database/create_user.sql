@@ -22,7 +22,7 @@ CREATE TABLE cards
     card_number TEXT,
     customer_id INTEGER,
     PRIMARY KEY (customer_id, card_number),
-    FOREIGN KEY (customer_id) REFERENCES customers (customer_id)
+    FOREIGN KEY (customer_id) REFERENCES customers (customer_id) ON DELETE CASCADE
 );
 
 CREATE TABLE managers
@@ -121,7 +121,7 @@ CREATE TABLE staff
     restaurant_id INTEGER,
     PRIMARY KEY (restaurant_id, staff_id),
     FOREIGN KEY (staff_id) REFERENCES users (user_id),
-    FOREIGN KEY (restaurant_id) REFERENCES restaurants (restaurant_id)
+    FOREIGN KEY (restaurant_id) REFERENCES restaurants (restaurant_id) ON DELETE CASCADE
 );
 
 CREATE TABLE shift
