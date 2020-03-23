@@ -37,16 +37,27 @@ export default class GenerateData extends Component {
         });
         console.log(resultM);
 
-        const emailS = `test S${i}`;
-        const passwordS = `p${i}`;
-        const resultS = await Axios.post('http://localhost:5000/registrations/staff/sign-up', {
-          email: emailS,
-          password: passwordS,
+        const emailStaff = `test S${i}`;
+        const passwordStaff = `p${i}`;
+        const resultStaff = await Axios.post('http://localhost:5000/registrations/staff/sign-up', {
+          email: emailStaff,
+          password: passwordStaff,
         }, {
           headers: { 'Access-Control-Allow-Origin': true },
         });
-        console.log(resultS);
+        console.log(resultStaff);
 
+        const emailRider = `test R${i}`;
+        const passwordRider = `p${i}`;
+        const resultRider = await Axios.post('http://localhost:5000/registrations/rider/sign-up', {
+          email: emailRider,
+          password: passwordRider,
+        }, {
+          headers: { 'Access-Control-Allow-Origin': true },
+        });
+        console.log(resultRider);
+
+        
       }
       this.setState({ isloading: false });
     };

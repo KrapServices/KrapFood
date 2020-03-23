@@ -13,7 +13,7 @@ const staffCreate = async (request, response) => {
         [email, password],
       )).rows[0];
       (await query(
-        'INSERT INTO staff (staff_id) VALUES ($1) RETURNING staff_id',
+        'INSERT INTO staff (staff_id, restaurant_id) VALUES ($1, 1) RETURNING staff_id, restaurant_id',
         [user.user_id],
       ));
       return user;
@@ -36,7 +36,7 @@ const staffLogin = async (request, response) => {
         [email, password],
       )).rows[0];
       const staff = (await query(
-        'SELECT staff_id FROM staff WHERE staff_id = $1',
+        'SELECT staff_id, restaurant_id FROM staff WHERE staff_id = $1',
         [user.user_id],
       )).rows[0];
         // append info to user object
