@@ -11,6 +11,8 @@ import Signup from './components/views/Login/Signup';
 import userContext from './userContext';
 import config from './config.json';
 
+// @flow
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -32,7 +34,7 @@ class App extends React.Component {
       window.localStorage.clear();
     };
 
-    this.login = async (email, password, type) => {
+    this.login = async (email : string, password : string, type : string) => {
       const result = await Axios.post(
         `${config.localhost}registrations/${type}/login`,
         {

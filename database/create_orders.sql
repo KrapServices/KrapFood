@@ -12,7 +12,7 @@ CREATE TABLE orders
     created_at TIMESTAMP NOT NULL DEFAULT current_timestamp,
     modified_at TIMESTAMP NOT NULL DEFAULT current_timestamp,
     PRIMARY KEY (order_id),
-    FOREIGN KEY (customer_id) REFERENCES customers (customer_id)
+    FOREIGN KEY (customer_id) REFERENCES customers (customer_id) ON DELETE CASCADE
 );
 
 -- Order can have multiple promotions

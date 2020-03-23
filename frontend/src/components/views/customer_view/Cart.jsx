@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { List } from 'semantic-ui-react';
+import { List, Button, Card } from 'semantic-ui-react';
 import customerCartContext from './customerCartContext';
 
 class Cart extends Component {
@@ -11,19 +11,32 @@ class Cart extends Component {
   }
 
   render() {
-    const shoppingCart = this.context;
+    const { shoppingCart, removeFromCart } = this.context;
     return (
-      <List>
+      <List relaxed>
         {
-                    shoppingCart.map((food) => (
-                      <List.Item>
-                        <List.Header>
-                          {' '}
-                          {food}
-                        </List.Header>
-                      </List.Item>
-                    ))
-                }
+          shoppingCart.map((food, index) => (
+            <List.Item key={index}>
+              <Card fluid>
+                <Card.Header as="h2" float="left">
+                  {`${food.food_name}`}
+                </Card.Header>
+
+                <Card.Description>
+                  Price
+                  {' '}
+                  <strong>
+                    $
+                    {`${food.price}`}
+                  </strong>
+                </Card.Description>
+                <Card.Content>
+                  <Button color="red" onClick={() => removeFromCart(index)}>remove</Button>
+                </Card.Content>
+              </Card>
+            </List.Item>
+          ))
+        }
       </List>
 
     );
