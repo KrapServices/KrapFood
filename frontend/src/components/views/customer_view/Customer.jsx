@@ -28,7 +28,7 @@ class Customer extends Component {
         <Tab
           menu={{ compact: true }}
           panes={panes}
-         style={{ marginLeft: '50px', marginRight: '50px' }}
+          style={{ marginLeft: '50px', marginRight: '50px' }}
         />
       </>
 
