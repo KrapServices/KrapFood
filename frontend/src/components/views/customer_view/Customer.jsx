@@ -18,7 +18,7 @@ class Customer extends Component {
     const {user} = this.context;
     const panes = [
       { menuItem: 'Order Food', render: () => <Tab.Pane><CustomerOrderFood user={user} /></Tab.Pane> },
-      { menuItem: 'Your Orders', render: () => <Tab.Pane><CustomerOrderView /></Tab.Pane> },
+      { menuItem: 'Your Orders', render: () => <Tab.Pane><CustomerOrderView user={user} /></Tab.Pane> },
       { menuItem: 'Summary', render: () => <Tab.Pane></Tab.Pane> },
     ];
     return (
@@ -29,7 +29,7 @@ class Customer extends Component {
         <Tab
           menu={{ compact: true }}
           panes={panes}
-          style={{ marginLeft: '50px', marginRight: '50px' }}
+         // style={{ marginLeft: '50px', marginRight: '50px' }}
         />
       </>
 

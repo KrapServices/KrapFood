@@ -80,7 +80,6 @@ class Home extends Component {
             // use this to generate data
             // remember to run npm run build before using this.
           }
-          <GenerateData />
         </Container>
       </div>
     );

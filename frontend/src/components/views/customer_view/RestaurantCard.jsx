@@ -13,9 +13,11 @@ class RestaurantCard extends Component {
 
 
   render() {
-    const { res } = this.props;
+    const { res, orderFromThisRestaurant } = this.props;
 
-    const { addToCart } = this.context;
+    const { addToCart, selectedRestaurantId } = this.context;
+    console.log(selectedRestaurantId);
+
     return (
       <List.Item key={res.restaurant_id}>
         <List.Content>
@@ -30,6 +32,8 @@ class RestaurantCard extends Component {
               <Card.Header>
                 Menu
               </Card.Header>
+              {' '}
+              (
               <Card.Content>
                 <Item.Group divided>
                   {res.foods.map((food) => (
@@ -45,39 +49,48 @@ class RestaurantCard extends Component {
                     </Item>
                   ))}
                 </Item.Group>
+                {
+                  selectedRestaurantId === res.restaurant_id ? <div /> : <Button color="orange" onClick={() => orderFromThisRestaurant(res.restaurant_id)}>Order from here</Button>
+}
               </Card.Content>
-              <Card.Content extra>
-                <Modal trigger={<Button color="green">Order</Button>}>
-                  <Modal.Header>{`${res.restaurant_name}`}</Modal.Header>
-                  <Modal.Header>{`Located at: ${res.restaurant_location}`}</Modal.Header>
-                  <Modal.Content>
-                    <Modal.Description>
-                      <Header>Available Menu</Header>
-                      <Item.Group divided>
-                        {res.foods.map((food) => (
-                          <Item key={food.food_id}>
-                            <Item.Content verticalAlign="middle">
-                              <Item.Header as="a">
-                                {' '}
-                                {`food name: ${food.food_name}`}
-                              </Item.Header>
-                              <Item.Meta>Description</Item.Meta>
-                              <Item.Extra>
-                                {`Price: ${food.price}`}
-                                <Button primary floated="right" onClick={() => addToCart(food)}>
-                                  Add to cart
-                                  <Icon name="right chevron" />
-                                </Button>
-                              </Item.Extra>
 
-                            </Item.Content>
-                          </Item>
-                        ))}
-                      </Item.Group>
-                    </Modal.Description>
-                  </Modal.Content>
-                </Modal>
-              </Card.Content>
+
+              {selectedRestaurantId === res.restaurant_id
+                ? (
+                  <Card.Content extra>
+                    <Modal trigger={<Button color="green">Order</Button>}>
+                      <Modal.Header>{`${res.restaurant_name}`}</Modal.Header>
+                      <Modal.Header>{`Located at: ${res.restaurant_location}`}</Modal.Header>
+                      <Modal.Content>
+                        <Modal.Description>
+                          <Header>Available Menu</Header>
+                          <Item.Group divided>
+                            {res.foods.map((food) => (
+                              <Item key={food.food_id}>
+                                <Item.Content verticalAlign="middle">
+                                  <Item.Header as="a">
+                                    {' '}
+                                    {`food name: ${food.food_name}`}
+                                  </Item.Header>
+                                  <Item.Meta>Description</Item.Meta>
+                                  <Item.Extra>
+                                    {`Price: ${food.price}`}
+                                    <Button primary floated="right" onClick={() => addToCart(food)}>
+                                      Add to cart
+                                      <Icon name="right chevron" />
+                                    </Button>
+                                  </Item.Extra>
+
+                                </Item.Content>
+                              </Item>
+                            ))}
+                          </Item.Group>
+                        </Modal.Description>
+                      </Modal.Content>
+                    </Modal>
+                  </Card.Content>
+                )
+                : <div />}
             </Card>
 
           </div>

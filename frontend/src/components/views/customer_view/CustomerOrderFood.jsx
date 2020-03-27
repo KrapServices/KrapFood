@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  List, Button, Segment, Grid, Input, Header,
+  List, Button, Segment, Grid, Input, Header, Search, Divider,
 } from 'semantic-ui-react';
 import Axios from 'axios';
 import Cart from './Cart';
@@ -15,6 +15,19 @@ class CustomerOrderFood extends Component {
     this.state = {
       listOfRestaurants: [],
       shoppingCart: [],
+      selectedRestaurantId: -1,
+    };
+
+    this.orderFromThisRestaurant = (id) => {
+      console.log('yums');
+      const { listOfRestaurants } = this.state;
+      this.setState({ selectedRestaurantId: id, listOfRestaurants: listOfRestaurants.filter((x) => x.restaurant_id === id) });
+    };
+
+    this.resetCurrentOrder = () => {
+      this.loadRestaurants();
+      this.clearCart();
+      this.setState({selectedRestaurantId: -1});
     };
 
     this.loadRestaurants = async () => {
@@ -25,6 +38,7 @@ class CustomerOrderFood extends Component {
         alert('cannot load restaurant');
       }
     };
+
     this.addToCart = (food) => {
       const { shoppingCart } = this.state;
       shoppingCart.push(food);
@@ -46,6 +60,8 @@ class CustomerOrderFood extends Component {
       console.log(result);
       return result;
     };
+
+
     this.createOrder = async () => {
       const { shoppingCart } = this.state;
       const { customer_id } = this.props.user;
@@ -90,11 +106,12 @@ class CustomerOrderFood extends Component {
 
 
   render() {
-    const { listOfRestaurants, shoppingCart } = this.state;
+    const { listOfRestaurants, shoppingCart, selectedRestaurantId } = this.state;
     const value = {
       shoppingCart,
       addToCart: this.addToCart,
       removeFromCart: this.removeFromCart,
+      selectedRestaurantId,
     };
     const price = this.calculateTotal();
 
@@ -125,15 +142,18 @@ class CustomerOrderFood extends Component {
                 <Button content="Confirm Order" color="green" onClick={() => this.createOrder()} />
               </Button.Group>
             </Segment>
+
+            { selectedRestaurantId === -1 ? <Header> Click on a restaurant to order </Header> : <Button onClick={this.resetCurrentOrder}>Change restaurant</Button> }
           </Grid.Column>
           <Grid.Column>
+            <Search fluid />
             <Segment>
-              <Input icon="search" placeholder="Search..." />
               <Header as="h1"> List Of Restaurants </Header>
+              <Divider />
               <List divided relaxed>
                 {listOfRestaurants.map((restaurant) => (
                   <React.Fragment key={restaurant.restaurant_id}>
-                    <RestaurantCard res={restaurant} />
+                    <RestaurantCard res={restaurant} orderFromThisRestaurant={this.orderFromThisRestaurant} />
                   </React.Fragment>
                 ))}
               </List>
