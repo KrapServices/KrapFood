@@ -11,13 +11,9 @@ class RestaurantCard extends Component {
     this.state = {};
   }
 
-
   render() {
     const { res, orderFromThisRestaurant } = this.props;
-
     const { addToCart, selectedRestaurantId } = this.context;
-    console.log(selectedRestaurantId);
-
     return (
       <List.Item key={res.restaurant_id}>
         <List.Content>
@@ -51,10 +47,8 @@ class RestaurantCard extends Component {
                 </Item.Group>
                 {
                   selectedRestaurantId === res.restaurant_id ? <div /> : <Button color="orange" onClick={() => orderFromThisRestaurant(res.restaurant_id)}>Order from here</Button>
-}
+                  }
               </Card.Content>
-
-
               {selectedRestaurantId === res.restaurant_id
                 ? (
                   <Card.Content extra>
@@ -103,6 +97,7 @@ class RestaurantCard extends Component {
 RestaurantCard.contextType = customerCartContext;
 RestaurantCard.propTypes = {
   res: PropTypes.object,
+  
 };
 
 export default RestaurantCard;

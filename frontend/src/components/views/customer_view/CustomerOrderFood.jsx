@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import _ from 'lodash';
+import faker from 'faker';
 import {
-  List, Button, Segment, Grid, Input, Header, Search, Divider,
+  List, Button, Segment, Grid, Header, Search, Divider,
 } from 'semantic-ui-react';
 import Axios from 'axios';
 import Cart from './Cart';
@@ -8,18 +10,27 @@ import config from '../../../config.json';
 import customerCartContext from './customerCartContext';
 import RestaurantCard from './RestaurantCard';
 
+const source = _.times(5, () => ({
+  title: faker.company.companyName(),
+  description: faker.company.catchPhrase(),
+  image: faker.internet.avatar(),
+  price: faker.finance.amount(0, 100, 2, '$'),
+}));
+
 
 class CustomerOrderFood extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isLoading: false,
+      value: '',
+      results: [],
       listOfRestaurants: [],
       shoppingCart: [],
       selectedRestaurantId: -1,
     };
 
     this.orderFromThisRestaurant = (id) => {
-      console.log('yums');
       const { listOfRestaurants } = this.state;
       this.setState({ selectedRestaurantId: id, listOfRestaurants: listOfRestaurants.filter((x) => x.restaurant_id === id) });
     };
@@ -27,7 +38,7 @@ class CustomerOrderFood extends Component {
     this.resetCurrentOrder = () => {
       this.loadRestaurants();
       this.clearCart();
-      this.setState({selectedRestaurantId: -1});
+      this.setState({ selectedRestaurantId: -1 });
     };
 
     this.loadRestaurants = async () => {
@@ -57,14 +68,12 @@ class CustomerOrderFood extends Component {
       const { shoppingCart } = this.state;
       const priceList = shoppingCart.map((x) => Number(x.price));
       const result = priceList.reduce((prev, curr) => prev + curr, 0);
-      console.log(result);
       return result;
     };
-
-
     this.createOrder = async () => {
       const { shoppingCart } = this.state;
-      const { customer_id } = this.props.user;
+      const { user } = this.props;
+      const { customer_id } = user;
       // get ID
       const listOfFoods = [];
 
@@ -91,6 +100,7 @@ class CustomerOrderFood extends Component {
             headers: { 'Access-Control-Allow-Origin': true },
           },
         );
+        console.log(result);
         this.clearCart();
         alert('order created!');
       } catch (error) {
@@ -98,6 +108,26 @@ class CustomerOrderFood extends Component {
         alert('error has occured');
       }
     };
+
+    this.handleResultSelect = (e, { result }) => this.setState({ value: result.title });
+
+
+    this.handleSearchChange = (e, { value }) => {
+      const initialState = { isLoading: false, results: [], value: '' }
+      this.setState({ isLoading: true, value });
+
+      setTimeout(() => {
+        if (this.state.value.length < 1) return this.setState(initialState)
+
+        const re = new RegExp(_.escapeRegExp(this.state.value), 'i');
+        const isMatch = (result) => re.test(result.title)
+
+        this.setState({
+          isLoading: false,
+          results: _.filter(source, isMatch),
+        });
+      }, 300);
+    }
   }
 
   componentDidMount() {
@@ -105,9 +135,13 @@ class CustomerOrderFood extends Component {
   }
 
 
+
   render() {
-    const { listOfRestaurants, shoppingCart, selectedRestaurantId } = this.state;
-    const value = {
+    const {
+      listOfRestaurants, shoppingCart, selectedRestaurantId, isLoading, results,
+      value
+    } = this.state;
+    const value2 = {
       shoppingCart,
       addToCart: this.addToCart,
       removeFromCart: this.removeFromCart,
@@ -116,13 +150,13 @@ class CustomerOrderFood extends Component {
     const price = this.calculateTotal();
 
     return (
-      <customerCartContext.Provider value={value}>
-        <Grid columns={2} stackable>
+      <customerCartContext.Provider value={value2}>
+        <Grid columns={1} stackable>
           <Grid.Column>
-            <Segment attached="top">
+            <Segment attached="top" color="grey">
               <Header as="h2">Your Cart</Header>
             </Segment>
-            <Segment attached>
+            <Segment attached color="grey">
               <Cart />
 
               <div style={{ marginBottom: '30px' }}>
@@ -135,7 +169,7 @@ class CustomerOrderFood extends Component {
               </div>
 
             </Segment>
-            <Segment attached="bottom">
+            <Segment attached="bottom" color="grey">
               <Button.Group>
                 <Button icon="delete" content="clear" onClick={() => this.clearCart()} />
                 <Button.Or />
@@ -143,12 +177,25 @@ class CustomerOrderFood extends Component {
               </Button.Group>
             </Segment>
 
-            { selectedRestaurantId === -1 ? <Header> Click on a restaurant to order </Header> : <Button onClick={this.resetCurrentOrder}>Change restaurant</Button> }
-          </Grid.Column>
-          <Grid.Column>
-            <Search fluid />
+
+            {selectedRestaurantId === -1 ? <Header> Click on a restaurant to order </Header> : <Button onClick={this.resetCurrentOrder}>Change restaurant</Button>}
+
+            <Divider />
+
+
             <Segment>
-              <Header as="h1"> List Of Restaurants </Header>
+              <Search
+                fluid
+                input={{ icon: 'search', iconPosition: 'left' }}
+                loading={isLoading}
+                onResultSelect={this.handleResultSelect}
+                onSearchChange={_.debounce(this.handleSearchChange, 500, {
+                  leading: true,
+                })}
+                results={results}
+                value={value}
+
+              />
               <Divider />
               <List divided relaxed>
                 {listOfRestaurants.map((restaurant) => (
@@ -158,6 +205,7 @@ class CustomerOrderFood extends Component {
                 ))}
               </List>
             </Segment>
+
           </Grid.Column>
         </Grid>
       </customerCartContext.Provider>
