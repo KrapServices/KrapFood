@@ -14,7 +14,7 @@ import Axios from 'axios';
 import userContext from '../../../userContext';
 import config from '../../../config.json';
 
-// @flow
+
 class Signup extends Component {
   constructor(props) {
     super(props);

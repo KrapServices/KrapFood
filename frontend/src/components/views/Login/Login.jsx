@@ -12,8 +12,6 @@ import { Link, withRouter } from 'react-router-dom';
 import ReactRouterPropTypes from 'react-router-prop-types';
 import userContext from '../../../userContext';
 
-// import login from "./registration";
-// @flow
 class Login extends Component {
   constructor(props) {
     super(props);

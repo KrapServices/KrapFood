@@ -55,9 +55,10 @@ class TopBar extends Component {
               vertical
             >
               <Menu
-                fluid widths={6}
+                fluid
+                widths={6}
                 inverted
-                size="medium"
+                size="huge"
                 icon="labeled"
                 borderless
               >
@@ -68,7 +69,10 @@ class TopBar extends Component {
                       <Menu.Item />
                       <Menu.Item />
                       <Menu.Item>
-                        <Header as="h1" inverted>  <Icon name="road" /> KRAPFOOD</Header>
+                        <Header as="h1" inverted>
+                          <Icon name="road" />
+                          KRAPFOOD
+                        </Header>
                       </Menu.Item>
                     </>
                   ) : (
@@ -82,11 +86,11 @@ class TopBar extends Component {
                 {!isLoggedIn
                   ? (
                     <>
-                      <Menu.Item as={Link} to="/login" >
+                      <Menu.Item as={Link} to="/login">
                         <Icon name="sign in" color="green" />
                         Log in
                       </Menu.Item>
-                      <Menu.Item as={Link} to="/sign-up" >
+                      <Menu.Item as={Link} to="/sign-up">
                         <Icon name="signup" color="blue" />
                         Sign up
                       </Menu.Item>
@@ -94,7 +98,7 @@ class TopBar extends Component {
                   )
                   : (
                     <>
-                      <Menu.Item as={Link} onClick={onLogout}>
+                      <Menu.Item onClick={onLogout}>
                         <Icon name="cancel" color="red" />
                         Log Out
                       </Menu.Item>

@@ -10,8 +10,6 @@ import Signup from './components/views/Login/Signup';
 import userContext from './userContext';
 import config from './config.json';
 
-// @flow
-
 class App extends React.Component {
   constructor(props) {
     super(props);
