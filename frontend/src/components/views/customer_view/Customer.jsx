@@ -22,9 +22,6 @@ class Customer extends Component {
     ];
     return (
       <>
-        <Header size="huge" as="h1">
-          Welcome, Customer
-        </Header>
         <Tab
           menu={{ compact: true }}
           panes={panes}
