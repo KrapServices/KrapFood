@@ -1,10 +1,10 @@
 {
   "queries": [
     "drop_tables.sql",
+    "initialize_workshifts.sql",
     "create_restaurants.sql",
     "create_user.sql",
     "create_orders.sql",
-    "initialize_timeslots.sql",
     "insert_restaurants.sql",
     "insert_food.sql"
   ]
