@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable camelcase */
 import React, { Component } from 'react';
 import _ from 'lodash';
 import faker from 'faker';
@@ -32,7 +34,10 @@ class CustomerOrderFood extends Component {
 
     this.orderFromThisRestaurant = (id) => {
       const { listOfRestaurants } = this.state;
-      this.setState({ selectedRestaurantId: id, listOfRestaurants: listOfRestaurants.filter((x) => x.restaurant_id === id) });
+      this.setState({
+        selectedRestaurantId: id,
+        listOfRestaurants: listOfRestaurants.filter((x) => x.restaurant_id === id),
+      });
     };
 
     this.resetCurrentOrder = () => {
@@ -100,11 +105,11 @@ class CustomerOrderFood extends Component {
             headers: { 'Access-Control-Allow-Origin': true },
           },
         );
-        console.log(result);
+        //  console.log(result);
         this.clearCart();
         alert('order created!');
       } catch (error) {
-        console.log(error);
+        //  console.log(error);
         alert('error has occured');
       }
     };
@@ -113,21 +118,21 @@ class CustomerOrderFood extends Component {
 
 
     this.handleSearchChange = (e, { value }) => {
-      const initialState = { isLoading: false, results: [], value: '' }
+      const initialState = { isLoading: false, results: [], value: '' };
       this.setState({ isLoading: true, value });
 
       setTimeout(() => {
-        if (this.state.value.length < 1) return this.setState(initialState)
+        if (this.state.value.length < 1) return this.setState(initialState);
 
         const re = new RegExp(_.escapeRegExp(this.state.value), 'i');
-        const isMatch = (result) => re.test(result.title)
+        const isMatch = (result) => re.test(result.title);
 
         this.setState({
           isLoading: false,
           results: _.filter(source, isMatch),
         });
       }, 300);
-    }
+    };
   }
 
   componentDidMount() {
@@ -139,11 +144,10 @@ class CustomerOrderFood extends Component {
   }
 
 
-
   render() {
     const {
       listOfRestaurants, shoppingCart, selectedRestaurantId, isLoading, results,
-      value
+      value,
     } = this.state;
     const value2 = {
       shoppingCart,
@@ -182,8 +186,9 @@ class CustomerOrderFood extends Component {
             </Segment>
 
 
-            {selectedRestaurantId === -1 ? <Header> Click on a restaurant to order </Header> : <Button onClick={this.resetCurrentOrder}>Change restaurant</Button>}
-
+            {selectedRestaurantId === -1
+              ? <Header> Click on a restaurant to order </Header>
+              : <Button onClick={this.resetCurrentOrder}>Change restaurant</Button>}
             <Divider />
 
 
