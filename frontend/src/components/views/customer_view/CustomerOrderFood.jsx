@@ -134,6 +134,10 @@ class CustomerOrderFood extends Component {
     this.loadRestaurants();
   }
 
+  componentWillUnmount() {
+    this.mounted = false;
+  }
+
 
 
   render() {

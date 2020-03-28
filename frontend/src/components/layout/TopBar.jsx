@@ -58,7 +58,7 @@ class TopBar extends Component {
                 fluid
                 widths={6}
                 inverted
-                size="huge"
+                size="small"
                 icon="labeled"
                 borderless
               >
