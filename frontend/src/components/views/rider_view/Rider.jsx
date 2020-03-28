@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import userContext from '../../../userContext';
+import WeeklyWorkSchedule from './WeeklyWorkSchedule';
 
 class Rider extends Component {
   constructor() {
@@ -9,9 +10,7 @@ class Rider extends Component {
 
   render() {
     return (
-      <>
-        <p>i am a Rider</p>
-      </>
+      <WeeklyWorkSchedule />
     );
   }
 }
