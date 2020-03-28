@@ -2,7 +2,7 @@
 /* eslint-disable camelcase */
 import React, { Component } from 'react';
 import {
-  Grid, Header, Divider, Table,
+  Grid, Header, Divider,
 } from 'semantic-ui-react';
 import Axios from 'axios';
 import config from '../../../config.json';
@@ -59,26 +59,27 @@ class CustomerOrderView extends Component {
     return (
       <div>
         <customerOrderContext.Provider value={value}>
-          <Grid>
+          <Grid columns={2}>
+
+
             <Grid.Column>
-              <Grid.Row centered>
-                <Header>
-                  Number Of Orders Placed:
-                  {' '}
-                  {numOfOrder}
-                </Header>
-              </Grid.Row>
-              <Grid.Row centered>
-                <br />
-              </Grid.Row>
-              <Grid.Row centered>
-                <Header>
-                  Points:
-                  {' '}
-                  {customerPoints}
-                </Header>
-              </Grid.Row>
+              <Header>
+                Number Of Orders Placed:
+                {' '}
+                {numOfOrder}
+              </Header>
             </Grid.Column>
+
+
+            <Grid.Column>
+              <Header>
+                Points:
+                {' '}
+                {customerPoints}
+              </Header>
+            </Grid.Column>
+
+
           </Grid>
           <Divider />
           <CustomerCurrentOrders />

@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import _ from 'lodash';
 import faker from 'faker';
 import {
-  List, Button, Segment, Grid, Header, Search, Divider,
+  List, Button, Segment, Grid, Header, Search, Divider, Message, Icon,
 } from 'semantic-ui-react';
 import Axios from 'axios';
 import Cart from './Cart';
@@ -75,6 +75,18 @@ class CustomerOrderFood extends Component {
       const result = priceList.reduce((prev, curr) => prev + curr, 0);
       return result;
     };
+    this.minimum = () => {
+      const { selectedRestaurantId, listOfRestaurants } = this.state;
+      if (selectedRestaurantId === -1) {
+        return true;
+      }
+      return this.calculateTotal() <= listOfRestaurants[0].price_threshold;
+    };
+
+
+    // =========================================================================
+    // Axios calls
+    // =========================================================================
     this.createOrder = async () => {
       const { shoppingCart } = this.state;
       const { user } = this.props;
@@ -113,6 +125,11 @@ class CustomerOrderFood extends Component {
         alert('error has occured');
       }
     };
+
+
+    // -------------------------------------------------------------------------
+    // Search stuff
+    // -------------------------------------------------------------------------
 
     this.handleResultSelect = (e, { result }) => this.setState({ value: result.title });
 
@@ -156,7 +173,6 @@ class CustomerOrderFood extends Component {
       selectedRestaurantId,
     };
     const price = this.calculateTotal();
-
     return (
       <customerCartContext.Provider value={value2}>
         <Grid columns={1} stackable>
@@ -175,23 +191,52 @@ class CustomerOrderFood extends Component {
                   {price}
                 </Header>
               </div>
-
             </Segment>
             <Segment attached="bottom" color="grey">
               <Button.Group>
                 <Button icon="delete" content="clear" onClick={() => this.clearCart()} />
                 <Button.Or />
-                <Button content="Confirm Order" color="green" onClick={() => this.createOrder()} />
+                <Button content="Confirm Order" color="green" onClick={() => this.createOrder()} disabled={this.minimum()} />
               </Button.Group>
             </Segment>
+            {selectedRestaurantId === -1 ? <div />
+              : (
+                <>
+                  <Header floated="left">Minimum Order cost</Header>
+                  <Header floated="right">
+                    {' '}
+                    $
+                    {listOfRestaurants[0].price_threshold}
+                  </Header>
+                </>
+              )}
 
+            <Message info icon>
 
-            {selectedRestaurantId === -1
-              ? <Header> Click on a restaurant to order </Header>
-              : <Button onClick={this.resetCurrentOrder}>Change restaurant</Button>}
+              {selectedRestaurantId === -1
+                ? (
+
+                  <>
+                    <Icon name="help circle" />
+                    {' '}
+                    <Message.Header>
+                      Select a Restaurant
+                    </Message.Header>
+
+                  </>
+
+                )
+                : (
+                  <Button color="red" onClick={this.resetCurrentOrder}>
+                    {' '}
+                    <Icon name="cancel" />
+                    Change restaurant
+                  </Button>
+                )}
+
+              {' '}
+            </Message>
             <Divider />
-
-
             <Segment>
               <Search
                 fluid
@@ -206,7 +251,7 @@ class CustomerOrderFood extends Component {
 
               />
               <Divider />
-              <List divided relaxed>
+              <List divided relaxed style={{ marginLeft: '8rem', marginRight: '8rem' }}>
                 {listOfRestaurants.map((restaurant) => (
                   <React.Fragment key={restaurant.restaurant_id}>
                     <RestaurantCard res={restaurant} orderFromThisRestaurant={this.orderFromThisRestaurant} />
