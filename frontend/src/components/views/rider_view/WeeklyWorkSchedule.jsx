@@ -1,9 +1,12 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
+import axios from 'axios';
 import PropTypes from 'prop-types';
 import {
   Icon, Table, Input, Button,
 } from 'semantic-ui-react';
+import userContext from '../../../userContext';
+import config from '../../../config.json';
 
 function Cell(props) {
   const [selected, setSelected] = React.useState(false);
@@ -25,7 +28,7 @@ function Cell(props) {
 }
 
 Cell.propTypes = {
-  hour: PropTypes.string.isRequired,
+  hour: PropTypes.number.isRequired,
   addShift: PropTypes.func.isRequired,
 };
 
@@ -36,73 +39,73 @@ function Row(props) {
     <Table.Row>
       <Table.Cell>{day}</Table.Cell>
       <Cell
-        hour="1000"
+        hour={10}
         addShift={(hour) => {
           addShift(day, hour);
         }}
       />
       <Cell
-        hour="1100"
+        hour={11}
         addShift={(hour) => {
           addShift(day, hour);
         }}
       />
       <Cell
-        hour="1200"
+        hour={12}
         addShift={(hour) => {
           addShift(day, hour);
         }}
       />
       <Cell
-        hour="1300"
+        hour={13}
         addShift={(hour) => {
           addShift(day, hour);
         }}
       />
       <Cell
-        hour="1400"
+        hour={14}
         addShift={(hour) => {
           addShift(day, hour);
         }}
       />
       <Cell
-        hour="1500"
+        hour={15}
         addShift={(hour) => {
           addShift(day, hour);
         }}
       />
       <Cell
-        hour="1600"
+        hour={16}
         addShift={(hour) => {
           addShift(day, hour);
         }}
       />
       <Cell
-        hour="1700"
+        hour={17}
         addShift={(hour) => {
           addShift(day, hour);
         }}
       />
       <Cell
-        hour="1800"
+        hour={18}
         addShift={(hour) => {
           addShift(day, hour);
         }}
       />
       <Cell
-        hour="1900"
+        hour={19}
         addShift={(hour) => {
           addShift(day, hour);
         }}
       />
       <Cell
-        hour="2000"
+        hour={20}
         addShift={(hour) => {
           addShift(day, hour);
         }}
       />
       <Cell
-        hour="2100"
+        hour={21}
         addShift={(hour) => {
           addShift(day, hour);
         }}
@@ -135,13 +138,19 @@ export default class WeeklyWorkSchedule extends React.Component {
     });
   }
 
-  handleSubmit() {
+  async handleSubmit() {
+    const { user } = this.context;
     const { shifts, date } = this.state;
-    const shiftsWithDate = shifts.map((shift) => ({
-      ...shift,
-      date,
-    }));
-    console.log(shiftsWithDate);
+    try {
+      await axios.post(`${config.localhost}schedules/`, {
+        riderId: user.rider_id,
+        startDate: date,
+        shifts,
+      });
+      window.location.reload();
+    } catch (error) {
+      alert('Submission failed');
+    }
   }
 
   render() {
@@ -152,6 +161,7 @@ export default class WeeklyWorkSchedule extends React.Component {
         <Input
           type="date"
           label="Starting date"
+          error={date.length === 0}
           onChange={(event) => {
             this.setState({
               date: event.target.value,
@@ -220,3 +230,5 @@ export default class WeeklyWorkSchedule extends React.Component {
     );
   }
 }
+
+WeeklyWorkSchedule.contextType = userContext;
