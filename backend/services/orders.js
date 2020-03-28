@@ -70,11 +70,15 @@ const getOrderByUserId = async (request, response) => {
   try {
     const { id } = request.params;
 
-    const order = (await query(
+    const orders = (await query(
       'SELECT * FROM orders where customer_id = $1', [id],
     )).rows;
-    console.log(`order: ${order}`);
-    return response.status(200).json({ order });
+    console.log(`orders: ${orders}`);
+    const preparingOrders = orders.filter(x => x.status === 'preparing');
+    const deliveringOrders = orders.filter(x => x.status === 'delivering');
+    const completedOrders = orders.filter(x => x.status === 'completed');
+    
+    return response.status(200).json({ orders, preparingOrders, deliveringOrders, completedOrders });
   } catch (error) {
     console.log(error);
     return response.status(500).send('orders could not be found');
