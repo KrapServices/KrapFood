@@ -10,7 +10,7 @@ import Cart from './Cart';
 import config from '../../../config.json';
 import customerCartContext from './customerCartContext';
 import RestaurantCard from './RestaurantCard';
-import PaymentForm from './CreditCard';
+import PaymentForm from './PaymentForm';
 
 class CustomerOrderFood extends Component {
   constructor(props) {
@@ -23,6 +23,7 @@ class CustomerOrderFood extends Component {
       shoppingCart: [],
       selectedRestaurantId: -1,
       paymentOpen: false,
+      payByCash: false,
     };
 
     this.orderFromThisRestaurant = (id) => {
@@ -80,8 +81,11 @@ class CustomerOrderFood extends Component {
     };
     this.closePayment = () => {
       this.setState({ paymentOpen: false });
-    }
-
+    };
+    this.switchPayment = () => {
+      const { payByCash } = this.state;
+      this.setState({ payByCash: !payByCash });
+    };
 
     // =========================================================================
     // Axios calls
@@ -178,7 +182,7 @@ class CustomerOrderFood extends Component {
   render() {
     const {
       listOfRestaurants, shoppingCart, selectedRestaurantId, isLoading, results,
-      searchValue,
+      searchValue, paymentOpen, payByCash,
     } = this.state;
     const value = {
       shoppingCart,
@@ -214,23 +218,53 @@ class CustomerOrderFood extends Component {
                 <Button content="Confirm Order" color="green" onClick={() => this.openPayment()} disabled={this.minimum()} />
               </Button.Group>
             </Segment>
-            <Modal
-              open={this.state.paymentOpen}
-              close={this.closePayment}
-              size="large"
-            >
-              <Header icon="money" content="Confirm your order" />
-              <Modal.Content>
-                <PaymentForm></PaymentForm>
-              </Modal.Content>
-              <Modal.Actions>
-                <Button color="red" onClick={() => this.closePayment()} inverted>
-                  <Icon name="cancel" />
-                  {' '}
-                  Back to order
-                </Button>
-              </Modal.Actions>
-            </Modal>
+            <>
+              <Modal
+                open={paymentOpen}
+                size="large"
+              >
+                <Header icon="money" content="Confirm your order" />
+                <Modal.Content>
+                  { payByCash
+                    ? (
+                      <>
+                        <h3>Payment will be by Cash on Delivery!</h3>
+                        <br />
+                        <Button color="orange" onClick={() => this.switchPayment()} inverted>
+                          <Icon name="money" />
+                          {' '}
+                          Pay by Credit Card instead
+                        </Button>
+                      </>
+                    )
+                    : (
+                      <>
+                        <PaymentForm />
+                        {' '}
+                        <br/>
+                        <Button color="orange" onClick={() => this.switchPayment()} inverted>
+                          <Icon name="money" />
+                          {' '}
+                          Pay by Cash On Delivery
+                        </Button>
+                      </>
+                    ) }
+                </Modal.Content>
+                <Modal.Actions>
+
+                  <Button color="red" onClick={() => this.closePayment()} inverted>
+                    <Icon name="cancel" />
+                    {' '}
+                    Back to order
+                  </Button>
+                  <Button color="green" onClick={() => this.createOrder()} inverted>
+                    <Icon name="checkmark" />
+                    {' '}
+                    Create Order
+                  </Button>
+                </Modal.Actions>
+              </Modal>
+            </>
 
             {selectedRestaurantId === -1 ? <div />
               : (

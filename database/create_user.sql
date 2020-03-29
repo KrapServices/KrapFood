@@ -11,6 +11,7 @@ CREATE TABLE users
 CREATE TABLE customers
 (
     customer_id SERIAL,
+    name TEXT,
     order_count INTEGER NOT NULL DEFAULT 0,
     points INTEGER NOT NULL DEFAULT 0,
     FOREIGN KEY (customer_id) REFERENCES users (user_id) ON DELETE CASCADE,
