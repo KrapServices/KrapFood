@@ -3,22 +3,26 @@ import React from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import {
-  Icon, Table, Input, Button,
+  Icon, Table, Input, Button, Header,
 } from 'semantic-ui-react';
 import userContext from '../../../userContext';
 import config from '../../../config.json';
 
 function Cell(props) {
   const [selected, setSelected] = React.useState(false);
-  const { hour, addShift } = props;
+  const { hour, addShift, removeShift } = props;
 
   return (
     <Table.Cell textAlign="center" selectable>
       <a
         href="#"
         onClick={() => {
+          if (selected) {
+            removeShift(hour);
+          } else {
+            addShift(hour);
+          }
           setSelected(!selected);
-          addShift(hour);
         }}
       >
         {selected ? <Icon color="green" name="checkmark" size="large" /> : null}
@@ -30,10 +34,11 @@ function Cell(props) {
 Cell.propTypes = {
   hour: PropTypes.number.isRequired,
   addShift: PropTypes.func.isRequired,
+  removeShift: PropTypes.func.isRequired,
 };
 
 function Row(props) {
-  const { day, addShift } = props;
+  const { day, addShift, removeShift } = props;
 
   return (
     <Table.Row>
@@ -43,11 +48,17 @@ function Row(props) {
         addShift={(hour) => {
           addShift(day, hour);
         }}
+        removeShift={(hour) => {
+          removeShift(day, hour);
+        }}
       />
       <Cell
         hour={11}
         addShift={(hour) => {
           addShift(day, hour);
+        }}
+        removeShift={(hour) => {
+          removeShift(day, hour);
         }}
       />
       <Cell
@@ -55,11 +66,17 @@ function Row(props) {
         addShift={(hour) => {
           addShift(day, hour);
         }}
+        removeShift={(hour) => {
+          removeShift(day, hour);
+        }}
       />
       <Cell
         hour={13}
         addShift={(hour) => {
           addShift(day, hour);
+        }}
+        removeShift={(hour) => {
+          removeShift(day, hour);
         }}
       />
       <Cell
@@ -67,11 +84,17 @@ function Row(props) {
         addShift={(hour) => {
           addShift(day, hour);
         }}
+        removeShift={(hour) => {
+          removeShift(day, hour);
+        }}
       />
       <Cell
         hour={15}
         addShift={(hour) => {
           addShift(day, hour);
+        }}
+        removeShift={(hour) => {
+          removeShift(day, hour);
         }}
       />
       <Cell
@@ -79,11 +102,17 @@ function Row(props) {
         addShift={(hour) => {
           addShift(day, hour);
         }}
+        removeShift={(hour) => {
+          removeShift(day, hour);
+        }}
       />
       <Cell
         hour={17}
         addShift={(hour) => {
           addShift(day, hour);
+        }}
+        removeShift={(hour) => {
+          removeShift(day, hour);
         }}
       />
       <Cell
@@ -91,11 +120,17 @@ function Row(props) {
         addShift={(hour) => {
           addShift(day, hour);
         }}
+        removeShift={(hour) => {
+          removeShift(day, hour);
+        }}
       />
       <Cell
         hour={19}
         addShift={(hour) => {
           addShift(day, hour);
+        }}
+        removeShift={(hour) => {
+          removeShift(day, hour);
         }}
       />
       <Cell
@@ -103,11 +138,17 @@ function Row(props) {
         addShift={(hour) => {
           addShift(day, hour);
         }}
+        removeShift={(hour) => {
+          removeShift(day, hour);
+        }}
       />
       <Cell
         hour={21}
         addShift={(hour) => {
           addShift(day, hour);
+        }}
+        removeShift={(hour) => {
+          removeShift(day, hour);
         }}
       />
     </Table.Row>
@@ -117,6 +158,7 @@ function Row(props) {
 Row.propTypes = {
   day: PropTypes.number.isRequired,
   addShift: PropTypes.func.isRequired,
+  removeShift: PropTypes.func.isRequired,
 };
 
 export default class WeeklyWorkSchedule extends React.Component {
@@ -138,6 +180,13 @@ export default class WeeklyWorkSchedule extends React.Component {
     });
   }
 
+  removeShift(day, hour) {
+    const { shifts } = this.state;
+    this.setState({
+      shifts: shifts.filter((shift) => shift.day !== day || shift.hour !== hour),
+    });
+  }
+
   async handleSubmit() {
     const { user } = this.context;
     const { shifts, date } = this.state;
@@ -149,6 +198,7 @@ export default class WeeklyWorkSchedule extends React.Component {
       });
       window.location.reload();
     } catch (error) {
+      console.error(error);
       alert('Submission failed');
     }
   }
@@ -158,6 +208,9 @@ export default class WeeklyWorkSchedule extends React.Component {
 
     return (
       <>
+        <Header as="h1">
+          Indicate your working timeslots
+        </Header>
         <Input
           type="date"
           label="Starting date"
@@ -192,30 +245,37 @@ export default class WeeklyWorkSchedule extends React.Component {
             <Row
               day={1}
               addShift={(day, hour) => this.addShift(day, hour)}
+              removeShift={(day, hour) => this.removeShift(day, hour)}
             />
             <Row
               day={2}
               addShift={(day, hour) => this.addShift(day, hour)}
+              removeShift={(day, hour) => this.removeShift(day, hour)}
             />
             <Row
               day={3}
               addShift={(day, hour) => this.addShift(day, hour)}
+              removeShift={(day, hour) => this.removeShift(day, hour)}
             />
             <Row
               day={4}
               addShift={(day, hour) => this.addShift(day, hour)}
+              removeShift={(day, hour) => this.removeShift(day, hour)}
             />
             <Row
               day={5}
               addShift={(day, hour) => this.addShift(day, hour)}
+              removeShift={(day, hour) => this.removeShift(day, hour)}
             />
             <Row
               day={6}
               addShift={(day, hour) => this.addShift(day, hour)}
+              removeShift={(day, hour) => this.removeShift(day, hour)}
             />
             <Row
               day={7}
               addShift={(day, hour) => this.addShift(day, hour)}
+              removeShift={(day, hour) => this.removeShift(day, hour)}
             />
           </Table.Body>
         </Table>

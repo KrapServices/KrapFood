@@ -10,7 +10,14 @@ class Rider extends Component {
 
   render() {
     return (
-      <WeeklyWorkSchedule />
+      <div
+        style={{
+          marginLeft: '20%',
+          marginRight: '20%',
+        }}
+      >
+        <WeeklyWorkSchedule />
+      </div>
     );
   }
 }
