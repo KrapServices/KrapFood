@@ -2,7 +2,7 @@
 /* eslint-disable no-await-in-loop */
 import React, { Component } from 'react';
 import {
-  Container, Segment, Header, Button, Message,
+  Container, Segment, Header, Button, Message, ButtonContent,
 } from 'semantic-ui-react';
 import { Link, withRouter } from 'react-router-dom';
 import ReactRouterPropTypes from 'react-router-prop-types';
@@ -30,7 +30,7 @@ class Home extends Component {
         case 'manager':
           return <Manager />;
         default:
-          return <Message>Please log in to use our application</Message>;
+          //return <Message>Please log in to use our application</Message>;
       }
     };
 
@@ -51,14 +51,44 @@ class Home extends Component {
           <Header>Welcome to KrapFood</Header>
           {!isLoggedIn ? (
             <Segment>
-              <Segment.Inline>
+              <Segment>
                 <Button primary as={Link} to="/login">
                   Log in
                 </Button>
-                <Button as={Link} color="green" to="/sign-up">
-                  Sign up
-                </Button>
-              </Segment.Inline>
+              </Segment>
+              <Message>
+                <Message.Content>Don't have an account yet?</Message.Content>
+              </Message>
+              <Segment.Inline>
+                  <Button
+                  color="blue"
+                  size="small"
+                  compact
+                  as={Link} to="/customer-signup">
+                    <ButtonContent>Customer Sign-up</ButtonContent>
+                  </Button>
+                  <Button
+                  color="green"
+                  size="small"
+                  compact
+                  as={Link} to="/rider-signup">
+                    <ButtonContent>Rider Sign-up</ButtonContent>
+                  </Button>
+                  <Button
+                  color="yellow"
+                  size="small"
+                  compact
+                  as={Link} to="/staff-signup">
+                    <ButtonContent>Staff Sign-up</ButtonContent>
+                  </Button>
+                  <Button
+                  color="teal"
+                  size="small"
+                  compact
+                  as={Link} to="/manager-signup">
+                    <ButtonContent>Manager Sign-up</ButtonContent>
+                  </Button>
+                </Segment.Inline>
             </Segment>
           ) : (
             <Segment>
