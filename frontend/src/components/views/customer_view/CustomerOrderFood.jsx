@@ -3,13 +3,14 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
 import {
-  List, Button, Segment, Grid, Header, Search, Divider, Message, Icon, Label, Card,
+  List, Button, Segment, Grid, Header, Search, Divider, Message, Icon, Label, Card, Modal,
 } from 'semantic-ui-react';
 import Axios from 'axios';
 import Cart from './Cart';
 import config from '../../../config.json';
 import customerCartContext from './customerCartContext';
 import RestaurantCard from './RestaurantCard';
+import PaymentForm from './CreditCard';
 
 class CustomerOrderFood extends Component {
   constructor(props) {
@@ -21,6 +22,7 @@ class CustomerOrderFood extends Component {
       listOfRestaurants: [],
       shoppingCart: [],
       selectedRestaurantId: -1,
+      paymentOpen: false,
     };
 
     this.orderFromThisRestaurant = (id) => {
@@ -73,6 +75,12 @@ class CustomerOrderFood extends Component {
       }
       return this.calculateTotal() <= listOfRestaurants[0].price_threshold;
     };
+    this.openPayment = () => {
+      this.setState({ paymentOpen: true });
+    };
+    this.closePayment = () => {
+      this.setState({ paymentOpen: false });
+    }
 
 
     // =========================================================================
@@ -146,18 +154,16 @@ class CustomerOrderFood extends Component {
         });
       }, 100);
     };
-    this.resultRenderer = (result) => {
-      return (
-        <Card>
-          <Card.Content>
-            <Card.Header>
-              {result.restaurant_name}
-            </Card.Header>
-            { result.foods.map((food) => <Card.Description>{food.category}</Card.Description>)}
-          </Card.Content>
-        </Card>
-      );
-    };
+    this.resultRenderer = (result) => (
+      <Card>
+        <Card.Content>
+          <Card.Header>
+            {result.restaurant_name}
+          </Card.Header>
+          { result.foods.map((food) => <Card.Description>{food.category}</Card.Description>)}
+        </Card.Content>
+      </Card>
+    );
   }
 
   componentDidMount() {
@@ -205,9 +211,27 @@ class CustomerOrderFood extends Component {
               <Button.Group>
                 <Button icon="delete" content="clear" onClick={() => this.clearCart()} />
                 <Button.Or />
-                <Button content="Confirm Order" color="green" onClick={() => this.createOrder()} disabled={this.minimum()} />
+                <Button content="Confirm Order" color="green" onClick={() => this.openPayment()} disabled={this.minimum()} />
               </Button.Group>
             </Segment>
+            <Modal
+              open={this.state.paymentOpen}
+              close={this.closePayment}
+              size="large"
+            >
+              <Header icon="money" content="Confirm your order" />
+              <Modal.Content>
+                <PaymentForm></PaymentForm>
+              </Modal.Content>
+              <Modal.Actions>
+                <Button color="red" onClick={() => this.closePayment()} inverted>
+                  <Icon name="cancel" />
+                  {' '}
+                  Back to order
+                </Button>
+              </Modal.Actions>
+            </Modal>
+
             {selectedRestaurantId === -1 ? <div />
               : (
                 <>
