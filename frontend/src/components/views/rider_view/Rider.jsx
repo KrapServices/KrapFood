@@ -3,93 +3,51 @@ import axios from 'axios';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import './Rider.css';
-import { Header, Table, Divider } from 'semantic-ui-react';
+import { Header, Table, Divider, Tab } from 'semantic-ui-react';
 import userContext from '../../../userContext';
 import WeeklyWorkSchedule from './WeeklyWorkSchedule';
 import config from '../../../config.json';
+import RiderWorkSchedule from './RiderWorkSchedule';
+import RiderViewOrder from './RiderOrderView';
 
 class Rider extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      date: new Date(Date.now()),
-      shifts: [],
+      activeIndex: 0,
     };
+
+    this.handleTabChange = (e, { activeIndex }) => {
+      window.localStorage.setItem('activeIndex', activeIndex);
+      this.setState({ activeIndex });
+    }
   }
 
-  async componentDidMount() {
-    const { user } = this.context;
-    const { rider_id: riderId } = user;
-    try {
-      const { shifts } = (await axios.get(`${config.localhost}schedules/${riderId}`)).data;
-      this.setState({
-        shifts: shifts.map((shift) => ({
-          ...shift,
-          date: new Date(shift.date),
-        })),
-      });
-    } catch (error) {
-      alert('error');
+  componentDidMount() {
+    const activeIndex = JSON.parse(window.localStorage.getItem('activeIndex'));
+    if (activeIndex) {
+      this.setState({ activeIndex });
     }
   }
 
   render() {
-    const { date, shifts } = this.state;
-
+    const { activeIndex } = this.state;
+    const panes = [
+      { menuItem: 'Schedule', render: () => <Tab.Pane><RiderWorkSchedule /></Tab.Pane> },
+      { menuItem: 'Assigned Orders', render: () => <Tab.Pane><RiderViewOrder/></Tab.Pane> },
+      { menuItem: 'Summary', render: () => <Tab.Pane><div /></Tab.Pane> },
+    ];
     return (
       <>
-        <div
-          style={{
-            marginLeft: '20%',
-            marginRight: '20%',
-          }}
-        >
-          <Header as="h2">View your existing work shifts</Header>
-          <Calendar
-            className="calendar"
-            onClickDay={(value) => {
-              this.setState({
-                date: value,
-              });
-            }}
-          />
-
-          <Table>
-            <Table.Header>
-              <Table.Row>
-                <Table.HeaderCell>Shift</Table.HeaderCell>
-                <Table.HeaderCell>Start</Table.HeaderCell>
-                <Table.HeaderCell>End</Table.HeaderCell>
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
-              {shifts
-                .filter((shift) => shift.date.getDate() === date.getDate())
-                .map((shift, index) => {
-                  const { startHour, endHour } = shift;
-                  return (
-                    <Table.Row key={startHour}>
-                      <Table.Cell>{index + 1}</Table.Cell>
-                      <Table.Cell>{startHour}</Table.Cell>
-                      <Table.Cell>{endHour}</Table.Cell>
-                    </Table.Row>
-                  );
-                })}
-            </Table.Body>
-          </Table>
-        </div>
-
-        <Divider />
-
-        <div
-          style={{
-            marginLeft: '20%',
-            marginRight: '20%',
-          }}
-        >
-          <WeeklyWorkSchedule />
-        </div>
+        <Tab
+          onTabChange={this.handleTabChange}
+          activeIndex={activeIndex}
+          menu={{ compact: true }}
+          panes={panes}
+          style={{ marginLeft: '50px', marginRight: '50px' }}
+        />
       </>
+
     );
   }
 }

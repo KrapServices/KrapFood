@@ -42,7 +42,7 @@ class PaymentForm extends React.Component {
        
       } catch (error) {
         //  console.log(error);
-        alert('error has occured');
+        alert('User does not have a credit card preregistered!');
       }
     
     }
