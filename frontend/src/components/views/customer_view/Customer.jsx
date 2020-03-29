@@ -30,6 +30,7 @@ class Customer extends Component {
   render() {
     const { activeIndex } = this.state;
     const { user } = this.context;
+    console.log(user);
     const panes = [
       { menuItem: 'Order Food', render: () => <Tab.Pane><CustomerOrderFood user={user} /></Tab.Pane> },
       { menuItem: 'Your Orders', render: () => <Tab.Pane><CustomerOrderView user={user} /></Tab.Pane> },

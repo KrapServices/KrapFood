@@ -12,9 +12,11 @@ class Staff extends Component {
   }
 
   render() {
+    console.log(this.context);
     const panes = [
       { menuItem: 'Add Food Item to Menu', render: () => <Tab.Pane><StaffAddFood /></Tab.Pane> },
       { menuItem: 'Update Food Availability', render: () => <Tab.Pane><StaffUpdateFood /></Tab.Pane> },
+      { menuItem: 'Create Promotion', render: () => <Tab.Pane><StaffUpdateFood /></Tab.Pane> },
     ];
     return (
       <>

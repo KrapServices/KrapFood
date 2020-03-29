@@ -35,13 +35,13 @@ const staffCreate = async (request, response) => {
   }
 };
 
-
 const staffLogin = async (request, response) => {
   try {
     const { email, password } = request.body;
+    
     const user = (await query(
       `
-      SELECT staff_id FROM Staff
+      SELECT staff_id, restaurant_id FROM Staff
       WHERE EXISTS (
         SELECT 1
         FROM users
@@ -52,13 +52,8 @@ const staffLogin = async (request, response) => {
       `,
       [email, password],
     )).rows[0];
-    
-    return response.status(200).json({
-      user: {
-        ...user,
-        type: 'staff',
-      },
-    });
+    user.type = 'staff';
+    return response.status(200).json({ user });
   } catch (error) {
     console.log(error);
     return response.status(500).send('user cannot be found');

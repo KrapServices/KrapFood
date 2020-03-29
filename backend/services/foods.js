@@ -20,18 +20,18 @@ const createFood = async (request, response) => {
   }
 };
 
+module.exports = {
+  createFood,
+};
+
 
 /*
 example request body to create food:
-
 {key : value }
-
 category:fast food
 food_name:chicken burger
 daily_limit:200
 availability:true
 price:2.00
 restaurant_id:1
-
-
 */
