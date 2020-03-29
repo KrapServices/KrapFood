@@ -44,7 +44,7 @@ class Signup extends Component {
       signup();
     };
 
-    this.handleSubmitCx = async (event : Event) => {
+    this.handleSubmitCx = async (event) => {
       const { email, password } = this.state;
       const { login } = this.context;
       event.preventDefault();
@@ -86,7 +86,7 @@ class Signup extends Component {
       }
     };
 
-    this.handleSubmitRd = async (event : Event) => {
+    this.handleSubmitRd = async (event) => {
       const { email, password } = this.state;
       const { login } = this.context;
       event.preventDefault();
@@ -107,7 +107,7 @@ class Signup extends Component {
       }
     };
 
-    this.handleSubmitStaff = async (event : Event) => {
+    this.handleSubmitStaff = async (event) => {
       const { email, password } = this.state;
       const { login } = this.context;
       event.preventDefault();
@@ -134,9 +134,6 @@ class Signup extends Component {
   }
 
   render() {
-
-    
-
     const { email, password } = this.state;
     return (
       <>

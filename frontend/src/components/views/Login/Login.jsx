@@ -60,7 +60,7 @@ class Login extends Component {
       }
     };
 
-    this.handleLoginRider = async (event : Event) => {
+    this.handleLoginRider = async (event) => {
       event.preventDefault();
       const { email, password } = this.state;
       const { login } = this.context;
@@ -74,7 +74,7 @@ class Login extends Component {
       }
     };
 
-    this.handleLoginStaff = async (event : Event) => {
+    this.handleLoginStaff = async (event) => {
       event.preventDefault();
       const { email, password } = this.state;
       const { login } = this.context;

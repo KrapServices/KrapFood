@@ -31,7 +31,7 @@ class App extends React.Component {
       window.localStorage.clear();
     };
 
-    this.login = async (email: string, password: string, type: string) => {
+    this.login = async (email, password, type) => {
       const result = await Axios.post(
         `${config.localhost}registrations/${type}/login`,
         {

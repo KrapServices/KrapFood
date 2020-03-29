@@ -2,7 +2,6 @@
 /* eslint-disable camelcase */
 import React, { Component } from 'react';
 import _ from 'lodash';
-import faker from 'faker';
 import {
   List, Button, Segment, Grid, Header, Search, Divider, Message, Icon, Label, Card,
 } from 'semantic-ui-react';
@@ -11,14 +10,6 @@ import Cart from './Cart';
 import config from '../../../config.json';
 import customerCartContext from './customerCartContext';
 import RestaurantCard from './RestaurantCard';
-/*
-const source = _.times(5, () => ({
-  title: faker.company.companyName(),
-  description: faker.company.catchPhrase(),
-  image: faker.internet.avatar(),
-  price: faker.finance.amount(0, 100, 2, '$'),
-}));
-*/
 
 class CustomerOrderFood extends Component {
   constructor(props) {
@@ -156,7 +147,6 @@ class CustomerOrderFood extends Component {
       }, 100);
     };
     this.resultRenderer = (result) => {
-      console.log(result);
       return (
         <Card>
           <Card.Content>
@@ -165,8 +155,6 @@ class CustomerOrderFood extends Component {
             </Card.Header>
             { result.foods.map((food) => <Card.Description>{food.category}</Card.Description>)}
           </Card.Content>
-
-
         </Card>
       );
     };
@@ -270,10 +258,8 @@ class CustomerOrderFood extends Component {
                         leading: true,
                       })}
                       results={results}
-
                       value={searchValue}
                       resultRenderer={this.resultRenderer}
-                      {...this.props}
                     />
                     <Divider />
                   </>
@@ -292,7 +278,6 @@ class CustomerOrderFood extends Component {
           </Grid.Column>
         </Grid>
       </customerCartContext.Provider>
-
     );
   }
 }
