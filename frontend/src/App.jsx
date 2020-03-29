@@ -4,14 +4,11 @@ import './App.css';
 import { Loader } from 'semantic-ui-react';
 import { Switch, Route } from 'react-router-dom';
 import Axios from 'axios';
-import TopBar from './components/layout/TopBar';
 import Home from './components/views/home/Home';
 import Login from './components/views/Login/Login';
 import Signup from './components/views/Login/Signup';
 import userContext from './userContext';
 import config from './config.json';
-
-// @flow
 
 class App extends React.Component {
   constructor(props) {
@@ -34,7 +31,7 @@ class App extends React.Component {
       window.localStorage.clear();
     };
 
-    this.login = async (email : string, password : string, type : string) => {
+    this.login = async (email, password, type) => {
       const result = await Axios.post(
         `${config.localhost}registrations/${type}/login`,
         {
@@ -80,10 +77,7 @@ class App extends React.Component {
             exact
             path="/"
             render={() => (
-              <TopBar>
-
-                <Home />
-              </TopBar>
+              <Home />
             )}
           />
           <Route exact path="/login" render={() => <Login />} />

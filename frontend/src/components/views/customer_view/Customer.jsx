@@ -7,26 +7,39 @@ import userContext from '../../../userContext';
 import CustomerOrderFood from './CustomerOrderFood';
 import CustomerOrderView from './CustomerOrderView';
 
-// @flow 
 class Customer extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      activeIndex: 0,
+    };
+
+    this.handleTabChange = (e, { activeIndex }) => {
+      window.localStorage.setItem('activeIndex', activeIndex);
+      this.setState({ activeIndex });
+    }
+  }
+
+  componentDidMount() {
+    const activeIndex = JSON.parse(window.localStorage.getItem('activeIndex'));
+    if (activeIndex) {
+      this.setState({ activeIndex });
+    }
   }
 
   render() {
-    const {user} = this.context;
+    const { activeIndex } = this.state;
+    const { user } = this.context;
     const panes = [
       { menuItem: 'Order Food', render: () => <Tab.Pane><CustomerOrderFood user={user} /></Tab.Pane> },
-      { menuItem: 'Your Orders', render: () => <Tab.Pane><CustomerOrderView /></Tab.Pane> },
-      { menuItem: 'Summary', render: () => <Tab.Pane></Tab.Pane> },
+      { menuItem: 'Your Orders', render: () => <Tab.Pane><CustomerOrderView user={user} /></Tab.Pane> },
+      { menuItem: 'Summary', render: () => <Tab.Pane><div /></Tab.Pane> },
     ];
     return (
       <>
-        <Header size="huge" as="h1">
-          Welcome, Customer
-        </Header>
         <Tab
+          onTabChange={this.handleTabChange}
+          activeIndex={activeIndex}
           menu={{ compact: true }}
           panes={panes}
           style={{ marginLeft: '50px', marginRight: '50px' }}

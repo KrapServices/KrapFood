@@ -66,10 +66,31 @@ const getOrderById = async (request, response) => {
   }
 };
 
+const getOrderByUserId = async (request, response) => {
+  try {
+    const { id } = request.params;
+
+    const orders = (await query(
+      'SELECT * FROM orders where customer_id = $1', [id],
+    )).rows;
+    console.log(`orders: ${orders}`);
+    const preparingOrders = orders.filter(x => x.status === 'preparing');
+    const deliveringOrders = orders.filter(x => x.status === 'delivering');
+    const completedOrders = orders.filter(x => x.status === 'completed');
+    
+    return response.status(200).json({ orders, preparingOrders, deliveringOrders, completedOrders });
+  } catch (error) {
+    console.log(error);
+    return response.status(500).send('orders could not be found');
+  }
+};
+
+
 
 module.exports = {
   getAllOrders,
   getOrderById,
+  getOrderByUserId,
   createOrder,
 };
 

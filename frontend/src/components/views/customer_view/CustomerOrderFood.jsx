@@ -1,6 +1,9 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable camelcase */
 import React, { Component } from 'react';
+import _ from 'lodash';
 import {
-  List, Button, Segment, Grid, Input, Header,
+  List, Button, Segment, Grid, Header, Search, Divider, Message, Icon, Label, Card,
 } from 'semantic-ui-react';
 import Axios from 'axios';
 import Cart from './Cart';
@@ -8,13 +11,30 @@ import config from '../../../config.json';
 import customerCartContext from './customerCartContext';
 import RestaurantCard from './RestaurantCard';
 
-
 class CustomerOrderFood extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isLoading: false,
+      searchValue: '',
+      results: [],
       listOfRestaurants: [],
       shoppingCart: [],
+      selectedRestaurantId: -1,
+    };
+
+    this.orderFromThisRestaurant = (id) => {
+      const { listOfRestaurants } = this.state;
+      this.setState({
+        selectedRestaurantId: id,
+        listOfRestaurants: listOfRestaurants.filter((x) => x.restaurant_id === id),
+      });
+    };
+
+    this.resetCurrentOrder = () => {
+      this.loadRestaurants();
+      this.clearCart();
+      this.setState({ selectedRestaurantId: -1 });
     };
 
     this.loadRestaurants = async () => {
@@ -25,6 +45,7 @@ class CustomerOrderFood extends Component {
         alert('cannot load restaurant');
       }
     };
+
     this.addToCart = (food) => {
       const { shoppingCart } = this.state;
       shoppingCart.push(food);
@@ -43,12 +64,24 @@ class CustomerOrderFood extends Component {
       const { shoppingCart } = this.state;
       const priceList = shoppingCart.map((x) => Number(x.price));
       const result = priceList.reduce((prev, curr) => prev + curr, 0);
-      console.log(result);
       return result;
     };
+    this.minimum = () => {
+      const { selectedRestaurantId, listOfRestaurants } = this.state;
+      if (selectedRestaurantId === -1) {
+        return true;
+      }
+      return this.calculateTotal() <= listOfRestaurants[0].price_threshold;
+    };
+
+
+    // =========================================================================
+    // Axios calls
+    // =========================================================================
     this.createOrder = async () => {
       const { shoppingCart } = this.state;
-      const { customer_id } = this.props.user;
+      const { user } = this.props;
+      const { customer_id } = user;
       // get ID
       const listOfFoods = [];
 
@@ -75,12 +108,55 @@ class CustomerOrderFood extends Component {
             headers: { 'Access-Control-Allow-Origin': true },
           },
         );
+        //  console.log(result);
         this.clearCart();
         alert('order created!');
       } catch (error) {
-        console.log(error);
+        //  console.log(error);
         alert('error has occured');
       }
+    };
+
+
+    // -------------------------------------------------------------------------
+    // Search stuff
+    // -------------------------------------------------------------------------
+
+    this.handleResultSelect = (e, { result }) => {
+      const { selectedRestaurantId, listOfRestaurants } = this.state;
+      this.setState({
+        selectedRestaurantId: result.restaurant_id,
+        listOfRestaurants: listOfRestaurants.filter((res) => res.restaurant_id === result.restaurant_id),
+      });
+    };
+
+    this.handleSearchChange = (e, { value }) => {
+      const { listOfRestaurants, searchValue } = this.state;
+      const initialState = { isLoading: false, results: [], searchValue: value };
+      this.setState({ isLoading: true, searchValue: value });
+
+      setTimeout(() => {
+        if (searchValue.length < 1) return this.setState(initialState);
+
+        const re = new RegExp(_.escapeRegExp(searchValue), 'i');
+        const isMatch = (result) => re.test(result.restaurant_name);
+        this.setState({
+          isLoading: false,
+          results: _.filter(listOfRestaurants, isMatch),
+        });
+      }, 100);
+    };
+    this.resultRenderer = (result) => {
+      return (
+        <Card>
+          <Card.Content>
+            <Card.Header>
+              {result.restaurant_name}
+            </Card.Header>
+            { result.foods.map((food) => <Card.Description>{food.category}</Card.Description>)}
+          </Card.Content>
+        </Card>
+      );
     };
   }
 
@@ -88,24 +164,32 @@ class CustomerOrderFood extends Component {
     this.loadRestaurants();
   }
 
+  componentWillUnmount() {
+    this.mounted = false;
+  }
+
 
   render() {
-    const { listOfRestaurants, shoppingCart } = this.state;
+    const {
+      listOfRestaurants, shoppingCart, selectedRestaurantId, isLoading, results,
+      searchValue,
+    } = this.state;
     const value = {
       shoppingCart,
       addToCart: this.addToCart,
       removeFromCart: this.removeFromCart,
+      selectedRestaurantId,
     };
     const price = this.calculateTotal();
-
+    console.log(results);
     return (
       <customerCartContext.Provider value={value}>
-        <Grid columns={2} stackable>
+        <Grid columns={1} stackable>
           <Grid.Column>
-            <Segment attached="top">
+            <Segment attached="top" color="grey">
               <Header as="h2">Your Cart</Header>
             </Segment>
-            <Segment attached>
+            <Segment attached color="grey">
               <Cart />
 
               <div style={{ marginBottom: '30px' }}>
@@ -116,32 +200,84 @@ class CustomerOrderFood extends Component {
                   {price}
                 </Header>
               </div>
-
             </Segment>
-            <Segment attached="bottom">
+            <Segment attached="bottom" color="grey">
               <Button.Group>
                 <Button icon="delete" content="clear" onClick={() => this.clearCart()} />
                 <Button.Or />
-                <Button content="Confirm Order" color="green" onClick={() => this.createOrder()} />
+                <Button content="Confirm Order" color="green" onClick={() => this.createOrder()} disabled={this.minimum()} />
               </Button.Group>
             </Segment>
-          </Grid.Column>
-          <Grid.Column>
+            {selectedRestaurantId === -1 ? <div />
+              : (
+                <>
+                  <Header floated="left">Minimum Order cost</Header>
+                  <Header floated="right">
+                    {' '}
+                    $
+                    {listOfRestaurants[0].price_threshold}
+                  </Header>
+                </>
+              )}
+
+            <Message info icon>
+
+              {selectedRestaurantId === -1
+                ? (
+
+                  <>
+                    <Icon name="help circle" />
+                    {' '}
+                    <Message.Header>
+                      Select a Restaurant
+                    </Message.Header>
+
+                  </>
+
+                )
+                : (
+                  <Button color="red" onClick={this.resetCurrentOrder}>
+                    {' '}
+                    <Icon name="cancel" />
+                    Change restaurant
+                  </Button>
+                )}
+
+              {' '}
+            </Message>
+            <Divider />
             <Segment>
-              <Input icon="search" placeholder="Search..." />
-              <Header as="h1"> List Of Restaurants </Header>
-              <List divided relaxed>
+              { selectedRestaurantId === -1
+                ? (
+                  <>
+                    <Search
+                      fluid
+                      loading={isLoading}
+                      onResultSelect={this.handleResultSelect}
+                      onSearchChange={_.debounce(this.handleSearchChange, 100, {
+                        leading: true,
+                      })}
+                      results={results}
+                      value={searchValue}
+                      resultRenderer={this.resultRenderer}
+                    />
+                    <Divider />
+                  </>
+                )
+                : <div />}
+
+              <List divided relaxed style={{ marginLeft: '8rem', marginRight: '8rem' }}>
                 {listOfRestaurants.map((restaurant) => (
                   <React.Fragment key={restaurant.restaurant_id}>
-                    <RestaurantCard res={restaurant} />
+                    <RestaurantCard res={restaurant} orderFromThisRestaurant={this.orderFromThisRestaurant} />
                   </React.Fragment>
                 ))}
               </List>
             </Segment>
+
           </Grid.Column>
         </Grid>
       </customerCartContext.Provider>
-
     );
   }
 }
