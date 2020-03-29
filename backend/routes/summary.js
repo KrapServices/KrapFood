@@ -18,7 +18,7 @@ router.get('/', async (req, res) => {
 
     const { order_count: orderCount, total_cost: totalCost } = (await query(
       `
-        SELECT count(order_id) AS order_count, sum(total_cost) AS total_cost
+        SELECT count(order_id) AS order_count, COALESCE(sum(total_cost), 0) AS total_cost
         FROM orders
         WHERE created_at - $1 >= '0' AND $2 - created_at >= '0'
       `,
