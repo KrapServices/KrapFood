@@ -8661,14 +8661,6 @@ react-app-polyfill@^1.0.6:
     regenerator-runtime "^0.13.3"
     whatwg-fetch "^3.0.0"
 
-<<<<<<< HEAD
-react-credit-cards@^0.8.0:
-  version "0.8.0"
-  resolved "https://registry.yarnpkg.com/react-credit-cards/-/react-credit-cards-0.8.0.tgz#5a568d01cb440275adf2d4cda29c0fb1bf97248a"
-  integrity sha512-OTI08Dz1qEefxHOKJQSUa5nn8awuN5rAE8lRz2XS3BG3SIa5vmaAJLAhdmikc75qEoIkrYST79Z8oGUPVkBNsA==
-  dependencies:
-    payment "^2.3.0"
-=======
 react-calendar@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/react-calendar/-/react-calendar-3.0.0.tgz#9edb604babc6545a3b41bef46d17176a1d5f6181"
@@ -8678,7 +8670,13 @@ react-calendar@^3.0.0:
     get-user-locale "^1.2.0"
     merge-class-names "^1.1.1"
     prop-types "^15.6.0"
->>>>>>> master
+
+react-credit-cards@^0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/react-credit-cards/-/react-credit-cards-0.8.0.tgz#5a568d01cb440275adf2d4cda29c0fb1bf97248a"
+  integrity sha512-OTI08Dz1qEefxHOKJQSUa5nn8awuN5rAE8lRz2XS3BG3SIa5vmaAJLAhdmikc75qEoIkrYST79Z8oGUPVkBNsA==
+  dependencies:
+    payment "^2.3.0"
 
 react-dev-utils@^10.2.0:
   version "10.2.0"
