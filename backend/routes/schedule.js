@@ -51,20 +51,12 @@ router.post('/', async (req, res) => {
     await transact(async (query) => {
       const { schedule_id: scheduleId } = (await query(
         `
-          INSERT INTO weekly_work_schedule (first_date)
-          VALUES ($1)
+          INSERT INTO weekly_work_schedule (rider_id, first_date)
+          VALUES ($1, $2)
           RETURNING schedule_id
         `,
-        [startDate],
+        [riderId, startDate],
       )).rows[0];
-
-      await query(
-        `
-          INSERT INTO pt_works (rider_id, schedule_id)
-          VALUES ($1, $2)
-        `,
-        [riderId, scheduleId],
-      );
 
       await Promise.all(intervals.map((interval) => {
         const { dayOfWeek, startHour, endHour } = interval;

@@ -82,8 +82,10 @@ CREATE TABLE staff
 CREATE TABLE weekly_work_schedule
 (
     schedule_id SERIAL,
+    rider_id INTEGER NOT NULL,
     first_date DATE NOT NULL,
-    PRIMARY KEY (schedule_id)
+    PRIMARY KEY (schedule_id),
+    FOREIGN KEY (rider_id) REFERENCES part_time_riders (rider_id)
 );
 
 CREATE TABLE wws_consists
@@ -97,11 +99,28 @@ CREATE TABLE wws_consists
     FOREIGN KEY (day_of_week, start_hour, end_hour) REFERENCES workshift (day_of_week, start_hour, end_hour)
 );
 
-CREATE TABLE pt_works
-(
-    rider_id INTEGER,
-    schedule_id INTEGER,
-    PRIMARY KEY (rider_id, schedule_id),
-    FOREIGN KEY (rider_id) REFERENCES part_time_riders (rider_id),
-    FOREIGN KEY (schedule_id) REFERENCES weekly_work_schedule (schedule_id)
-);
+CREATE OR REPLACE FUNCTION check_overlap_wws() RETURNS TRIGGER
+    AS $$
+DECLARE
+    f_date DATE;
+BEGIN
+    SELECT W.first_date INTO f_date
+        FROM weekly_work_schedule W
+        WHERE W.rider_id = NEW.rider_id
+        AND W.schedule_id <> NEW.schedule_id
+        AND (W.first_date - NEW.first_date <= '6'
+        AND W.first_date - NEW.first_date >= '0' 
+        OR NEW.first_date - W.first_date <= '6'
+        AND NEW.first_date - W.first_date >= '0');
+    IF f_date IS NOT NULL THEN
+        RAISE exception 'Clashing with %', f_date;
+    END IF;
+    RETURN NULL;
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS wws_trigger ON weekly_work_schedule CASCADE;
+CREATE TRIGGER wws_trigger
+    AFTER INSERT ON weekly_work_schedule
+    FOR EACH ROW
+    EXECUTE PROCEDURE check_overlap_wws();
