@@ -1,5 +1,5 @@
 const express = require('express');
-const { transact } = require('../database');
+const { transact, query } = require('../database');
 
 const router = express.Router();
 
@@ -71,6 +71,34 @@ router.post('/', async (req, res) => {
     });
 
     res.status(201).json({});
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({});
+  }
+});
+
+router.get('/:id', async (req, res) => {
+  const { id: riderId } = req.params;
+
+  try {
+    const shifts = (await query(
+      `
+        SELECT first_date, day_of_week, start_hour, end_hour
+        FROM weekly_work_schedule NATURAL JOIN wws_consists
+        WHERE rider_id = $1
+      `,
+      [riderId],
+    )).rows.map((shift) => {
+      const date = new Date(shift.first_date);
+      date.setDate(shift.first_date.getDate() + (shift.day_of_week - 1));
+      return {
+        date,
+        startHour: shift.start_hour,
+        endHour: shift.end_hour,
+      };
+    });
+
+    res.status(200).json({ shifts });
   } catch (error) {
     console.error(error);
     res.status(500).json({});

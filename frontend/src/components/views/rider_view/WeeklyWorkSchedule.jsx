@@ -15,7 +15,7 @@ function Cell(props) {
   return (
     <Table.Cell textAlign="center" selectable>
       <a
-        href="#"
+        href="#picker"
         onClick={() => {
           if (selected) {
             removeShift(hour);
@@ -209,7 +209,7 @@ export default class WeeklyWorkSchedule extends React.Component {
     return (
       <>
         <Header as="h1">
-          Indicate your working timeslots
+          Register a work week
         </Header>
         <Input
           type="date"
@@ -222,7 +222,7 @@ export default class WeeklyWorkSchedule extends React.Component {
           }}
         />
 
-        <Table>
+        <Table id="picker">
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>Day</Table.HeaderCell>
