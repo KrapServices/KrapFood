@@ -11,7 +11,7 @@ import Rider from '../rider_view/Rider';
 import Customer from '../customer_view/Customer';
 import Manager from '../manager_view/Manager';
 import Staff from '../staff_view/Staff';
-import GenerateData from '../../utils/GenerateData';
+import TopBar from '../../layout/TopBar';
 
 class Home extends Component {
   constructor(props) {
@@ -47,6 +47,7 @@ class Home extends Component {
     const { email } = user;
     return (
       <div>
+        <TopBar onLogout={this.onLogout}>
         <Container fluid textAlign="center">
           <Header>Welcome to KrapFood</Header>
           {!isLoggedIn ? (
@@ -105,13 +106,8 @@ class Home extends Component {
               </Segment.Inline>
             </Segment>
           )}
-          {this.renderBody(user.type)}
-          { /** *********** */
-            // use this to generate data
-            // remember to run npm run build before using this.
-          }
-          <GenerateData />
         </Container>
+        </TopBar>
       </div>
     );
   }

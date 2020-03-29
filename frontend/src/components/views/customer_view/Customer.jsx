@@ -8,24 +8,39 @@ import CustomerOrderFood from './CustomerOrderFood';
 import CustomerOrderView from './CustomerOrderView';
 
 class Customer extends Component {
-  constructor() {
-    super();
-    this.state = {};
+  constructor(props) {
+    super(props);
+    this.state = {
+      activeIndex: 0,
+    };
+
+    this.handleTabChange = (e, { activeIndex }) => {
+      window.localStorage.setItem('activeIndex', activeIndex);
+      this.setState({ activeIndex });
+    }
+  }
+
+  componentDidMount() {
+    const activeIndex = JSON.parse(window.localStorage.getItem('activeIndex'));
+    if (activeIndex) {
+      this.setState({ activeIndex });
+    }
   }
 
   render() {
+    const { activeIndex } = this.state;
+    const { user } = this.context;
     const panes = [
-      { menuItem: 'Order Food', render: () => <Tab.Pane><CustomerOrderFood /></Tab.Pane> },
-      { menuItem: 'Your Orders', render: () => <Tab.Pane><CustomerOrderView /></Tab.Pane> },
-      { menuItem: 'Summary', render: () => <Tab.Pane></Tab.Pane> },
+      { menuItem: 'Order Food', render: () => <Tab.Pane><CustomerOrderFood user={user} /></Tab.Pane> },
+      { menuItem: 'Your Orders', render: () => <Tab.Pane><CustomerOrderView user={user} /></Tab.Pane> },
+      { menuItem: 'Summary', render: () => <Tab.Pane><div /></Tab.Pane> },
     ];
     return (
       <>
-        <Header size="huge" as="h1">
-          Welcome, Customer
-        </Header>
         <Tab
-          menu={{ horizontal: true, compact: true }}
+          onTabChange={this.handleTabChange}
+          activeIndex={activeIndex}
+          menu={{ compact: true }}
           panes={panes}
           style={{ marginLeft: '50px', marginRight: '50px' }}
         />

@@ -10,52 +10,103 @@ import {
   Responsive,
   Segment,
   Visibility,
-} from 'semantic-ui-react';
-import './layout.css';
+  Button,
 
-export default class TopBar extends Component {
+} from 'semantic-ui-react';
+import userContext from '../../userContext';
+
+
+class TopBar extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+    };
+
+    this.welcomeUser = (userType) => {
+      switch (userType) {
+        case 'customer':
+          return <Header size="huge" as="h1" inverted> Welcome, Customer</Header>;
+        case 'rider':
+          return <Header inverted>Rider</Header>;
+        case 'staff':
+          return <Header inverted>Staff</Header>;
+        case 'manager':
+          return <Header inverted>Manager</Header>;
+        default:
+          return <Header inverted>Super User</Header>;
+      }
+    };
+  }
+
   render() {
-    const { children } = this.props;
+    const { user, isLoggedIn } = this.context;
+    const { email } = user;
+    const { children, onLogout } = this.props;
+    const fix = true;
 
     return (
       <div>
         <Responsive>
           <Visibility once onBottomPassedReverse={this.hideFixedMenu}>
-            <Grid
-              style={{
-                minHeight: 20,
-                backgroundColor: '#fc475f',
-                marginBottom: '1rem',
-              }}
-              columns={3}
-              centered
+            <Segment
+              inverted
+              textAlign="center"
+              style={{ minHeight: 100, padding: '1em 1em', marginBottom: '50px' }}
+              vertical
             >
-              <Grid.Row centered>
-                <Grid.Column textAlign="left" verticalAlign="bottom">
-                  <p style={{ marginLeft: '1em' }}>
-                    <Header as={Link} to="/">
-                      <Icon name="road" />
-                      KrapFood
-                    </Header>
-                  </p>
-                </Grid.Column>
-                <Grid.Column textAlign="center">
-                  {' '}
-                  <Menu
-                    borderless
-                    secondary
-                    size="small"
-                    compact
-                    style={{ marginleft: 'auto', marginRight: 'auto' }}
-                  >
-                    <Menu.Item as={Link} to="/" fitted>
-                      Home
-                    </Menu.Item>
-                  </Menu>
-                </Grid.Column>
-                <Grid.Column></Grid.Column>
-              </Grid.Row>
-            </Grid>
+              <Menu
+                fluid
+                widths={6}
+                inverted
+                size="small"
+                icon="labeled"
+                borderless
+              >
+
+                {!isLoggedIn
+                  ? (
+                    <>
+                      <Menu.Item />
+                      <Menu.Item />
+                      <Menu.Item>
+                        <Header as="h1" inverted>
+                          <Icon name="road" />
+                          KRAPFOOD
+                        </Header>
+                      </Menu.Item>
+                    </>
+                  ) : (
+                    <>
+                      <Menu.Item />
+                      <Menu.Item position="left">
+                        {this.welcomeUser(user.type)}
+                      </Menu.Item>
+                    </>
+                  )}
+                {!isLoggedIn
+                  ? (
+                    <>
+                      <Menu.Item as={Link} to="/login">
+                        <Icon name="sign in" color="green" />
+                        Log in
+                      </Menu.Item>
+                      <Menu.Item as={Link} to="/sign-up">
+                        <Icon name="signup" color="blue" />
+                        Sign up
+                      </Menu.Item>
+                    </>
+                  )
+                  : (
+                    <>
+                      <Menu.Item onClick={onLogout}>
+                        <Icon name="cancel" color="red" />
+                        Log Out
+                      </Menu.Item>
+                      <Menu.Item />
+                    </>
+                  )}
+              </Menu>
+            </Segment>
           </Visibility>
           <Container fluid className="site">
             <div className="site-content">{children}</div>
@@ -71,6 +122,10 @@ export default class TopBar extends Component {
   }
 }
 
+TopBar.contextType = userContext;
+
 TopBar.propTypes = {
   children: PropTypes.node.isRequired,
 };
+
+export default TopBar;

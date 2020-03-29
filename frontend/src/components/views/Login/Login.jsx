@@ -12,8 +12,6 @@ import { Link, withRouter } from 'react-router-dom';
 import ReactRouterPropTypes from 'react-router-prop-types';
 import userContext from '../../../userContext';
 
-// import login from "./registration";
-
 class Login extends Component {
   constructor(props) {
     super(props);
@@ -27,7 +25,7 @@ class Login extends Component {
       history.push('/');
     };
 
-    this.handleChange = (event) => {
+    this.handleChange = (event ) => {
       const { name, value } = event.target;
       this.setState({
         [name]: value,
@@ -48,7 +46,7 @@ class Login extends Component {
       }
     };
 
-    this.handleLoginManager = async (event) => {
+    this.handleLoginManager = async (event ) => {
       event.preventDefault();
       const { email, password } = this.state;
       const { login } = this.context;

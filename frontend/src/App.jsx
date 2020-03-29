@@ -4,7 +4,6 @@ import './App.css';
 import { Loader } from 'semantic-ui-react';
 import { Switch, Route } from 'react-router-dom';
 import Axios from 'axios';
-import TopBar from './components/layout/TopBar';
 import Home from './components/views/home/Home';
 import Login from './components/views/Login/Login';
 import userContext from './userContext';
@@ -81,10 +80,7 @@ class App extends React.Component {
             exact
             path="/"
             render={() => (
-              <TopBar>
-
-                <Home />
-              </TopBar>
+              <Home />
             )}
           />
           <Route exact path="/login" render={() => <Login />} />
