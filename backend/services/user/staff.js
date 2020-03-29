@@ -7,18 +7,28 @@ const { query, transact } = require('../../database');
 const staffCreate = async (request, response) => {
   try {
     const { email, password } = request.body;
-    const result = await transact(async (query) => {
+
+    await transact(async (query) => {
       const user = (await query(
-        'INSERT INTO users (email , password) VALUES ($1,$2) RETURNING user_id',
+        `
+          INSERT INTO users (email , password) 
+          VALUES ($1,$2) 
+          RETURNING user_id
+        `,
         [email, password],
       )).rows[0];
+
       (await query(
-        'INSERT INTO staff (staff_id, restaurant_id) VALUES ($1, 1) RETURNING staff_id, restaurant_id',
+        `
+          INSERT INTO staff (staff_id, restaurant_id) 
+          VALUES ($1, 1) 
+          RETURNING staff_id
+        `,
         [user.user_id],
       ));
-      return user;
     });
-    response.status(201).send('user created');
+
+    response.status(201).send('Staff created');
   } catch (error) {
     console.log(error);
     return response.status(500).send('error occured');
@@ -29,23 +39,26 @@ const staffCreate = async (request, response) => {
 const staffLogin = async (request, response) => {
   try {
     const { email, password } = request.body;
-
-    const result = await transact(async (query) => {
-      let user = (await query(
-        'SELECT user_id, email, password FROM users WHERE email = $1 and password = $2',
-        [email, password],
-      )).rows[0];
-      const staff = (await query(
-        'SELECT staff_id FROM staff WHERE staff_id = $1 ',
-        [user.user_id],
-      )).rows[0];
-        // append info to user object
-      user.type = 'staff';
-      user = { ...user, ...staff };
-      console.log(user);
-      return user;
+    const user = (await query(
+      `
+      SELECT staff_id FROM Staff
+      WHERE EXISTS (
+        SELECT 1
+        FROM users
+        WHERE email = $1 
+        AND password = $2 
+        AND staff_id = user_id
+      )
+      `,
+      [email, password],
+    )).rows[0];
+    
+    return response.status(200).json({
+      user: {
+        ...user,
+        type: 'staff',
+      },
     });
-    response.status(200).json({ user: result });
   } catch (error) {
     console.log(error);
     return response.status(500).send('user cannot be found');

@@ -20,10 +20,6 @@ const createFood = async (request, response) => {
   }
 };
 
-module.exports = {
-  createFood,
-};
-
 
 /*
 example request body to create food:
