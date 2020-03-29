@@ -144,9 +144,33 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-DROP CONSTRAINT TRIGGER IF EXISTS wws_hours_trigger ON weekly_work_schedule CASCADE;
+DROP TRIGGER IF EXISTS wws_hours_trigger ON weekly_work_schedule CASCADE;
 CREATE CONSTRAINT TRIGGER wws_hours_trigger
     AFTER INSERT ON weekly_work_schedule
     DEFERRABLE INITIALLY DEFERRED
     FOR EACH ROW
     EXECUTE PROCEDURE check_wws_hours();
+
+CREATE OR REPLACE FUNCTION check_shift_overlaps() RETURNS TRIGGER
+    AS $$
+DECLARE
+    overlap_exists INTEGER;
+BEGIN
+    SELECT 1 INTO overlap_exists
+    FROM wws_consists C
+    WHERE NEW.schedule_id = C.schedule_id
+    AND NEW.day_of_week = C.day_of_week
+    AND (NEW.start_hour <> C.start_hour OR NEW.end_hour <> C.end_hour)
+    AND (NEW.start_hour - INTERVAL '1 hour', NEW.end_hour + INTERVAL '1 hour') OVERLAPS (C.start_hour, C.end_hour);
+    IF overlap_exists IS NOT NULL THEN
+        RAISE exception 'Shift overlap detected';
+    END IF;
+    RETURN NULL;
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS shift_overlap_trigger ON wws_consists CASCADE;
+CREATE TRIGGER shift_overlap_trigger
+    AFTER INSERT ON wws_consists
+    FOR EACH ROW
+    EXECUTE PROCEDURE check_shift_overlaps();
