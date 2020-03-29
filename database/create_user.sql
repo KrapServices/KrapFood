@@ -99,7 +99,7 @@ CREATE TABLE wws_consists
     FOREIGN KEY (day_of_week, start_hour, end_hour) REFERENCES workshift (day_of_week, start_hour, end_hour)
 );
 
-CREATE OR REPLACE FUNCTION check_overlap_wws() RETURNS TRIGGER
+CREATE OR REPLACE FUNCTION check_wws_overlap() RETURNS TRIGGER
     AS $$
 DECLARE
     f_date DATE;
@@ -113,14 +113,40 @@ BEGIN
         OR NEW.first_date - W.first_date <= '6'
         AND NEW.first_date - W.first_date >= '0');
     IF f_date IS NOT NULL THEN
-        RAISE exception 'Clashing with %', f_date;
+        RAISE exception '% clashing with %', NEW.first_date, f_date;
     END IF;
     RETURN NULL;
 END;
 $$ LANGUAGE plpgsql;
 
-DROP TRIGGER IF EXISTS wws_trigger ON weekly_work_schedule CASCADE;
-CREATE TRIGGER wws_trigger
+DROP TRIGGER IF EXISTS wws_overlap_trigger ON weekly_work_schedule CASCADE;
+CREATE TRIGGER wws_overlap_trigger
     AFTER INSERT ON weekly_work_schedule
     FOR EACH ROW
-    EXECUTE PROCEDURE check_overlap_wws();
+    EXECUTE PROCEDURE check_wws_overlap();
+
+CREATE OR REPLACE FUNCTION check_wws_hours() RETURNS TRIGGER
+    AS $$
+DECLARE
+    total_hours INTERVAL;
+BEGIN
+    WITH durations AS (
+        SELECT end_hour - start_hour AS duration
+        FROM wws_consists C
+        WHERE NEW.schedule_id = C.schedule_id
+    )
+    SELECT sum(duration) INTO total_hours
+    FROM durations;
+    IF total_hours IS NULL OR total_hours < '10 hour' OR total_hours > '48 hour' THEN
+        RAISE exception 'Schedule has % total hours', total_hours;
+    END IF;
+    RETURN NULL;
+END;
+$$ LANGUAGE plpgsql;
+
+DROP CONSTRAINT TRIGGER IF EXISTS wws_hours_trigger ON weekly_work_schedule CASCADE;
+CREATE CONSTRAINT TRIGGER wws_hours_trigger
+    AFTER INSERT ON weekly_work_schedule
+    DEFERRABLE INITIALLY DEFERRED
+    FOR EACH ROW
+    EXECUTE PROCEDURE check_wws_hours();

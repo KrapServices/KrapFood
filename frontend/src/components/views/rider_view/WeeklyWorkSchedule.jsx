@@ -204,7 +204,7 @@ export default class WeeklyWorkSchedule extends React.Component {
   }
 
   render() {
-    const { date } = this.state;
+    const { date, shifts } = this.state;
 
     return (
       <>
@@ -281,7 +281,7 @@ export default class WeeklyWorkSchedule extends React.Component {
         </Table>
 
         <Button
-          disabled={date.length === 0}
+          disabled={date.length === 0 || shifts.length === 0}
           onClick={() => this.handleSubmit()}
         >
           Submit
