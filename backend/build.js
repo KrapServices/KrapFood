@@ -10,9 +10,10 @@ async function build(queries) {
         const lines = fs.readFileSync(path, { encoding: 'utf-8' });
         return query(lines);
       }
+
       // Do this in order because sql scripts may depend on previous scripts
-      queries.forEach(async (sqlQuery) => {
-        await execute(sqlQuery);
+      queries.forEach((sqlQuery) => {
+        execute(sqlQuery);
       });
     });
     console.log('Successfully built database.');
