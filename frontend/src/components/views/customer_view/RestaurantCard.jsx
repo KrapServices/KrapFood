@@ -37,21 +37,19 @@ class RestaurantCard extends Component {
               <Item key={food.food_id}>
                 <Item.Image src="https://react.semantic-ui.com/images/wireframe/image.png" />
                 <Item.Content>
-
                   <Item.Header as="h1">{food.food_name}</Item.Header>
                   <Item.Description floated="left">
                     Price:
-
                     <b>{` ${food.price}`}</b>
-
                     {' '}
-
                     <br />
-                    DailyLimit:
+                    Daily Limit:
                     {' '}
-
                     <b>{` ${food.daily_limit}`}</b>
-
+                    {' '}
+                    <br />
+                    Available:
+                    <b>{food.availability ? <Icon name="checkmark" color="green" /> : <Icon name="cancel" color="red" />}</b>
                     {' '}
                   </Item.Description>
                   { food.availability
@@ -64,7 +62,6 @@ class RestaurantCard extends Component {
                     ) : <p>daily limit reached</p>}
                 </Item.Content>
               </Item>
-
             ))}
           </Item.Group>
         </>

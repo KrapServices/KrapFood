@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import {
   Header, Table,
 } from 'semantic-ui-react';
-import PropTypes from 'prop-types';
 import customerOrderContext from './customerOrderContext';
 
 class CustomerCurrentOrders extends Component {
@@ -42,7 +41,7 @@ class CustomerCurrentOrders extends Component {
         </Table>
         <br />
         <Header as="h2">Current Orders being Delivered</Header>
-        <Table padded >
+        <Table padded>
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>Order Id</Table.HeaderCell>
@@ -66,7 +65,7 @@ class CustomerCurrentOrders extends Component {
         </Table>
         <br />
         <Header as="h2">Completed Orders</Header>
-        <Table padded >
+        <Table padded>
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>Order Id</Table.HeaderCell>
@@ -83,7 +82,6 @@ class CustomerCurrentOrders extends Component {
                 <Table.Cell>{order.status}</Table.Cell>
                 <Table.Cell>{order.delivery_location}</Table.Cell>
                 <Table.Cell>{order.total_cost}</Table.Cell>
-
               </Table.Row>
             ))}
           </Table.Body>
@@ -95,8 +93,5 @@ class CustomerCurrentOrders extends Component {
 }
 
 CustomerCurrentOrders.contextType = customerOrderContext;
-CustomerCurrentOrders.propTypes = {
-
-};
 
 export default CustomerCurrentOrders;

@@ -4,28 +4,28 @@ import React, { Component } from 'react';
 import _ from 'lodash';
 import faker from 'faker';
 import {
-  List, Button, Segment, Grid, Header, Search, Divider, Message, Icon,
+  List, Button, Segment, Grid, Header, Search, Divider, Message, Icon, Label, Card,
 } from 'semantic-ui-react';
 import Axios from 'axios';
 import Cart from './Cart';
 import config from '../../../config.json';
 import customerCartContext from './customerCartContext';
 import RestaurantCard from './RestaurantCard';
-
+/*
 const source = _.times(5, () => ({
   title: faker.company.companyName(),
   description: faker.company.catchPhrase(),
   image: faker.internet.avatar(),
   price: faker.finance.amount(0, 100, 2, '$'),
 }));
-
+*/
 
 class CustomerOrderFood extends Component {
   constructor(props) {
     super(props);
     this.state = {
       isLoading: false,
-      value: '',
+      searchValue: '',
       results: [],
       listOfRestaurants: [],
       shoppingCart: [],
@@ -131,24 +131,44 @@ class CustomerOrderFood extends Component {
     // Search stuff
     // -------------------------------------------------------------------------
 
-    this.handleResultSelect = (e, { result }) => this.setState({ value: result.title });
-
+    this.handleResultSelect = (e, { result }) => {
+      const { selectedRestaurantId, listOfRestaurants } = this.state;
+      this.setState({
+        selectedRestaurantId: result.restaurant_id,
+        listOfRestaurants: listOfRestaurants.filter((res) => res.restaurant_id === result.restaurant_id),
+      });
+    };
 
     this.handleSearchChange = (e, { value }) => {
-      const initialState = { isLoading: false, results: [], value: '' };
-      this.setState({ isLoading: true, value });
+      const { listOfRestaurants, searchValue } = this.state;
+      const initialState = { isLoading: false, results: [], searchValue: value };
+      this.setState({ isLoading: true, searchValue: value });
 
       setTimeout(() => {
-        if (this.state.value.length < 1) return this.setState(initialState);
+        if (searchValue.length < 1) return this.setState(initialState);
 
-        const re = new RegExp(_.escapeRegExp(this.state.value), 'i');
-        const isMatch = (result) => re.test(result.title);
-
+        const re = new RegExp(_.escapeRegExp(searchValue), 'i');
+        const isMatch = (result) => re.test(result.restaurant_name);
         this.setState({
           isLoading: false,
-          results: _.filter(source, isMatch),
+          results: _.filter(listOfRestaurants, isMatch),
         });
-      }, 300);
+      }, 100);
+    };
+    this.resultRenderer = (result) => {
+      console.log(result);
+      return (
+        <Card>
+          <Card.Content>
+            <Card.Header>
+              {result.restaurant_name}
+            </Card.Header>
+            { result.foods.map((food) => <Card.Description>{food.category}</Card.Description>)}
+          </Card.Content>
+
+
+        </Card>
+      );
     };
   }
 
@@ -164,17 +184,18 @@ class CustomerOrderFood extends Component {
   render() {
     const {
       listOfRestaurants, shoppingCart, selectedRestaurantId, isLoading, results,
-      value,
+      searchValue,
     } = this.state;
-    const value2 = {
+    const value = {
       shoppingCart,
       addToCart: this.addToCart,
       removeFromCart: this.removeFromCart,
       selectedRestaurantId,
     };
     const price = this.calculateTotal();
+    console.log(results);
     return (
-      <customerCartContext.Provider value={value2}>
+      <customerCartContext.Provider value={value}>
         <Grid columns={1} stackable>
           <Grid.Column>
             <Segment attached="top" color="grey">
@@ -238,19 +259,27 @@ class CustomerOrderFood extends Component {
             </Message>
             <Divider />
             <Segment>
-              <Search
-                fluid
-                input={{ icon: 'search', iconPosition: 'left' }}
-                loading={isLoading}
-                onResultSelect={this.handleResultSelect}
-                onSearchChange={_.debounce(this.handleSearchChange, 500, {
-                  leading: true,
-                })}
-                results={results}
-                value={value}
+              { selectedRestaurantId === -1
+                ? (
+                  <>
+                    <Search
+                      fluid
+                      loading={isLoading}
+                      onResultSelect={this.handleResultSelect}
+                      onSearchChange={_.debounce(this.handleSearchChange, 100, {
+                        leading: true,
+                      })}
+                      results={results}
 
-              />
-              <Divider />
+                      value={searchValue}
+                      resultRenderer={this.resultRenderer}
+                      {...this.props}
+                    />
+                    <Divider />
+                  </>
+                )
+                : <div />}
+
               <List divided relaxed style={{ marginLeft: '8rem', marginRight: '8rem' }}>
                 {listOfRestaurants.map((restaurant) => (
                   <React.Fragment key={restaurant.restaurant_id}>

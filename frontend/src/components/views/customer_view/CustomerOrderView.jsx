@@ -60,8 +60,6 @@ class CustomerOrderView extends Component {
       <div>
         <customerOrderContext.Provider value={value}>
           <Grid columns={2}>
-
-
             <Grid.Column>
               <Header>
                 Number Of Orders Placed:
@@ -69,8 +67,6 @@ class CustomerOrderView extends Component {
                 {numOfOrder}
               </Header>
             </Grid.Column>
-
-
             <Grid.Column>
               <Header>
                 Points:
@@ -78,13 +74,10 @@ class CustomerOrderView extends Component {
                 {customerPoints}
               </Header>
             </Grid.Column>
-
-
           </Grid>
           <Divider />
           <CustomerCurrentOrders />
         </customerOrderContext.Provider>
-
       </div>
     );
   }
