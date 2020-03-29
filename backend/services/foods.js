@@ -27,16 +27,17 @@ const getMenu = async (request, response) => {
     //   'SELECT * FROM restaurants where restaurant_id = $1', [id],
     // )).rows[0];
     const food = (await query(
-      `SELECT food_id, category, food_name, daily_limit, availability, price, price_threshold 
+      `SELECT food_id, category, food_name, daily_limit, availability, price 
         FROM foods F
-        WHERE F.restaurant_id = $1'`, 
+        WHERE F.restaurant_id = $1`, 
     [id],
     )).rows;
-    const menu = { food };
-    return response.status(200).json(menu);
+    console.log(food.rows);
+    // const menu = food;
+    return response.status(200).json(food);
   } catch (error) {
     console.log(error);
-    return response.status(500).send('restaurant could not be found');
+    return response.status(500).send('menu could not be found');
   }
 }
 
