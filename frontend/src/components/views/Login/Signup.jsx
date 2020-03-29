@@ -14,7 +14,7 @@ import Axios from 'axios';
 import userContext from '../../../userContext';
 import config from '../../../config.json';
 
-// @flow
+
 class Signup extends Component {
   constructor(props) {
     super(props);
@@ -44,7 +44,7 @@ class Signup extends Component {
       signup();
     };
 
-    this.handleSubmitCx = async (event : Event) => {
+    this.handleSubmitCx = async (event) => {
       const { email, password } = this.state;
       const { login } = this.context;
       event.preventDefault();
@@ -86,7 +86,7 @@ class Signup extends Component {
       }
     };
 
-    this.handleSubmitRd = async (event : Event) => {
+    this.handleSubmitRd = async (event) => {
       const { email, password } = this.state;
       const { login } = this.context;
       event.preventDefault();
@@ -107,7 +107,7 @@ class Signup extends Component {
       }
     };
 
-    this.handleSubmitStaff = async (event : Event) => {
+    this.handleSubmitStaff = async (event) => {
       const { email, password } = this.state;
       const { login } = this.context;
       event.preventDefault();

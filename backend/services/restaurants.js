@@ -28,7 +28,7 @@ const createRestaurant = async (request, response) => {
 const getAllRestaurant = async (request, response) => {
   try {
     let restaurants = (await query(
-      'SELECT r.restaurant_id, restaurant_name, restaurant_location from restaurants r',
+      'SELECT r.restaurant_id, restaurant_name, restaurant_location, price_threshold from restaurants r',
     )).rows;
     restaurants = await getAllRestaurantWithFood(restaurants);
     console.log(`restaurants: ${restaurants}`);
