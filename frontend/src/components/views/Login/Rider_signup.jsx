@@ -30,6 +30,11 @@ const shiftOptions = [
 ]
 
 class Rider_signup extends Component {
+  
+  onSelectChange(e) {
+    console.log(e.target.value);
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -48,8 +53,7 @@ class Rider_signup extends Component {
     };
     
     this.handleDropdownChange = (event) => {
-      this.setState({
-        shiftType: event.target.value });
+      this.setState({shiftType: event.target.value})
     };
 
     this.redirectHome = () => {
@@ -94,7 +98,7 @@ class Rider_signup extends Component {
   }
 
   render() {
-    const { email, password } = this.state;
+    const { email, password, shiftType } = this.state;
     return (
       <>
         <Grid
@@ -134,16 +138,14 @@ class Rider_signup extends Component {
                   onChange={this.handleChange}
                 />    
                 <Segment>
-                  <Select
-                  placeholder="Select Shift Type"
-                  fluid
-                  iconPosition="left"
+                  <Dropdown
+                  onChange={this.handleDropdownChange}
                   options={shiftOptions}
-                  name="shiftType"
-                  value={this.state.shiftType}
-                  onChange={(event) => this.setState({shiftType: event.target.value})}
-                  >
-                  </Select>
+                  placeholder="Select Shift Type"
+                  selection
+                  iconPosition="left"  
+                  value={this.state.value}                
+                  />
                 </Segment> 
                 <Button
                     color="green"
