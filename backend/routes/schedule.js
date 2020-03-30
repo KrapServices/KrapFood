@@ -1,5 +1,5 @@
 const express = require('express');
-const { transact } = require('../database');
+const { transact, query } = require('../database');
 
 const router = express.Router();
 
@@ -51,20 +51,12 @@ router.post('/', async (req, res) => {
     await transact(async (query) => {
       const { schedule_id: scheduleId } = (await query(
         `
-          INSERT INTO weekly_work_schedule (first_date)
-          VALUES ($1)
+          INSERT INTO weekly_work_schedule (rider_id, first_date)
+          VALUES ($1, $2)
           RETURNING schedule_id
         `,
-        [startDate],
+        [riderId, startDate],
       )).rows[0];
-
-      await query(
-        `
-          INSERT INTO pt_works (rider_id, schedule_id)
-          VALUES ($1, $2)
-        `,
-        [riderId, scheduleId],
-      );
 
       await Promise.all(intervals.map((interval) => {
         const { dayOfWeek, startHour, endHour } = interval;
@@ -79,6 +71,34 @@ router.post('/', async (req, res) => {
     });
 
     res.status(201).json({});
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({});
+  }
+});
+
+router.get('/:id', async (req, res) => {
+  const { id: riderId } = req.params;
+
+  try {
+    const shifts = (await query(
+      `
+        SELECT first_date, day_of_week, start_hour, end_hour
+        FROM weekly_work_schedule NATURAL JOIN wws_consists
+        WHERE rider_id = $1
+      `,
+      [riderId],
+    )).rows.map((shift) => {
+      const date = new Date(shift.first_date);
+      date.setDate(shift.first_date.getDate() + (shift.day_of_week - 1));
+      return {
+        date,
+        startHour: shift.start_hour,
+        endHour: shift.end_hour,
+      };
+    });
+
+    res.status(200).json({ shifts });
   } catch (error) {
     console.error(error);
     res.status(500).json({});
