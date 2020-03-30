@@ -173,6 +173,7 @@ class Login extends Component {
                 </Button.Group>
               </Segment>
             </Form>
+            
             <Message>
               <Message.Header>New to us?</Message.Header>
               <Message.Content>

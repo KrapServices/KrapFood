@@ -20,17 +20,16 @@ const shiftOptions = [
   {
     key: 'part time',
     text: 'Part Time',
-    value: 'part time'
+    value: 'part time',
   },
   {
-    key: "full time",
+    key: 'full time',
     text: 'Full Time',
-    value: 'full time'
-  }
-]
+    value: 'full time',
+  },
+];
 
 class Rider_signup extends Component {
-  
   onSelectChange(e) {
     console.log(e.target.value);
   }
@@ -51,9 +50,9 @@ class Rider_signup extends Component {
         [name]: value,
       });
     };
-    
-    this.handleDropdownChange = (event) => {
-      this.setState({shiftType: event.target.value})
+
+    this.handleDropdownChange = (event, { value }) => {
+      this.setState({ shiftType: value });
     };
 
     this.redirectHome = () => {
@@ -90,7 +89,6 @@ class Rider_signup extends Component {
         alert('error has occured');
       }
     };
-
   }
 
   componentDidMount() {
@@ -136,24 +134,24 @@ class Rider_signup extends Component {
                   name="password"
                   value={password}
                   onChange={this.handleChange}
-                />    
+                />
                 <Segment>
                   <Dropdown
-                  onChange={this.handleDropdownChange}
-                  options={shiftOptions}
-                  placeholder="Select Shift Type"
-                  selection
-                  iconPosition="left"  
-                  value={this.state.value}                
+                    onChange={this.handleDropdownChange}
+                    options={shiftOptions}
+                    placeholder="Select Shift Type"
+                    selection
+                    iconPosition="left"
+                    value={this.state.value}
                   />
-                </Segment> 
+                </Segment>
                 <Button
-                    color="green"
-                    size="large"
-                    compact
-                    onClick={this.handleSubmitRd}
+                  color="green"
+                  size="large"
+                  compact
+                  onClick={this.handleSubmitRd}
                 >
-                    <Button.Content visible>Sign-up!</Button.Content>
+                  <Button.Content visible>Sign-up!</Button.Content>
                 </Button>
               </Segment>
             </Form>
@@ -162,8 +160,8 @@ class Rider_signup extends Component {
                 <Message.Header>Already have an account?</Message.Header>
                 <Message.Content>
                   <br />
-                  <Button size="small" as={Link} color="red" to="/">
-                    Back to Home
+                  <Button size="small" as={Link} color="red" to="/sign-up">
+                    Back to Sign up
                   </Button>
                   <Button primary size="small" as={Link} to="/login">
                     Log in

@@ -66,7 +66,6 @@ class Customer_signup extends Component {
         alert('error has occured');
       }
     };
-
   }
 
   componentDidMount() {
@@ -113,14 +112,14 @@ class Customer_signup extends Component {
                   value={password}
                   onChange={this.handleChange}
                 />
-                  <Button
-                    color="blue"
-                    size="large"
-                    compact
-                    onClick={this.handleSubmitCx}
-                  >
-                    <Button.Content visible>Sign-up!</Button.Content>
-                  </Button>
+                <Button
+                  color="blue"
+                  size="large"
+                  compact
+                  onClick={this.handleSubmitCx}
+                >
+                  <Button.Content visible>Sign-up!</Button.Content>
+                </Button>
               </Segment>
             </Form>
             <Segment>
@@ -128,8 +127,8 @@ class Customer_signup extends Component {
                 <Message.Header>Already have an account?</Message.Header>
                 <Message.Content>
                   <br />
-                  <Button size="small" as={Link} color="red" to="/">
-                    Back to Home
+                  <Button size="small" as={Link} color="red" to="/sign-up">
+                    Back to Sign up
                   </Button>
                   <Button primary size="small" as={Link} to="/login">
                     Log in

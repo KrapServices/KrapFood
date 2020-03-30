@@ -12,6 +12,7 @@ import Rider_signup from './components/views/Login/Rider_signup';
 import Customer_signup from './components/views/Login/Customer_signup';
 import Manager_signup from './components/views/Login/Manager_signup';
 import Staff_signup from './components/views/Login/Staff_signup';
+import Signup from './components/views/Login/Signup';
 
 class App extends React.Component {
   constructor(props) {
@@ -84,6 +85,7 @@ class App extends React.Component {
             )}
           />
           <Route exact path="/login" render={() => <Login />} />
+          <Route exact path="/sign-up" render={() => <Signup />}/>
           <Route exact path="/customer-signup" render={() => <Customer_signup />} />
           <Route exact path="/rider-signup" render={() => <Rider_signup />} />
           <Route exact path="/manager-signup" render={() => <Manager_signup />} />

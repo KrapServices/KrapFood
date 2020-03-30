@@ -30,7 +30,7 @@ class Home extends Component {
         case 'manager':
           return <Manager />;
         default:
-          //return <Message>Please log in to use our application</Message>;
+          // return <Message>Please log in to use our application</Message>;
       }
     };
 
@@ -48,65 +48,37 @@ class Home extends Component {
     return (
       <div>
         <TopBar onLogout={this.onLogout}>
-        <Container fluid textAlign="center">
-          <Header>Welcome to KrapFood</Header>
-          {!isLoggedIn ? (
-            <Segment>
+          <Container fluid textAlign="center">
+            <Header>Welcome to KrapFood</Header>
+            {!isLoggedIn ? (
               <Segment>
-                <Button primary as={Link} to="/login">
-                  Log in
-                </Button>
+                <Segment>
+                  <Button primary as={Link} to="/login">
+                    Log in
+                  </Button>
+                </Segment>
+                <Message>
+                  <Message.Content>Don't have an account yet?</Message.Content>
+                </Message>
+            
               </Segment>
-              <Message>
-                <Message.Content>Don't have an account yet?</Message.Content>
-              </Message>
-              <Segment.Inline>
-                  <Button
-                  color="blue"
-                  size="small"
-                  compact
-                  as={Link} to="/customer-signup">
-                    <ButtonContent>Customer Sign-up</ButtonContent>
-                  </Button>
-                  <Button
-                  color="green"
-                  size="small"
-                  compact
-                  as={Link} to="/rider-signup">
-                    <ButtonContent>Rider Sign-up</ButtonContent>
-                  </Button>
-                  <Button
-                  color="yellow"
-                  size="small"
-                  compact
-                  as={Link} to="/staff-signup">
-                    <ButtonContent>Staff Sign-up</ButtonContent>
-                  </Button>
-                  <Button
-                  color="teal"
-                  size="small"
-                  compact
-                  as={Link} to="/manager-signup">
-                    <ButtonContent>Manager Sign-up</ButtonContent>
+            
+            ) : (
+              <Segment>
+                <Segment.Inline>
+                  <Header>
+                    Welcome!
+                  </Header>
+                  <Header>
+                    {email}
+                  </Header>
+                  <Button primary onClick={this.onLogout}>
+                    Log Out
                   </Button>
                 </Segment.Inline>
-            </Segment>
-          ) : (
-            <Segment>
-              <Segment.Inline>
-                <Header>
-                  Welcome!
-                </Header>
-                <Header>
-                  {email}
-                </Header>
-                <Button primary onClick={this.onLogout}>
-                  Log Out
-                </Button>
-              </Segment.Inline>
-            </Segment>
-          )}
-        </Container>
+              </Segment>
+            )}
+          </Container>
         </TopBar>
       </div>
     );

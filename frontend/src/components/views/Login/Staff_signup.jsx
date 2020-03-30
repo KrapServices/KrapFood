@@ -139,8 +139,8 @@ class Staff_signup extends Component {
                 <Message.Header>Already have an account?</Message.Header>
                 <Message.Content>
                   <br />
-                  <Button size="small" as={Link} color="red" to="/">
-                    Back to Home
+                  <Button size="small" as={Link} color="red" to="/sign-up">
+                    Back to Sign up
                   </Button>
                   <Button primary size="small" as={Link} to="/login">
                     Log in
