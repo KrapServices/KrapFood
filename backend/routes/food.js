@@ -5,6 +5,7 @@ const router = express.Router();
 
 router.post('/create', foodServices.createFood);
 router.get('/menu/:id', foodServices.getMenu);
-router.post('/update', foodServices.updateAvailability);
+router.post('/update', foodServices.updateItem);
+
 
 module.exports = router;

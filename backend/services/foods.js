@@ -20,20 +20,20 @@ const createFood = async (request, response) => {
   }
 };
 
-const updateAvailability = async (request, response) => {
+const updateItem = async (request, response) => {
   try {
     const {
-      restaurant_id, food_id, availability
+      category, food_name, daily_limit, availability, price, restaurant_id, food_id
     } = request.body;
     console.log(request.body);
     const food = (await query(
       `UPDATE foods
-      SET availability = $1
-      WHERE restaurant_id = $2 AND food_id = $3 returning availability`,
-      [availability, restaurant_id, food_id]
+      SET category = $1, food_name = $2, daily_limit = $3, availability = $4, price = $5
+      WHERE restaurant_id = $6 AND food_id = $7 returning availability`,
+      [category, food_name, daily_limit, availability, price, restaurant_id, food_id]
     )).rows[0];
     console.log(food);
-    return response.status(200).json({ updated_food_availability: food.availability });
+    return response.status(200).json({ updated_food: food_id });
   } catch (error) {
     console.log(error);
     return response.status(500).send("An error occured with updating the food's availibility. please try again");
@@ -61,7 +61,7 @@ const getMenu = async (request, response) => {
 module.exports = {
   createFood,
   getMenu,
-  updateAvailability
+  updateItem
 };
 
 

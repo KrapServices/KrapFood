@@ -79,10 +79,95 @@ const getAllRestaurantWithFood = async (restaurants ) =>  {
   return result;
 }
 
+// -----------------------------------------------------------------------------
+// Functions for Staff Dashboard
+// -----------------------------------------------------------------------------
+
+/* Calculates total cost of orders */
+const getTotalCost = async (request, response) => {
+  try {
+    const { id } = request.params;
+    month = Date.now().getMonth() + 1;
+    const totalCost = (await query(
+      `SELECT COALESCE(sum(price), 0)
+      FROM foods F NATURAL JOIN contain C
+      JOIN orders O ON O.order_id = C.order_id 
+      AND O.status = 'completed'
+      WHERE EXTRACT(month FROM O.modified_at) = $1
+      GROUP BY restaurant_id
+      HAVING restaurant_id = $2
+      `
+      ,
+    [month, id]
+    )).rows[0];
+    return response.status(200).json({ restaurant: totalCost });
+  } catch (error) {
+    console.log(error);
+    return response.status(500).send('restaurant could not be found');
+  }
+};
+
+/* Calculates total number of orders */
+const getTotalOrders = async (request, response) => {
+  try {
+    const { id } = request.params;
+    month = Date.now().getMonth() + 1;
+    const totalOrders = (await query(
+      `SELECT COALESCE(count(distinct O.order_id), 0)
+      FROM foods F NATURAL JOIN contain C
+      JOIN orders O ON O.order_id = C.order_id 
+      AND O.status = 'completed'
+      WHERE EXTRACT(month FROM O.modified_at) = $1
+      GROUP BY restaurant_id
+      HAVING restaurant_id = $2
+      `
+      ,
+    [month, id]
+    )).rows[0];
+    return response.status(200).json({ restaurant: totalCost });
+  } catch (error) {
+    console.log(error);
+    return response.status(500).send('restaurant could not be found');
+  }
+};
+
+/* Calculates total number of orders */
+const getTopFive = async (request, response) => {
+  try {
+    const { id } = request.params;
+    month = Date.now().getMonth() + 1;
+    const topFiveItems = (await query(
+      `SELECT food_name, category, price, count(food_id)
+      FROM foods F NATURAL JOIN contain C
+      JOIN orders O ON O.order_id = C.order_id
+      AND O.status = 'completed'
+      WHERE EXTRACT(month FROM O.modified_at) = $1
+      HAVING restaurant_id = $1
+      ORDER BY (
+        SELECT count(food_id)
+        FROM foods F NATURAL JOIN contain C
+        JOIN orders O ON O.order_id = C.order_id
+        AND O.status = 'completed'
+        HAVING restaurant_id = $2
+      )
+      LIMIT 5
+      `
+      ,
+      [month, id]
+    )).rows;
+    return response.status(200).json({ restaurant: totalCost });
+  } catch (error) {
+    console.log(error);
+    return response.status(500).send('restaurant could not be found');
+  }
+};
 
 
 module.exports = {
   createRestaurant,
   getAllRestaurant,
   getRestaurantById,
+  getTopFive,
+  getTotalCost,
+  getTotalOrders
 };
