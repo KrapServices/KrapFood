@@ -25,6 +25,20 @@ router.get('/', async (req, res) => {
       [new Date(parseInt(startDate, 10)), new Date(parseInt(endDate, 10))],
     )).rows[0];
 
+    const customerStatistics = (await query(
+      `
+        SELECT customer_id, count(order_id) as order_amount, sum(total_cost) as total_amount
+        FROM orders
+        WHERE created_at - $1 >= '0' AND $2 - created_at >= '0'
+        GROUP BY customer_id
+      `,
+      [new Date(parseInt(startDate, 10)), new Date(parseInt(endDate, 10))],
+    )).rows.map((stat) => ({
+      customerId: stat.customer_id,
+      orderAmount: stat.order_amount,
+      totalAmount: stat.total_amount,
+    }));
+
     res.status(200).json({
       startDate: new Date(parseInt(startDate, 10)).toString(),
       endDate: new Date(parseInt(endDate, 10)).toString(),
@@ -32,6 +46,7 @@ router.get('/', async (req, res) => {
         customerCount: parseInt(customerCount, 10),
         orderCount: parseInt(orderCount, 10),
         totalCost: parseFloat(totalCost),
+        customerStatistics,
       },
     });
   } catch (error) {

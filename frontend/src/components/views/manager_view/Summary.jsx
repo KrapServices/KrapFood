@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import {
-  Header, Input, Statistic, Button,
+  Header, Input, Statistic, Button, Table,
 } from 'semantic-ui-react';
 import config from '../../../config.json';
 
@@ -14,6 +14,7 @@ export default class Summary extends React.Component {
       customerCount: 0,
       orderCount: 0,
       totalCost: 0,
+      customerStatistics: [],
     };
   }
 
@@ -31,12 +32,13 @@ export default class Summary extends React.Component {
       customerCount: summary.customerCount,
       orderCount: summary.orderCount,
       totalCost: summary.totalCost,
+      customerStatistics: summary.customerStatistics,
     });
   }
 
   render() {
     const {
-      startDate, endDate, customerCount, orderCount, totalCost,
+      startDate, endDate, customerCount, orderCount, totalCost, customerStatistics,
     } = this.state;
 
     return (
@@ -90,6 +92,36 @@ export default class Summary extends React.Component {
             <Statistic.Label>Total Order Value</Statistic.Label>
           </Statistic>
         </Statistic.Group>
+
+        <div
+          style={{
+            marginLeft: '10%',
+            marginRight: '10%',
+          }}
+        >
+          <Table>
+            <Table.Header>
+              <Table.HeaderCell>Customer ID</Table.HeaderCell>
+              <Table.HeaderCell>Order Amount</Table.HeaderCell>
+              <Table.HeaderCell>Total Amount</Table.HeaderCell>
+            </Table.Header>
+
+            <Table.Body>
+              {customerStatistics.map((stat) => {
+                const { customerId, orderAmount, totalAmount } = stat;
+
+                return (
+                  <Table.Row key={customerId}>
+                    <Table.Cell>{customerId}</Table.Cell>
+                    <Table.Cell>{orderAmount}</Table.Cell>
+                    <Table.Cell>{totalAmount}</Table.Cell>
+                  </Table.Row>
+                );
+              })}
+            </Table.Body>
+          </Table>
+        </div>
+
       </>
     );
   }
