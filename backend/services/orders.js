@@ -85,12 +85,59 @@ const getOrderByUserId = async (request, response) => {
   }
 };
 
+const getOrderByRiderId = async (request, response) => {
+  try {
+    const { id } = request.params;
+    const orders = (await query(
+      'SELECT * FROM orders natural join Delivers where rider_id = $1 and (status = $2 or status = $3)', [id, 'delivering', 'completed'],
+    )).rows;
+    console.log(`orders: ${orders}`);
+    //const preparingOrders = orders.filter(x => x.status === 'preparing');
+    const deliveringOrders = orders.filter(x => x.status === 'delivering');
+    const completedOrders = orders.filter(x => x.status === 'completed');
+    
+    return response.status(200).json({ orders, deliveringOrders, completedOrders });
+  } catch (error) {
+    console.log(error);
+    return response.status(500).send('orders could not be found');
+  }
+};
+
+const updateOrderDelivering = async (request, response) => {
+  try {
+    const { id } = request.params;
+    const orders = (await query(
+      ' UPDATE ORDERS set status = $1 where order_id = 1;', ['delivering'],
+    ));
+    return response.status(200);
+  } catch (error) {
+    console.log(error);
+    return response.status(500).send('orders could not be updated to delivering');
+  }
+};
+
+const updateOrderCompleted = async (request, response) => {
+  try {
+    const { id } = request.params;
+    const orders = (await query(
+      ' UPDATE ORDERS set status = $1 where order_id = 1;', ['completed'],
+    ));
+    return response.status(200);
+  } catch (error) {
+    console.log(error);
+    return response.status(500).send('orders could not be updated to completed');
+  }
+};
+
 
 
 module.exports = {
   getAllOrders,
   getOrderById,
   getOrderByUserId,
+  getOrderByRiderId,
+  updateOrderCompleted,
+  updateOrderDelivering,
   createOrder,
 };
 

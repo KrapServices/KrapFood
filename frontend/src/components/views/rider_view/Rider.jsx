@@ -3,7 +3,9 @@ import axios from 'axios';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import './Rider.css';
-import { Header, Table, Divider, Tab } from 'semantic-ui-react';
+import {
+  Header, Table, Divider, Tab,
+} from 'semantic-ui-react';
 import userContext from '../../../userContext';
 import WeeklyWorkSchedule from './WeeklyWorkSchedule';
 import config from '../../../config.json';
@@ -20,7 +22,7 @@ class Rider extends Component {
     this.handleTabChange = (e, { activeIndex }) => {
       window.localStorage.setItem('activeIndex', activeIndex);
       this.setState({ activeIndex });
-    }
+    };
   }
 
   componentDidMount() {
@@ -34,7 +36,7 @@ class Rider extends Component {
     const { activeIndex } = this.state;
     const panes = [
       { menuItem: 'Schedule', render: () => <Tab.Pane><RiderWorkSchedule /></Tab.Pane> },
-      { menuItem: 'Assigned Orders', render: () => <Tab.Pane><RiderViewOrder/></Tab.Pane> },
+      { menuItem: 'Assigned Orders', render: () => <Tab.Pane><RiderViewOrder /></Tab.Pane> },
       { menuItem: 'Summary', render: () => <Tab.Pane><div /></Tab.Pane> },
     ];
     return (

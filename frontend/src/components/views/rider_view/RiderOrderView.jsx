@@ -22,17 +22,18 @@ class RiderOrderView extends Component {
 
 
     this.loadOrders = async () => {
-      const { user } = this.props;
+      const { user } = this.context;
       const { rider_id } = user;
       const result = await Axios.get(`${config.localhost}orders/riderId/${rider_id}`);
       if (result.status === 200) {
-        // console.table(result.data.orders);
+        console.log(result.data.orders);
         const {
           orders, deliveringOrders, completedOrders,
         } = result.data;
         this.setState({
           orders, deliveringOrders, completedOrders,
         });
+        console.log(this.state);
         // console.table(this.state);
       } else {
         alert('cannot load orders');
@@ -41,7 +42,7 @@ class RiderOrderView extends Component {
   }
 
   componentDidMount() {
-    // this.loadOrders();
+    this.loadOrders();
   }
 
 
@@ -65,5 +66,4 @@ class RiderOrderView extends Component {
 }
 
 RiderOrderView.contextType = userContext;
-
 export default RiderOrderView;
