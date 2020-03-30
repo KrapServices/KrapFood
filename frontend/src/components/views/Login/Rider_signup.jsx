@@ -8,11 +8,26 @@ import {
   Button,
   Message,
   Icon,
+  Dropdown,
+  Select,
 } from 'semantic-ui-react';
 import { Link, withRouter } from 'react-router-dom';
 import Axios from 'axios';
 import userContext from '../../../userContext';
 import config from '../../../config.json';
+
+const shiftOptions = [
+  {
+    key: 'part time',
+    text: 'Part Time',
+    value: 'part time'
+  },
+  {
+    key: "full time",
+    text: 'Full Time',
+    value: 'full time'
+  }
+]
 
 class Rider_signup extends Component {
   constructor(props) {
@@ -20,7 +35,7 @@ class Rider_signup extends Component {
     this.state = {
       email: '',
       password: '',
-      shift_type: '',
+      shiftType: '',
       error: '',
     };
 
@@ -30,6 +45,11 @@ class Rider_signup extends Component {
       this.setState({
         [name]: value,
       });
+    };
+    
+    this.handleDropdownChange = (event) => {
+      this.setState({
+        shiftType: event.target.value });
     };
 
     this.redirectHome = () => {
@@ -47,12 +67,12 @@ class Rider_signup extends Component {
     };
 
     this.handleSubmitRd = async (event) => {
-      const { email, password, shift_type } = this.state;
+      const { email, password, shiftType } = this.state;
       const { login } = this.context;
       event.preventDefault();
       await Axios.post(
         `${config.localhost}registrations/rider/sign-up`,
-        { email, password, shift_type },
+        { email, password, shiftType },
         {
           headers: { 'Access-Control-Allow-Origin': true },
         },
@@ -74,7 +94,7 @@ class Rider_signup extends Component {
   }
 
   render() {
-    const { email, password, shift_type } = this.state;
+    const { email, password } = this.state;
     return (
       <>
         <Grid
@@ -112,17 +132,19 @@ class Rider_signup extends Component {
                   name="password"
                   value={password}
                   onChange={this.handleChange}
-                />
-                <Form.Input
+                />    
+                <Segment>
+                  <Select
+                  placeholder="Select Shift Type"
                   fluid
-                  icon="time"
                   iconPosition="left"
-                  placeholder="Part time/Full time"
-                  type="shift_type"
-                  name="shift_type"
-                  value={shift_type}
-                  onChange={this.handleChange}
-                />         
+                  options={shiftOptions}
+                  name="shiftType"
+                  value={this.state.shiftType}
+                  onChange={(event) => this.setState({shiftType: event.target.value})}
+                  >
+                  </Select>
+                </Segment> 
                 <Button
                     color="green"
                     size="large"
@@ -138,7 +160,7 @@ class Rider_signup extends Component {
                 <Message.Header>Already have an account?</Message.Header>
                 <Message.Content>
                   <br />
-                  <Button as={Link} color="red" to="/">
+                  <Button size="small" as={Link} color="red" to="/">
                     Back to Home
                   </Button>
                   <Button primary size="small" as={Link} to="/login">

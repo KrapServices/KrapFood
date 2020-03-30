@@ -21,6 +21,7 @@ class Customer_signup extends Component {
       email: '',
       password: '',
       error: '',
+
     };
 
     this.handleChange = (event) => {
@@ -127,7 +128,7 @@ class Customer_signup extends Component {
                 <Message.Header>Already have an account?</Message.Header>
                 <Message.Content>
                   <br />
-                  <Button as={Link} color="red" to="/">
+                  <Button size="small" as={Link} color="red" to="/">
                     Back to Home
                   </Button>
                   <Button primary size="small" as={Link} to="/login">
