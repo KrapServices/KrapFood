@@ -103,11 +103,11 @@ const getOrderByRiderId = async (request, response) => {
   }
 };
 
-const updateOrderDelivering = async (request, response) => {
+const updateOrderStatus= async (request, response) => {
   try {
-    const { id } = request.params;
+    const { status } = request.body;
     const orders = (await query(
-      ' UPDATE ORDERS set status = $1 where order_id = 1;', ['delivering'],
+      ' UPDATE ORDERS set status = $1, modified_at = DEFAULT where order_id = 1;', [status],
     ));
     return response.status(200);
   } catch (error) {
@@ -116,28 +116,13 @@ const updateOrderDelivering = async (request, response) => {
   }
 };
 
-const updateOrderCompleted = async (request, response) => {
-  try {
-    const { id } = request.params;
-    const orders = (await query(
-      ' UPDATE ORDERS set status = $1 where order_id = 1;', ['completed'],
-    ));
-    return response.status(200);
-  } catch (error) {
-    console.log(error);
-    return response.status(500).send('orders could not be updated to completed');
-  }
-};
-
-
 
 module.exports = {
   getAllOrders,
   getOrderById,
   getOrderByUserId,
   getOrderByRiderId,
-  updateOrderCompleted,
-  updateOrderDelivering,
+  updateOrderStatus,
   createOrder,
 };
 
