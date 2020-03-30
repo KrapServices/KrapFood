@@ -124,7 +124,7 @@ const getTotalOrders = async (request, response) => {
       ,
     [month, id]
     )).rows[0];
-    return response.status(200).json({ restaurant: totalCost });
+    return response.status(200).json({ restaurant: totalOrders });
   } catch (error) {
     console.log(error);
     return response.status(500).send('restaurant could not be found');
@@ -155,7 +155,7 @@ const getTopFive = async (request, response) => {
       ,
       [month, id]
     )).rows;
-    return response.status(200).json({ restaurant: totalCost });
+    return response.status(200).json({ restaurant: topFiveItems });
   } catch (error) {
     console.log(error);
     return response.status(500).send('restaurant could not be found');

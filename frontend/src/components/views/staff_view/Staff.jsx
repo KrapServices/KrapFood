@@ -4,6 +4,7 @@ import { Header, Tab } from 'semantic-ui-react';
 import StaffAddFood from './StaffAddFood';
 import StaffUpdateFood from './StaffUpdateFood';
 import StaffSummary from './StaffSummary';
+import StaffCreatePromotion from './StaffCreatePromotion';
 
 
 class Staff extends Component {
@@ -17,7 +18,7 @@ class Staff extends Component {
     const panes = [
       { menuItem: 'Add Food Item to Menu', render: () => <Tab.Pane><StaffAddFood /></Tab.Pane> },
       { menuItem: 'Update Food Items', render: () => <Tab.Pane><StaffUpdateFood /></Tab.Pane> },
-      { menuItem: 'Create Promotion', render: () => <Tab.Pane><StaffUpdateFood /></Tab.Pane> },
+      { menuItem: 'Create Promotion', render: () => <Tab.Pane><StaffCreatePromotion /></Tab.Pane> },
       { menuItem: 'Summary Information', render: () => <Tab.Pane><StaffSummary /></Tab.Pane> },
     ];
     return (
