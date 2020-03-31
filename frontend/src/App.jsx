@@ -8,10 +8,10 @@ import Home from './components/views/home/Home';
 import Login from './components/views/Login/Login';
 import userContext from './userContext';
 import config from './config.json';
-import Rider_signup from './components/views/Login/Rider_signup';
-import Customer_signup from './components/views/Login/Customer_signup';
-import Manager_signup from './components/views/Login/Manager_signup';
-import Staff_signup from './components/views/Login/Staff_signup';
+import RiderSignup from './components/views/Login/RiderSignup';
+import CustomerSignup from './components/views/Login/CustomerSignup';
+import ManagerSignup from './components/views/Login/ManagerSignup';
+import StaffSignup from './components/views/Login/StaffSignup';
 import Signup from './components/views/Login/Signup';
 
 class App extends React.Component {
@@ -86,10 +86,10 @@ class App extends React.Component {
           />
           <Route exact path="/login" render={() => <Login />} />
           <Route exact path="/sign-up" render={() => <Signup />}/>
-          <Route exact path="/customer-signup" render={() => <Customer_signup />} />
-          <Route exact path="/rider-signup" render={() => <Rider_signup />} />
-          <Route exact path="/manager-signup" render={() => <Manager_signup />} />
-          <Route exact path="/staff-signup" render={() => <Staff_signup />} />
+          <Route exact path="/customer-signup" render={() => <CustomerSignup />} />
+          <Route exact path="/rider-signup" render={() => <RiderSignup />} />
+          <Route exact path="/manager-signup" render={() => <ManagerSignup />} />
+          <Route exact path="/staff-signup" render={() => <StaffSignup />} />
         </Switch>
       </userContext.Provider>
     );

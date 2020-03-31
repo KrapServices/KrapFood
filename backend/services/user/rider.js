@@ -3,6 +3,8 @@ const { query, transact } = require('../../database');
 // RIDERS
 // =============================================================================
 
+//default 
+
 // create single user for rider
 const riderCreate = async (request, response) => {
   try {
@@ -18,10 +20,10 @@ const riderCreate = async (request, response) => {
       ));
       if(shiftType === "part time") {
         await(query (
-          'INSERT INTO part_time_riders (rider_id, salary_per_hour) VALUES ($1, 0) returning rider_id',
+          'INSERT INTO part_time_riders (rider_id) VALUES ($1) returning rider_id',
           [user.user_id],))
       } else {
-          await(query('INSERT INTO full_time_riders (rider_id, base_salary) VALUES ($1, 0) returning rider_id', 
+          await(query('INSERT INTO full_time_riders (rider_id) VALUES ($1) returning rider_id', 
           [user.user_id],))
       };
       console.log(shiftType);
