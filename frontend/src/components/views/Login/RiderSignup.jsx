@@ -8,18 +8,37 @@ import {
   Button,
   Message,
   Icon,
+  Dropdown,
 } from 'semantic-ui-react';
 import { Link, withRouter } from 'react-router-dom';
 import Axios from 'axios';
 import userContext from '../../../userContext';
 import config from '../../../config.json';
 
-class Manager_signup extends Component {
+const shiftOptions = [
+  {
+    key: 'part time',
+    text: 'Part Time',
+    value: 'part time',
+  },
+  {
+    key: 'full time',
+    text: 'Full Time',
+    value: 'full time',
+  },
+];
+
+class RiderSignup extends Component {
+  onSelectChange(e) {
+    console.log(e.target.value);
+  }
+
   constructor(props) {
     super(props);
     this.state = {
       email: '',
       password: '',
+      shiftType: '',
       error: '',
     };
 
@@ -29,6 +48,10 @@ class Manager_signup extends Component {
       this.setState({
         [name]: value,
       });
+    };
+
+    this.handleDropdownChange = (event, { value }) => {
+      this.setState({ shiftType: value });
     };
 
     this.redirectHome = () => {
@@ -45,19 +68,19 @@ class Manager_signup extends Component {
       signup();
     };
 
-    this.handleSubmitMg = async (event) => {
-      const { email, password } = this.state;
+    this.handleSubmitRd = async (event) => {
+      const { email, password, shiftType } = this.state;
       const { login } = this.context;
       event.preventDefault();
       await Axios.post(
-        `${config.localhost}registrations/manager/sign-up`,
-        { email, password },
+        `${config.localhost}registrations/rider/sign-up`,
+        { email, password, shiftType },
         {
           headers: { 'Access-Control-Allow-Origin': true },
         },
       );
       try {
-        await login(email, password, 'manager');
+        await login(email, password, 'rider');
         const { history } = this.props;
         history.push('/');
       } catch (error) {
@@ -111,14 +134,24 @@ class Manager_signup extends Component {
                   value={password}
                   onChange={this.handleChange}
                 />
+                <Segment>
+                  <Dropdown
+                    onChange={this.handleDropdownChange}
+                    options={shiftOptions}
+                    placeholder="Select Shift Type"
+                    selection
+                    iconPosition="left"
+                    value={this.state.value}
+                  />
+                </Segment>
                 <Button
-                    color="teal"
-                    size="large"
-                    compact
-                    onClick={this.handleSubmitMg}
+                  color="green"
+                  size="large"
+                  compact
+                  onClick={this.handleSubmitRd}
                 >
-                    <Button.Content visible>Sign-up!</Button.Content>
-                  </Button>
+                  <Button.Content visible>Sign-up!</Button.Content>
+                </Button>
               </Segment>
             </Form>
             <Segment>
@@ -142,10 +175,10 @@ class Manager_signup extends Component {
   }
 }
 
-Manager_signup.contextType = userContext;
+RiderSignup.contextType = userContext;
 
-Manager_signup.propTypes = {
+RiderSignup.propTypes = {
   history: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
-export default withRouter(Manager_signup);
+export default withRouter(RiderSignup);

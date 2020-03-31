@@ -14,14 +14,13 @@ import Axios from 'axios';
 import userContext from '../../../userContext';
 import config from '../../../config.json';
 
-class Customer_signup extends Component {
+class ManagerSignup extends Component {
   constructor(props) {
     super(props);
     this.state = {
       email: '',
       password: '',
       error: '',
-
     };
 
     this.handleChange = (event) => {
@@ -46,19 +45,19 @@ class Customer_signup extends Component {
       signup();
     };
 
-    this.handleSubmitCx = async (event) => {
+    this.handleSubmitMg = async (event) => {
       const { email, password } = this.state;
       const { login } = this.context;
       event.preventDefault();
       await Axios.post(
-        `${config.localhost}registrations/customer/sign-up`,
+        `${config.localhost}registrations/manager/sign-up`,
         { email, password },
         {
           headers: { 'Access-Control-Allow-Origin': true },
         },
       );
       try {
-        await login(email, password, 'customer');
+        await login(email, password, 'manager');
         const { history } = this.props;
         history.push('/');
       } catch (error) {
@@ -113,13 +112,13 @@ class Customer_signup extends Component {
                   onChange={this.handleChange}
                 />
                 <Button
-                  color="blue"
-                  size="large"
-                  compact
-                  onClick={this.handleSubmitCx}
+                    color="teal"
+                    size="large"
+                    compact
+                    onClick={this.handleSubmitMg}
                 >
-                  <Button.Content visible>Sign-up!</Button.Content>
-                </Button>
+                    <Button.Content visible>Sign-up!</Button.Content>
+                  </Button>
               </Segment>
             </Form>
             <Segment>
@@ -143,10 +142,10 @@ class Customer_signup extends Component {
   }
 }
 
-Customer_signup.contextType = userContext;
+ManagerSignup.contextType = userContext;
 
-Customer_signup.propTypes = {
+ManagerSignup.propTypes = {
   history: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
-export default withRouter(Customer_signup);
+export default withRouter(ManagerSignup);

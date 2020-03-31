@@ -8,38 +8,19 @@ import {
   Button,
   Message,
   Icon,
-  Dropdown,
-  Select,
 } from 'semantic-ui-react';
 import { Link, withRouter } from 'react-router-dom';
 import Axios from 'axios';
 import userContext from '../../../userContext';
 import config from '../../../config.json';
 
-const shiftOptions = [
-  {
-    key: 'part time',
-    text: 'Part Time',
-    value: 'part time',
-  },
-  {
-    key: 'full time',
-    text: 'Full Time',
-    value: 'full time',
-  },
-];
-
-class Rider_signup extends Component {
-  onSelectChange(e) {
-    console.log(e.target.value);
-  }
-
+class StaffSignup extends Component {
   constructor(props) {
     super(props);
     this.state = {
       email: '',
       password: '',
-      shiftType: '',
+      restaurantId: '',
       error: '',
     };
 
@@ -49,10 +30,6 @@ class Rider_signup extends Component {
       this.setState({
         [name]: value,
       });
-    };
-
-    this.handleDropdownChange = (event, { value }) => {
-      this.setState({ shiftType: value });
     };
 
     this.redirectHome = () => {
@@ -69,19 +46,19 @@ class Rider_signup extends Component {
       signup();
     };
 
-    this.handleSubmitRd = async (event) => {
-      const { email, password, shiftType } = this.state;
+    this.handleSubmitStaff = async (event) => {
+      const { email, password, restaurantId } = this.state;
       const { login } = this.context;
       event.preventDefault();
       await Axios.post(
-        `${config.localhost}registrations/rider/sign-up`,
-        { email, password, shiftType },
+        `${config.localhost}registrations/staff/sign-up`,
+        { email, password, restaurantId },
         {
           headers: { 'Access-Control-Allow-Origin': true },
         },
       );
       try {
-        await login(email, password, 'rider');
+        await login(email, password, 'staff');
         const { history } = this.props;
         history.push('/');
       } catch (error) {
@@ -89,6 +66,8 @@ class Rider_signup extends Component {
         alert('error has occured');
       }
     };
+
+
   }
 
   componentDidMount() {
@@ -96,7 +75,7 @@ class Rider_signup extends Component {
   }
 
   render() {
-    const { email, password, shiftType } = this.state;
+    const { email, password, restaurantId } = this.state;
     return (
       <>
         <Grid
@@ -135,23 +114,23 @@ class Rider_signup extends Component {
                   value={password}
                   onChange={this.handleChange}
                 />
-                <Segment>
-                  <Dropdown
-                    onChange={this.handleDropdownChange}
-                    options={shiftOptions}
-                    placeholder="Select Shift Type"
-                    selection
-                    iconPosition="left"
-                    value={this.state.value}
-                  />
-                </Segment>
+                <Form.Input
+                  fluid
+                  icon="info"
+                  iconPosition="left"
+                  placeholder="Restaurant ID"
+                  type="restaurantId"
+                  name="restaurantId"
+                  value={restaurantId}
+                  onChange={this.handleChange}
+                />
                 <Button
-                  color="green"
-                  size="large"
-                  compact
-                  onClick={this.handleSubmitRd}
+                    color="yellow"
+                    size="large"
+                    compact
+                    onClick={this.handleSubmitStaff}
                 >
-                  <Button.Content visible>Sign-up!</Button.Content>
+                    <Button.Content visible>Sign-up!</Button.Content>
                 </Button>
               </Segment>
             </Form>
@@ -176,10 +155,10 @@ class Rider_signup extends Component {
   }
 }
 
-Rider_signup.contextType = userContext;
+StaffSignup.contextType = userContext;
 
-Rider_signup.propTypes = {
+StaffSignup.propTypes = {
   history: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
-export default withRouter(Rider_signup);
+export default withRouter(StaffSignup);
