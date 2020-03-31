@@ -36,29 +36,49 @@ const customerLogin = async (request, response) => {
     // append info to user object
     user.type = 'customer';
     console.log(user);
-    return response.status(200).json({ user });
+    return response.status(204).json({ user });
   } catch (error) {
     console.log(error);
     return response.status(500).send('user cannot be found');
   }
 };
 
-const customerCreditCardInfo = async (request, response) => {
+
+const customerCreateCreditCard = async (request, response) => {
   try {
-    const { id } = request.params;
-    const cardNumber = (await query(
-      'SELECT card_number FROM cards where customer_id = $1',
-      [id],
+    const {
+      cardNumber, expiry, customerId, nameCard,
+    } = request.body;
+    console.log(request.body);
+    const result = (await query(
+      'INSERT INTO CARDS (card_number, expiry, customer_id, name_card) VALUES ($1,$2,$3,$4)',
+      [cardNumber, expiry, customerId, nameCard],
     )).rows[0];
-    return response.status(200).json({ cardNumber });
+    return response.status(200).send();
   } catch (error) {
     console.log(error);
     return response.status(500).send('card cannot be found');
   }
-}
+};
+
+
+const customerCreditCardInfo = async (request, response) => {
+  try {
+    const { id } = request.params;
+    const cards = (await query(
+      'SELECT * FROM cards where customer_id = $1',
+      [id],
+    )).rows;
+    return response.status(200).json({ cards });
+  } catch (error) {
+    console.log(error);
+    return response.status(500).send('card cannot be found');
+  }
+};
 
 module.exports = {
   customerLogin,
   customerCreate,
-  customerCreditCardInfo
+  customerCreditCardInfo,
+  customerCreateCreditCard,
 };

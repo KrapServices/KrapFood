@@ -92,10 +92,9 @@ const getOrderByRiderId = async (request, response) => {
       'SELECT * FROM orders natural join Delivers where rider_id = $1 and (status = $2 or status = $3)', [id, 'delivering', 'completed'],
     )).rows;
     console.log(`orders: ${orders}`);
-    //const preparingOrders = orders.filter(x => x.status === 'preparing');
+    // const preparingOrders = orders.filter(x => x.status === 'preparing');
     const deliveringOrders = orders.filter(x => x.status === 'delivering');
     const completedOrders = orders.filter(x => x.status === 'completed');
-    
     return response.status(200).json({ orders, deliveringOrders, completedOrders });
   } catch (error) {
     console.log(error);

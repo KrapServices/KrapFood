@@ -6,6 +6,7 @@ import {
 import userContext from '../../../userContext';
 import CustomerOrderFood from './CustomerOrderFood';
 import CustomerOrderView from './CustomerOrderView';
+import CustomerInfo from './CustomerInfo';
 
 class Customer extends Component {
   constructor(props) {
@@ -17,7 +18,7 @@ class Customer extends Component {
     this.handleTabChange = (e, { activeIndex }) => {
       window.localStorage.setItem('activeIndex', activeIndex);
       this.setState({ activeIndex });
-    }
+    };
   }
 
   componentDidMount() {
@@ -37,6 +38,7 @@ class Customer extends Component {
     ];
     return (
       <>
+        <CustomerInfo />
         <Tab
           onTabChange={this.handleTabChange}
           activeIndex={activeIndex}
