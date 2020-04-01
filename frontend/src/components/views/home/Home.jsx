@@ -2,7 +2,7 @@
 /* eslint-disable no-await-in-loop */
 import React, { Component } from 'react';
 import {
-  Container, Segment, Header, Button, Message,
+  Container, Segment, Header, Button, Message, ButtonContent,
 } from 'semantic-ui-react';
 import { Link, withRouter } from 'react-router-dom';
 import ReactRouterPropTypes from 'react-router-prop-types';
@@ -30,7 +30,7 @@ class Home extends Component {
         case 'manager':
           return <Manager />;
         default:
-          return <Message>Please log in to use our application</Message>;
+          // return <Message>Please log in to use our application</Message>;
       }
     };
 
@@ -48,14 +48,37 @@ class Home extends Component {
     return (
       <div>
         <TopBar onLogout={this.onLogout}>
-        <Container fluid textAlign="center">
-          { 
-            isLoggedIn ? <div/> :
-          
-          <Header>Welcome to KrapFood</Header>}
-          {this.renderBody(user.type)}
-      
-        </Container>
+          <Container fluid textAlign="center">
+            <Header>Welcome to KrapFood</Header>
+            {!isLoggedIn ? (
+              <Segment>
+                <Segment>
+                  <Button primary as={Link} to="/login">
+                    Log in
+                  </Button>
+                </Segment>
+                <Message>
+                  <Message.Content>Don't have an account yet?</Message.Content>
+                </Message>
+            
+              </Segment>
+            
+            ) : (
+              <Segment>
+                <Segment.Inline>
+                  <Header>
+                    Welcome!
+                  </Header>
+                  <Header>
+                    {email}
+                  </Header>
+                  <Button primary onClick={this.onLogout}>
+                    Log Out
+                  </Button>
+                </Segment.Inline>
+              </Segment>
+            )}
+          </Container>
         </TopBar>
       </div>
     );

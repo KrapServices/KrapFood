@@ -45,7 +45,7 @@ CREATE TABLE riders
 CREATE TABLE part_time_riders
 (
     rider_id INTEGER,
-    salary_per_hour NUMERIC(5, 2) NOT NULL,
+    salary_per_hour NUMERIC(5, 2) NOT NULL DEFAULT 10.00,
     PRIMARY KEY (rider_id),
     FOREIGN KEY (rider_id) REFERENCES riders (rider_id) ON DELETE CASCADE
 );
@@ -53,7 +53,7 @@ CREATE TABLE part_time_riders
 CREATE TABLE full_time_riders
 (
     rider_id INTEGER,
-    base_salary INTEGER NOT NULL,
+    base_salary INTEGER NOT NULL DEFAULT 2000,
     PRIMARY KEY (rider_id),
     FOREIGN KEY (rider_id) REFERENCES riders (rider_id) ON DELETE CASCADE
 );
