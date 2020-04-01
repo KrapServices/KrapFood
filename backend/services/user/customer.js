@@ -76,9 +76,22 @@ const customerCreditCardInfo = async (request, response) => {
   }
 };
 
+const getPromotions = async (request, response) => {
+  try {
+    const promotions = (await query(
+      'SELECT * FROM promotions',
+    )).rows;
+    return response.status(200).json({ promotions });
+  } catch (error) {
+    console.log(error);
+    return response.status(500).send('card cannot be found');
+  }
+}
+
 module.exports = {
   customerLogin,
   customerCreate,
   customerCreditCardInfo,
   customerCreateCreditCard,
+  getPromotions,
 };
