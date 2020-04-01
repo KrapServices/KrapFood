@@ -2,7 +2,7 @@
 /* eslint-disable no-await-in-loop */
 import React, { Component } from 'react';
 import {
-  Container, Segment, Header, Button, Message, ButtonContent,
+  Container, Segment, Header, Button, Message, 
 } from 'semantic-ui-react';
 import { Link, withRouter } from 'react-router-dom';
 import ReactRouterPropTypes from 'react-router-prop-types';
