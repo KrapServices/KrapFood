@@ -18,20 +18,31 @@ class CustomerInfo extends Component {
     };
 
     this.handleOpen = () => this.setState({ modalOpen: true });
-    this.handleClose = () => this.setState({ modalOpen: false });
+    this.handleClose = async () => {
+      await this.loadCard();
+      this.setState({ modalOpen: false });
+    };
+
+    this.loadCard = async () => {
+      const { user } = this.context;
+      // eslint-disable-next-line camelcase
+      const { customer_id } = user;
+      // eslint-disable-next-line camelcase
+      try {
+        const resultCC = await Axios.get(`${config.localhost}customers/cc/${customer_id}`);
+        const resultPromo = await Axios.get(`${config.localhost}customers/promotions/`);
+        if (resultCC.status === 200 && resultPromo.status === 200) {
+          this.setState({ customerCreditCards: resultCC.data.cards, promotions: resultPromo.data.promotions });
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
   }
 
 
-  async componentDidMount() {
-    const { user } = this.context;
-    // eslint-disable-next-line camelcase
-    const { customer_id } = user;
-    // eslint-disable-next-line camelcase
-    const resultCC = await Axios.get(`${config.localhost}customers/cc/${customer_id}`);
-    const resultPromo = await Axios.get(`${config.localhost}customers/promotions/`);
-    if (resultCC.status === 200 && resultPromo.status === 200) {
-      this.setState({ customerCreditCards: resultCC.data.cards, promotions: resultPromo.data.promotions });
-    }
+  componentDidMount() {
+    this.loadCard();
   }
 
   render() {
