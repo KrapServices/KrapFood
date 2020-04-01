@@ -141,7 +141,7 @@ class RiderSignup extends Component {
                     placeholder="Select Shift Type"
                     selection
                     iconPosition="left"
-                    value={this.state.value}
+                    // value={this.state.value}
                   />
                 </Segment>
                 <Button

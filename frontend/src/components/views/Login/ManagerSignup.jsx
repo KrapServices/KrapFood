@@ -112,13 +112,13 @@ class ManagerSignup extends Component {
                   onChange={this.handleChange}
                 />
                 <Button
-                    color="teal"
-                    size="large"
-                    compact
-                    onClick={this.handleSubmitMg}
+                  color="teal"
+                  size="large"
+                  compact
+                  onClick={this.handleSubmitMg}
                 >
-                    <Button.Content visible>Sign-up!</Button.Content>
-                  </Button>
+                  <Button.Content visible>Sign-up!</Button.Content>
+                </Button>
               </Segment>
             </Form>
             <Segment>

@@ -66,8 +66,6 @@ class StaffSignup extends Component {
         alert('error has occured');
       }
     };
-
-
   }
 
   componentDidMount() {
@@ -125,12 +123,12 @@ class StaffSignup extends Component {
                   onChange={this.handleChange}
                 />
                 <Button
-                    color="yellow"
-                    size="large"
-                    compact
-                    onClick={this.handleSubmitStaff}
+                  color="yellow"
+                  size="large"
+                  compact
+                  onClick={this.handleSubmitStaff}
                 >
-                    <Button.Content visible>Sign-up!</Button.Content>
+                  <Button.Content visible>Sign-up!</Button.Content>
                 </Button>
               </Segment>
             </Form>
