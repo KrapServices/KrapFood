@@ -43,40 +43,17 @@ class Home extends Component {
 
   render() {
     const { user, isLoggedIn } = this.context;
-    const { email } = user;
     return (
       <div>
         <TopBar onLogout={this.onLogout}>
           <Container fluid textAlign="center">
-            <Header>Welcome to KrapFood</Header>
-            {!isLoggedIn ? (
-              <Segment>
-                <Segment>
-                  <Button primary as={Link} to="/login">
-                    Log in
-                  </Button>
-                </Segment>
-                <Message>
-                  <Message.Content>Don't have an account yet?</Message.Content>
-                </Message>
+            {
+          isLoggedIn ? <div />
 
-              </Segment>
+            : <Header>Welcome to KrapFood</Header>
+}
+            {this.renderBody(user.type)}
 
-            ) : (
-              <Segment>
-                <Segment.Inline>
-                  <Header>
-                    Welcome!
-                  </Header>
-                  <Header>
-                    {email}
-                  </Header>
-                  <Button primary onClick={this.onLogout}>
-                    Log Out
-                  </Button>
-                </Segment.Inline>
-              </Segment>
-            )}
           </Container>
         </TopBar>
       </div>

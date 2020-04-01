@@ -21,7 +21,9 @@ CREATE TABLE customers
 CREATE TABLE cards  
 (
     card_number TEXT,
+    expiry TEXT,
     customer_id INTEGER,
+    name_card Text,
     PRIMARY KEY (customer_id, card_number),
     FOREIGN KEY (customer_id) REFERENCES customers (customer_id) ON DELETE CASCADE
 );

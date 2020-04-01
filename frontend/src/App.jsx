@@ -46,6 +46,7 @@ class App extends React.Component {
           headers: { 'Access-Control-Allow-Origin': true },
         },
       );
+
       if (result.status === 200) {
         window.localStorage.setItem('user', JSON.stringify(result.data.user));
         this.setState({ user: result.data.user, isLoggedIn: true });
@@ -85,7 +86,7 @@ class App extends React.Component {
             )}
           />
           <Route exact path="/login" render={() => <Login />} />
-          <Route exact path="/sign-up" render={() => <Signup />}/>
+          <Route exact path="/sign-up" render={() => <Signup />} />
           <Route exact path="/customer-signup" render={() => <CustomerSignup />} />
           <Route exact path="/rider-signup" render={() => <RiderSignup />} />
           <Route exact path="/manager-signup" render={() => <ManagerSignup />} />
