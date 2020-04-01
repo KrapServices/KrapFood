@@ -102,13 +102,31 @@ const getOrderByRiderId = async (request, response) => {
   }
 };
 
+const getOrderByRestaurantId = async (request, response) => {
+  try {
+    const { id } = request.params;
+    const orders = (await query(
+      'SELECT * FROM orders o',
+    )).rows;
+    console.log(`orders: ${orders}`);
+    const preparingOrders = orders.filter(x => x.status === 'preparing');
+    const deliveringOrders = orders.filter(x => x.status === 'delivering');
+    const completedOrders = orders.filter(x => x.status === 'completed');
+    return response.status(200).json({ orders,preparingOrders, deliveringOrders, completedOrders });
+  } catch (error) {
+    console.log(error);
+    return response.status(500).send('orders could not be found');
+  }
+};
+
 const updateOrderStatus= async (request, response) => {
   try {
+    const { id } = request.params;
     const { status } = request.body;
     const orders = (await query(
-      ' UPDATE ORDERS set status = $1, modified_at = DEFAULT where order_id = 1;', [status],
+      ' UPDATE ORDERS set status = $1, modified_at = DEFAULT where order_id = $2;', [status, id],
     ));
-    return response.status(200);
+    return response.status(200).send();
   } catch (error) {
     console.log(error);
     return response.status(500).send('orders could not be updated to delivering');
@@ -123,6 +141,7 @@ module.exports = {
   getOrderByRiderId,
   updateOrderStatus,
   createOrder,
+  getOrderByRestaurantId
 };
 
 /**
