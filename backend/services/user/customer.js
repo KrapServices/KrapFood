@@ -36,7 +36,7 @@ const customerLogin = async (request, response) => {
     // append info to user object
     user.type = 'customer';
     console.log(user);
-    return response.status(204).json({ user });
+    return response.status(200).json({ user });
   } catch (error) {
     console.log(error);
     return response.status(500).send('user cannot be found');

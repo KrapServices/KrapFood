@@ -191,7 +191,6 @@ class CustomerOrderFood extends Component {
       selectedRestaurantId,
     };
     const price = this.calculateTotal();
-    console.log(results);
     return (
       <customerCartContext.Provider value={value}>
         <Grid columns={1} stackable>
