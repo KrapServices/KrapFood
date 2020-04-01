@@ -11,6 +11,8 @@ router.get('/userId/:id', orderServices.getOrderByUserId);
 
 router.get('/riderId/:id', orderServices.getOrderByRiderId);
 
+router.get('/restaurantId/:id', orderServices.getOrderByRestaurantId);
+
 router.patch('/:id', orderServices.updateOrderStatus);
 
 router.post('/', orderServices.createOrder);

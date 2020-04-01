@@ -9,9 +9,8 @@ CREATE TABLE restaurants (
 );
 
 CREATE TABLE foods (
-  food_id SERIAL NOT NULL UNIQUE,
   category TEXT,
-  food_name TEXT NOT NULL DEFAULT '',
+  food_name TEXT,
   daily_limit INTEGER NOT NULL DEFAULT 10000000,
   availability boolean NOT NULL DEFAULT TRUE,
   price NUMERIC(10, 2) NOT NULL,
@@ -19,6 +18,6 @@ CREATE TABLE foods (
   restaurant_id INTEGER NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT current_timestamp,
   modified_at TIMESTAMP NOT NULL DEFAULT current_timestamp,
-  PRIMARY KEY (restaurant_id, food_id),
-  FOREIGN KEY (restaurant_id) REFERENCES restaurants (restaurant_id) ON DELETE CASCADE
+  PRIMARY KEY (restaurant_id, food_name),
+  FOREIGN KEY (restaurant_id) REFERENCES restaurants (restaurant_id) ON DELETE CASCADE ON UPDATE CASCADE
 );

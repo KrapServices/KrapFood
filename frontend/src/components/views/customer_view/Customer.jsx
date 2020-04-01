@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import {
-  Tab,
-} from 'semantic-ui-react';
+import { Tab } from 'semantic-ui-react';
 import userContext from '../../../userContext';
 import CustomerOrderFood from './orderFood/CustomerOrderFood';
 import CustomerOrderView from './orderView/CustomerOrderView';
@@ -14,7 +12,7 @@ class Customer extends Component {
       activeIndex: 0,
     };
 
-    this.handleTabChange = (e, { activeIndex }) => {
+    this.handleTabChange = (_, { activeIndex }) => {
       window.localStorage.setItem('activeIndex', activeIndex);
       this.setState({ activeIndex });
     };
@@ -47,7 +45,6 @@ class Customer extends Component {
           style={{ marginLeft: '50px', marginRight: '50px' }}
         />
       </>
-
     );
   }
 }
