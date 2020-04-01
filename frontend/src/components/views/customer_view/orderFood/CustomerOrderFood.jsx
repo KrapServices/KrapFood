@@ -117,15 +117,13 @@ class CustomerOrderFood extends Component {
     // -------------------------------------------------------------------------
     // Delivery Fee
     // -------------------------------------------------------------------------
-    this.determineFee = (value) => {
-      return 5; 
-    }
+    this.determineFee = (value) => 5;
 
     this.calculateDeliveryFee = (e, { value }) => {
       console.log(value);
       const deliveryFee = this.determineFee(value);
       this.setState({ isDeliveryFeeCaculated: true, deliveryFee });
-    }
+    };
 
     // =========================================================================
     // Axios calls
@@ -222,7 +220,7 @@ class CustomerOrderFood extends Component {
   render() {
     const {
       listOfRestaurants, shoppingCart, selectedRestaurantId, isLoading, results,
-      searchValue, paymentOpen, payByCash, selectedCreditCard, promotions, isDeliveryFeeCaculated, deliveryFee
+      searchValue, paymentOpen, payByCash, selectedCreditCard, promotions, isDeliveryFeeCaculated, deliveryFee,
     } = this.state;
     const value = {
       shoppingCart,
@@ -281,12 +279,8 @@ class CustomerOrderFood extends Component {
                         <PaymentForm selectedCreditCard={selectedCreditCard} setCard={(card) => this.setCard(card)} />
                         {' '}
                         <br />
-<<<<<<< HEAD
-                        <Button color="orange" onClick={() => this.switchPayment()} inverted>
-=======
                         <br />
                         <Button color="orange" onClick={() => this.switchPayment()} inverted fluid>
->>>>>>> origin/customer
                           <Icon name="money" />
                           {' '}
                           Pay by Cash On Delivery
@@ -296,7 +290,7 @@ class CustomerOrderFood extends Component {
                   <Promotions promotions={promotions} setPromotions={this.setPromotions} />
                   <Header as="h3"> Delivery Location</Header>
                   <Input focus onChange={this.calculateDeliveryFee} placeholder="Enter  Address" fluid />
-                    <Header as ="h3">{`Delivery Fee  ${deliveryFee}`}</Header>
+                  <Header as="h3">{`Delivery Fee  ${deliveryFee}`}</Header>
                 </Modal.Content>
                 <Modal.Actions>
                   <Button color="red" onClick={() => this.closePayment()} inverted>

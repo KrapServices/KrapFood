@@ -90,8 +90,6 @@ const getOrderByUserId = async (request, response) => {
   }
 };
 
-<<<<<<< HEAD
-=======
 const getOrderByRiderId = async (request, response) => {
   try {
     const { id } = request.params;
@@ -100,8 +98,8 @@ const getOrderByRiderId = async (request, response) => {
     )).rows;
     console.log(`orders: ${orders}`);
     // const preparingOrders = orders.filter(x => x.status === 'preparing');
-    const deliveringOrders = orders.filter(x => x.status === 'delivering');
-    const completedOrders = orders.filter(x => x.status === 'completed');
+    const deliveringOrders = orders.filter((x) => x.status === 'delivering');
+    const completedOrders = orders.filter((x) => x.status === 'completed');
     return response.status(200).json({ orders, deliveringOrders, completedOrders });
   } catch (error) {
     console.log(error);
@@ -109,7 +107,7 @@ const getOrderByRiderId = async (request, response) => {
   }
 };
 
-const updateOrderStatus= async (request, response) => {
+const updateOrderStatus = async (request, response) => {
   try {
     const { status } = request.body;
     const orders = (await query(
@@ -123,7 +121,6 @@ const updateOrderStatus= async (request, response) => {
 };
 
 
->>>>>>> master
 module.exports = {
   getAllOrders,
   getOrderById,

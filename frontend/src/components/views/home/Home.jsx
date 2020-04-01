@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
 import {
-<<<<<<< HEAD
   Container, Segment, Header, Button, Message,
-=======
-  Container, Segment, Header, Button, Message, 
->>>>>>> origin/customer
 } from 'semantic-ui-react';
 import { Link, withRouter } from 'react-router-dom';
 import ReactRouterPropTypes from 'react-router-prop-types';
