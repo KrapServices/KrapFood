@@ -3,14 +3,15 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
 import {
-  List, Button, Segment, Grid, Header, Search, Divider, Message, Icon, Label, Card, Modal,
+  List, Button, Segment, Grid, Header, Search, Divider, Message, Icon, Card, Modal, Input,
 } from 'semantic-ui-react';
 import Axios from 'axios';
 import Cart from './Cart';
-import config from '../../../config.json';
+import config from '../../../../config.json';
 import customerCartContext from './customerCartContext';
 import RestaurantCard from './RestaurantCard';
 import PaymentForm from './PaymentForm';
+import Promotions from './Promotions';
 
 class CustomerOrderFood extends Component {
   constructor(props) {
@@ -24,8 +25,15 @@ class CustomerOrderFood extends Component {
       selectedRestaurantId: -1,
       paymentOpen: false,
       payByCash: false,
+      selectedCreditCard: {},
+      promotions: [''],
+      customerLocation: '',
+      deliveryFee: 0,
+      isDeliveryFeeCaculated: false,
     };
-
+    // =========================================================================
+    // Restaurant state
+    // =========================================================================
     this.orderFromThisRestaurant = (id) => {
       const { listOfRestaurants } = this.state;
       this.setState({
@@ -33,13 +41,6 @@ class CustomerOrderFood extends Component {
         listOfRestaurants: listOfRestaurants.filter((x) => x.restaurant_id === id),
       });
     };
-
-    this.resetCurrentOrder = () => {
-      this.loadRestaurants();
-      this.clearCart();
-      this.setState({ selectedRestaurantId: -1 });
-    };
-
     this.loadRestaurants = async () => {
       const result = await Axios.get(`${config.localhost}restaurants/`);
       if (result.status === 200) {
@@ -48,6 +49,16 @@ class CustomerOrderFood extends Component {
         alert('cannot load restaurant');
       }
     };
+
+    this.resetCurrentOrder = () => {
+      this.loadRestaurants();
+      this.clearCart();
+      this.setState({ selectedRestaurantId: -1 });
+    };
+
+    // =========================================================================
+    // Cart Stuff
+    // =========================================================================
 
     this.addToCart = (food) => {
       const { shoppingCart } = this.state;
@@ -76,16 +87,46 @@ class CustomerOrderFood extends Component {
       }
       return this.calculateTotal() <= listOfRestaurants[0].price_threshold;
     };
+
+    // ---------------------------------------------------------------------------
+    // credit card
+    // ---------------------------------------------------------------------------
     this.openPayment = () => {
       this.setState({ paymentOpen: true });
     };
     this.closePayment = () => {
-      this.setState({ paymentOpen: false });
+      this.setState({ paymentOpen: false, isDeliveryFeeCaculated: false, deliveryFee: 0 });
+    };
+    this.setCard = (card) => {
+      this.setState({ selectedCreditCard: card });
     };
     this.switchPayment = () => {
       const { payByCash } = this.state;
-      this.setState({ payByCash: !payByCash });
+      this.setState({ payByCash: !payByCash, selectedCreditCard: {} });
     };
+
+    // =========================================================================
+    // promo code
+    // =========================================================================
+
+    this.setPromotions = (value, index) => {
+      const { promotions } = this.state;
+      promotions[index] = value;
+      this.setState({ promotions });
+    };
+
+    // -------------------------------------------------------------------------
+    // Delivery Fee
+    // -------------------------------------------------------------------------
+    this.determineFee = (value) => {
+      return 5; 
+    }
+
+    this.calculateDeliveryFee = (e, { value }) => {
+      console.log(value);
+      const deliveryFee = this.determineFee(value);
+      this.setState({ isDeliveryFeeCaculated: true, deliveryFee });
+    }
 
     // =========================================================================
     // Axios calls
@@ -120,7 +161,7 @@ class CustomerOrderFood extends Component {
             headers: { 'Access-Control-Allow-Origin': true },
           },
         );
-        //  console.log(result);
+        console.log(result);
         this.clearCart();
         alert('order created!');
       } catch (error) {
@@ -135,7 +176,7 @@ class CustomerOrderFood extends Component {
     // -------------------------------------------------------------------------
 
     this.handleResultSelect = (e, { result }) => {
-      const { selectedRestaurantId, listOfRestaurants } = this.state;
+      const { listOfRestaurants } = this.state;
       this.setState({
         selectedRestaurantId: result.restaurant_id,
         listOfRestaurants: listOfRestaurants.filter((res) => res.restaurant_id === result.restaurant_id),
@@ -182,7 +223,7 @@ class CustomerOrderFood extends Component {
   render() {
     const {
       listOfRestaurants, shoppingCart, selectedRestaurantId, isLoading, results,
-      searchValue, paymentOpen, payByCash,
+      searchValue, paymentOpen, payByCash, selectedCreditCard, promotions, isDeliveryFeeCaculated, deliveryFee
     } = this.state;
     const value = {
       shoppingCart,
@@ -191,7 +232,6 @@ class CustomerOrderFood extends Component {
       selectedRestaurantId,
     };
     const price = this.calculateTotal();
-    console.log(results);
     return (
       <customerCartContext.Provider value={value}>
         <Grid columns={1} stackable>
@@ -230,7 +270,7 @@ class CustomerOrderFood extends Component {
                       <>
                         <h3>Payment will be by Cash on Delivery!</h3>
                         <br />
-                        <Button color="orange" onClick={() => this.switchPayment()} inverted>
+                        <Button color="orange" onClick={() => this.switchPayment()} inverted fluid>
                           <Icon name="money" />
                           {' '}
                           Pay by Credit Card instead
@@ -239,25 +279,29 @@ class CustomerOrderFood extends Component {
                     )
                     : (
                       <>
-                        <PaymentForm />
+                        <PaymentForm selectedCreditCard={selectedCreditCard} setCard={(card) => this.setCard(card)} />
                         {' '}
-                        <br/>
-                        <Button color="orange" onClick={() => this.switchPayment()} inverted>
+                        <br />
+                        <br />
+                        <Button color="orange" onClick={() => this.switchPayment()} inverted fluid>
                           <Icon name="money" />
                           {' '}
                           Pay by Cash On Delivery
                         </Button>
                       </>
                     ) }
+                  <Promotions promotions={promotions} setPromotions={this.setPromotions} />
+                  <Header as="h3"> Delivery Location</Header>
+                  <Input focus onChange={this.calculateDeliveryFee} placeholder="Enter  Address" fluid />
+                    <Header as ="h3">{`Delivery Fee  ${deliveryFee}`}</Header>
                 </Modal.Content>
                 <Modal.Actions>
-
                   <Button color="red" onClick={() => this.closePayment()} inverted>
                     <Icon name="cancel" />
                     {' '}
                     Back to order
                   </Button>
-                  <Button color="green" onClick={() => this.createOrder()} inverted>
+                  <Button color="green" onClick={() => this.createOrder()} disabled={!isDeliveryFeeCaculated} inverted>
                     <Icon name="checkmark" />
                     {' '}
                     Create Order
@@ -323,7 +367,6 @@ class CustomerOrderFood extends Component {
                   </>
                 )
                 : <div />}
-
               <List divided relaxed style={{ marginLeft: '8rem', marginRight: '8rem' }}>
                 {listOfRestaurants.map((restaurant) => (
                   <React.Fragment key={restaurant.restaurant_id}>
