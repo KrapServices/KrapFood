@@ -9,6 +9,10 @@ router.get('/:id', orderServices.getOrderById);
 
 router.get('/userId/:id', orderServices.getOrderByUserId);
 
+router.get('/riderId/:id', orderServices.getOrderByRiderId);
+
+router.patch('/:id', orderServices.updateOrderStatus);
+
 router.post('/', orderServices.createOrder);
 
 module.exports = router;
