@@ -1,10 +1,10 @@
 import React from 'react';
 import Axios from 'axios';
 import Cards from 'react-credit-cards';
-import { Header, Button, Segment } from 'semantic-ui-react';
-import config from '../../../config.json';
+import { Header, Button } from 'semantic-ui-react';
+import config from '../../../../config.json';
 import 'react-credit-cards/es/styles-compiled.css';
-import userContext from '../../../userContext';
+import userContext from '../../../../userContext';
 
 
 class CreditCardSignUp extends React.Component {

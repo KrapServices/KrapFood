@@ -3,9 +3,9 @@ import {
   Modal, Button, Icon, Header, Segment,
 } from 'semantic-ui-react';
 import Axios from 'axios';
-import config from '../../../config';
+import config from '../../../config.json';
 import userContext from '../../../userContext';
-import CreditCardSignUp from './CreditCardSignup';
+import CreditCardSignUp from './creditCard/CreditCardSignup';
 
 
 class CustomerInfo extends Component {
@@ -23,7 +23,9 @@ class CustomerInfo extends Component {
 
   async componentDidMount() {
     const { user } = this.context;
+    // eslint-disable-next-line camelcase
     const { customer_id } = user;
+    // eslint-disable-next-line camelcase
     const result = await Axios.get(`${config.localhost}customers/cc/${customer_id}`);
     if (result.status === 200) {
       this.setState({ customerCreditCards: result.data.cards });
@@ -42,10 +44,10 @@ class CustomerInfo extends Component {
                 : (
                   <Segment.Group>
                     {
-              customerCreditCards.map((card) =>(
+              customerCreditCards.map((card) => (
                 <Segment key={card.card_number}>
                   <Header as="h2">{card.card_number}</Header>
-                  <Header as="h4" >{card.expiry}</Header>
+                  <Header as="h4">{card.expiry}</Header>
                 </Segment>
               ))
 }

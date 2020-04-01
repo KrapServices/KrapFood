@@ -7,7 +7,7 @@ import {
 } from 'semantic-ui-react';
 import Axios from 'axios';
 import Cart from './Cart';
-import config from '../../../config.json';
+import config from '../../../../config.json';
 import customerCartContext from './customerCartContext';
 import RestaurantCard from './RestaurantCard';
 import PaymentForm from './PaymentForm';
@@ -120,7 +120,7 @@ class CustomerOrderFood extends Component {
             headers: { 'Access-Control-Allow-Origin': true },
           },
         );
-        //  console.log(result);
+        console.log(result);
         this.clearCart();
         alert('order created!');
       } catch (error) {
@@ -135,7 +135,7 @@ class CustomerOrderFood extends Component {
     // -------------------------------------------------------------------------
 
     this.handleResultSelect = (e, { result }) => {
-      const { selectedRestaurantId, listOfRestaurants } = this.state;
+      const { listOfRestaurants } = this.state;
       this.setState({
         selectedRestaurantId: result.restaurant_id,
         listOfRestaurants: listOfRestaurants.filter((res) => res.restaurant_id === result.restaurant_id),

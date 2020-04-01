@@ -1,10 +1,10 @@
 import React from 'react';
 import Axios from 'axios';
 import Cards from 'react-credit-cards';
-import config from '../../../config.json';
-import 'react-credit-cards/es/styles-compiled.css';
-import userContext from '../../../userContext';
 import { Header } from 'semantic-ui-react';
+import config from '../../../../config.json';
+import 'react-credit-cards/es/styles-compiled.css';
+import userContext from '../../../../userContext';
 
 class PaymentForm extends React.Component {
   constructor(props) {
@@ -29,26 +29,24 @@ class PaymentForm extends React.Component {
 
     this.getCard = async () => {
       const { user } = this.context;
-      const  { name } = user;
+      const { name } = user;
       try {
         const result = await Axios.get(
-          `${config.localhost}customers/cc/` + user.customer_id,
+          `${config.localhost}customers/cc/${user.customer_id}`,
           {
             headers: { 'Access-Control-Allow-Origin': true },
           },
         );
         console.log(result);
-        this.setState({name, number: result.data.cardNumber['card_number']});
-       
+        this.setState({ name, number: result.data.cardNumber.card_number });
       } catch (error) {
         //  console.log(error);
         alert('User does not have a credit card preregistered!');
       }
-    
-    }
+    };
   }
 
-  componentDidMount = () => {
+  componentDidMount() {
     this.getCard();
   }
 
@@ -67,29 +65,29 @@ class PaymentForm extends React.Component {
           number={number}
         />
         <form>
-        <Header as="h2">CC Number</Header>
-        <input
-            maxLength='16'
+          <Header as="h2">CC Number</Header>
+          <input
+            maxLength="16"
             type="tel"
             name="number"
             value={number}
             onChange={this.handleInputChange}
             onFocus={this.handleInputFocus}
           />
-          <br/>
+          <br />
           <Header as="h2">Enter Name</Header>
-        <input
-            maxLength='25'
+          <input
+            maxLength="25"
             type="tel"
             name="name"
             value={name}
             onChange={this.handleInputChange}
             onFocus={this.handleInputFocus}
           />
-          <br/>
+          <br />
           <Header as="h2">Enter Expiry Date</Header>
           <input
-            maxLength='4'
+            maxLength="4"
             type="tel"
             name="expiry"
             value={expiry}
@@ -99,7 +97,7 @@ class PaymentForm extends React.Component {
           <br />
           <Header as="h2">Enter CVC</Header>
           <input
-            maxLength='3'
+            maxLength="3"
             type="tel"
             name="cvc"
             value={cvc}
