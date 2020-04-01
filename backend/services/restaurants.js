@@ -170,8 +170,27 @@ const getStatsById = async (request, response) => {
       orderCount: stat.order_count,
       totalCost: stat.total_cost,
     }));
+    const topFive = (await query(
+      `
+    WITH foodCount AS (
+      SELECT C.food_name, C.restaurant_id, count(*) AS orderCount
+      FROM foods F JOIN contain C
+      ON F.food_name = C.food_name AND F.restaurant_id = C.restaurant_id AND F.restaurant_id = $1
+      JOIN orders O ON O.order_id = C.order_id
+      AND O.status = 'completed'
+    AND EXTRACT(MONTH FROM O.modified_at) = $2 AND EXTRACT(YEAR FROM O.modified_at) = $3
+      GROUP BY (C.food_name, C.restaurant_id)
+      )
+      SELECT C.food_name, category, price, orderCount
+      FROM foodCount C JOIN foods F ON C.food_name = F.food_name AND C.restaurant_id = F.restaurant_id
+      ORDER BY orderCount
+      LIMIT 5
+        `,
+      [restaurantId, month, year],
+    )).rows;
     return response.status(200).json({
       stats,
+      topFive,
     });
   } catch (error) {
     console.log(error);

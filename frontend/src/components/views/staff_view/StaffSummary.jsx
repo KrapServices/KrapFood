@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Axios from 'axios';
-import { Table, Statistic, Dropdown, SearchResults } from 'semantic-ui-react';
+import { Table, Dropdown, Loader, Item, Statistic, Header, Card } from 'semantic-ui-react';
 import userContext from '../../../userContext';
 import config from '../../../config.json';
 
@@ -23,46 +23,45 @@ class StaffSummary extends Component {
     super();
     this.state = {
       months: [],
+      isLoading: true,
     }
 
     this.loadMonths = async () => {
       const { restaurant_id } = this.context.user;
+      console.log(restaurant_id);
       try {
         const result = await Axios.get(
           `${config.localhost}restaurants/${restaurant_id}/months`,
         );
         this.setState({
-          months:result.data
-        })
+          months: result.data,
+          month: result.data[result.data.length-1].month,
+          year: result.data[result.data.length-1].year
+        });
+        console.log(this.state);
       } catch (error) {
         console.log('Error has occured');
       }
     };
 
-    this.handleChange = (e, { value }) => {
-      this.setState({month: value[0], year: value[1]});
-      console.log(this.state);
-      this.loadStats();
-    };
-
-    this.loadStats = async () => {
+    this.handleChange = async (e, { value }) => {
       const { restaurant_id } = this.context.user;
-      const { month, year } = this.state;
+      const month = value[0];
+      const year = value[1];
       try {
         const result = await Axios.get(
           `${config.localhost}restaurants/${restaurant_id}/stats/?month=${month}&year=${year}`,
         );
-        this.setState({orderCount: result.data.stats[0].orderCount, 
-          totalCost: result.data.stats[0].totalCost
-        });
-        // this.generateStats();
-        // if (result.status === 200) {
-        //   this.setState({ menu: result.data });
-        // } else {
-        //   alert('unable to load menu');
-        // }
-        // return result.data.totalOrders;
-        console.log(this.state);
+        if (result.status === 200) {
+          this.setState({orderCount: result.data.stats[0].orderCount, 
+            totalCost: result.data.stats[0].totalCost,
+            topFive: result.data.topFive
+          });
+          this.setState({
+            isLoading: false
+          });
+          console.log(this.state);
+        }
       } catch (error) {
         console.log('Error has occured');
       }
@@ -76,14 +75,15 @@ class StaffSummary extends Component {
 
   render() {
     // destructuring
-    const { months } = this.state;
-    const { orderCount, totalCost } = this.state;
+    const { months, month, year, orderCount, totalCost, topFive, isLoading } = this.state;
     return (
+      <>
       <Table>
          <Dropdown
             placeholder='Select month'
             fluid
             selection
+            defaultValue={[month, year]}
             options={months.map(month => {
               return {
                   key: [month.month, month.year],
@@ -93,22 +93,56 @@ class StaffSummary extends Component {
             })}
             onChange={this.handleChange}
           />
-          <Statistic.Group
+        <br />
+        <br />
+          {isLoading ? <Loader/> : <div>
+          <Statistic.Group 
+          widths = 'two'
           style={{
             justifyContent: 'center',
           }}
         >
-          <Statistic>
+          <Statistic size = "huge">
             <Statistic.Value>{orderCount}</Statistic.Value>
             <Statistic.Label>Orders</Statistic.Label>
           </Statistic>
-          <Statistic>
+          <Statistic size = "huge">
             <Statistic.Value>{totalCost}</Statistic.Value>
             <Statistic.Label>Total Order Value</Statistic.Label>
           </Statistic>
+          <Header as="h1">Top Five</Header>
+
         </Statistic.Group>
 
-      </Table>
+        <Item.Group divided style={{ textAlign: 'left' }}>
+          {topFive.map((food, index) => (
+              <Item key={index}>
+              {' '}
+              <Header as='h1'>{index+1}.</Header>
+              {' '}
+              <Item.Image 
+              src="https://react.semantic-ui.com/images/wireframe/image.png" spaced="left" bordered="true" />
+              <Item.Content>
+                <Item.Header as="h1">{food.food_name}</Item.Header>
+                <Item.Description floated="left">
+                  Price:
+                  <b>{` ${food.price}`}</b>
+                  {' '}
+                  <br />
+                  Category:
+                  {' '}
+                  <b>{` ${food.category}`}</b>
+                  {' '}
+                  <br />
+                  </Item.Description>
+              </Item.Content>
+            </Item>
+          ))}
+        </Item.Group></div>}
+          <br />
+          <br />
+        </Table>
+      </>
     );
   }
 }

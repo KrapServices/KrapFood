@@ -17,7 +17,6 @@ class StaffUpdateFood extends Component {
       price: '',
       restaurantId: '',
       menu: [],
-      openModal: false,
     };
 
 
@@ -71,7 +70,7 @@ class StaffUpdateFood extends Component {
     this.updateState = (food) => {
       const { category, dailyLimit, availability, price, foodName } = food;
       this.setState({
-        category, dailyLimit, availability, price, foodName, openModal: true
+        category, dailyLimit, availability, price, foodName
       });
     };
   }

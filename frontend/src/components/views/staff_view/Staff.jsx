@@ -36,7 +36,6 @@ class Staff extends Component {
       { menuItem: 'Add Food Item to Menu', render: () => <Tab.Pane><StaffAddFood /></Tab.Pane> },
       { menuItem: 'Update Food Items', render: () => <Tab.Pane><StaffUpdateFood /></Tab.Pane> },
       { menuItem: 'Update Orders', render: () => <Tab.Pane><StaffUpdateOrder user={user} /></Tab.Pane> },
-      { menuItem: 'Create Promotion', render: () => <Tab.Pane><StaffCreatePromotion /></Tab.Pane> },
       { menuItem: 'Summary Information', render: () => <Tab.Pane><StaffSummary /></Tab.Pane> },
     ];
     return (
