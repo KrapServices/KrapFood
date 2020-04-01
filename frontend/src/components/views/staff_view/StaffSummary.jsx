@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Axios from 'axios';
-import { Table, Statistic, Dropdown } from 'semantic-ui-react';
+import { Table, Statistic, Dropdown, SearchResults } from 'semantic-ui-react';
 import userContext from '../../../userContext';
 import config from '../../../config.json';
 
@@ -52,7 +52,9 @@ class StaffSummary extends Component {
         const result = await Axios.get(
           `${config.localhost}restaurants/${restaurant_id}/stats/?month=${month}&year=${year}`,
         );
-        console.log(result.data.stats[0]);
+        this.setState({orderCount: result.data.stats[0].orderCount, 
+          totalCost: result.data.stats[0].totalCost
+        });
         // this.generateStats();
         // if (result.status === 200) {
         //   this.setState({ menu: result.data });
@@ -60,30 +62,11 @@ class StaffSummary extends Component {
         //   alert('unable to load menu');
         // }
         // return result.data.totalOrders;
+        console.log(this.state);
       } catch (error) {
         console.log('Error has occured');
       }
     };
-
-    // this.generateStats = () => {
-    //   return (
-    //     <Statistic.Group
-    //       style={{
-    //         justifyContent: 'center',
-    //       }}
-    //     >
-    //       <Statistic>
-    //         <Statistic.Value>{orderCount}</Statistic.Value>
-    //         <Statistic.Label>Orders</Statistic.Label>
-    //       </Statistic>
-    //       <Statistic>
-    //         <Statistic.Value>{totalCost}</Statistic.Value>
-    //         <Statistic.Label>Total Order Value</Statistic.Label>
-    //       </Statistic>
-    //     </Statistic.Group>
-
-    //   );
-    // }
 
   }
 
@@ -94,6 +77,7 @@ class StaffSummary extends Component {
   render() {
     // destructuring
     const { months } = this.state;
+    const { orderCount, totalCost } = this.state;
     return (
       <Table>
          <Dropdown
@@ -109,6 +93,21 @@ class StaffSummary extends Component {
             })}
             onChange={this.handleChange}
           />
+          <Statistic.Group
+          style={{
+            justifyContent: 'center',
+          }}
+        >
+          <Statistic>
+            <Statistic.Value>{orderCount}</Statistic.Value>
+            <Statistic.Label>Orders</Statistic.Label>
+          </Statistic>
+          <Statistic>
+            <Statistic.Value>{totalCost}</Statistic.Value>
+            <Statistic.Label>Total Order Value</Statistic.Label>
+          </Statistic>
+        </Statistic.Group>
+
       </Table>
     );
   }
