@@ -27,7 +27,7 @@ class StaffUpdateFood extends Component {
       this.state.restaurant_id = restaurant_id;
       try {
         const result = await Axios.get(
-          `${config.localhost}food/menu/${restaurant_id}`,
+          `${config.localhost}restaurants/${restaurant_id}/food`,
         );
         console.log(result);
         if (result.status === 200) {
@@ -56,7 +56,7 @@ class StaffUpdateFood extends Component {
       this.state.food_id = food_id;
       console.log(this.state);
       try {
-        const result = await Axios.post(
+        const result = await Axios.patch(
           `${config.localhost}food/update`,
           this.state,
           {

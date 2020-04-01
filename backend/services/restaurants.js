@@ -57,117 +57,103 @@ const getRestaurantById = async (request, response) => {
   }
 };
 
+const getMenuById = async (request, response) => {
+  try {
+    const { id } = request.params;
+    const food = (await query(
+      `SELECT food_id, category, food_name, daily_limit, availability, price 
+        FROM foods F
+        WHERE F.restaurant_id = $1`,
+      [id],
+    )).rows;
+    console.log(food);
+    // const menu = food;
+    return response.status(200).json(food);
+  } catch (error) {
+    console.log(error);
+    return response.status(500).send('menu could not be found');
+  }
+};
+
+
 // -----------------------------------------------------------------------------
 // Utilty functions
 // -----------------------------------------------------------------------------
 
-const getAllRestaurantWithFood = async (restaurants ) =>  {
-  let result = [];
-  for ( let eachRestaurant of restaurants) {
-    const id = eachRestaurant['restaurant_id'];
+const getAllRestaurantWithFood = async (restaurants) => {
+  const result = [];
+  for (const eachRestaurant of restaurants) {
+    const id = eachRestaurant.restaurant_id;
     const foodQuery = await query(
-      'SELECT * FROM FOODS where restaurant_id = $1' , [id]
+      'SELECT * FROM FOODS where restaurant_id = $1', [id],
     );
     if (!(foodQuery == undefined)) {
       const eachRestaurantFood = foodQuery.rows;
-      eachRestaurant['foods'] = eachRestaurantFood;
+      eachRestaurant.foods = eachRestaurantFood;
     } else {
-      eachRestaurant['foods'] = [];
+      eachRestaurant.foods = [];
     }
     result.push(eachRestaurant);
   }
   return result;
-}
+};
 
 // -----------------------------------------------------------------------------
 // Functions for Staff Dashboard
 // -----------------------------------------------------------------------------
-
-/* Calculates total cost of orders */
-const getTotalCost = async (request, response) => {
+const getMonthsById = async (request, response) => {
   try {
-    const { id } = request.params;
-    month = Date.now().getMonth() + 1;
-    const totalCost = (await query(
-      `SELECT COALESCE(sum(price), 0)
-      FROM foods F NATURAL JOIN contain C
+    const { id: restaurantId } = request.params;
+    const yearMonths = (await query(
+      `
+      SELECT DISTINCT EXTRACT(YEAR FROM O.modified_at) AS year, EXTRACT(MONTH FROM O.modified_at) AS month
+      FROM foods F JOIN contain C 
+      ON F.food_id = C.food_id AND F.restaurant_id = $1
       JOIN orders O ON O.order_id = C.order_id 
       AND O.status = 'completed'
-      WHERE EXTRACT(month FROM O.modified_at) = $1
-      GROUP BY restaurant_id
-      HAVING restaurant_id = $2
-      `
-      ,
-    [month, id]
-    )).rows[0];
-    return response.status(200).json({ restaurant: totalCost });
+      `,
+      [restaurantId],
+    )).rows;
+    return response.status(200).json(yearMonths);
   } catch (error) {
     console.log(error);
     return response.status(500).send('restaurant could not be found');
   }
 };
 
-/* Calculates total number of orders */
-const getTotalOrders = async (request, response) => {
+const getStatsById = async (request, response) => {
   try {
-    const { id } = request.params;
-    month = Date.now().getMonth() + 1;
-    const totalOrders = (await query(
-      `SELECT COALESCE(count(distinct O.order_id), 0)
-      FROM foods F NATURAL JOIN contain C
-      JOIN orders O ON O.order_id = C.order_id 
-      AND O.status = 'completed'
-      WHERE EXTRACT(month FROM O.modified_at) = $1
-      GROUP BY restaurant_id
-      HAVING restaurant_id = $2
+    const { id: restaurantId } = request.params;
+    const { month, year } = request.query;
+    const stats = (await query(
       `
-      ,
-    [month, id]
-    )).rows[0];
-    return response.status(200).json({ restaurant: totalOrders });
-  } catch (error) {
-    console.log(error);
-    return response.status(500).send('restaurant could not be found');
-  }
-};
-
-/* Calculates total number of orders */
-const getTopFive = async (request, response) => {
-  try {
-    const { id } = request.params;
-    month = Date.now().getMonth() + 1;
-    const topFiveItems = (await query(
-      `SELECT food_name, category, price, count(food_id)
-      FROM foods F NATURAL JOIN contain C
+      SELECT count(distinct O.order_id) AS order_count, COALESCE(sum(price), 0) AS total_cost
+      FROM foods F JOIN contain C
+      ON F.food_id = C.food_id AND F.restaurant_id = $1
       JOIN orders O ON O.order_id = C.order_id
       AND O.status = 'completed'
-      WHERE EXTRACT(month FROM O.modified_at) = $1
-      HAVING restaurant_id = $1
-      ORDER BY (
-        SELECT count(food_id)
-        FROM foods F NATURAL JOIN contain C
-        JOIN orders O ON O.order_id = C.order_id
-        AND O.status = 'completed'
-        HAVING restaurant_id = $2
-      )
-      LIMIT 5
-      `
-      ,
-      [month, id]
-    )).rows;
-    return response.status(200).json({ restaurant: topFiveItems });
+      AND EXTRACT(MONTH FROM O.modified_at) = $2 AND EXTRACT(YEAR FROM O.modified_at) = $3
+      `,
+      [restaurantId, month, year],
+    )).rows.map((stat) => ({
+      month: stat.month,
+      orderCount: stat.order_count,
+      totalCost: stat.total_cost,
+    }));
+    return response.status(200).json({
+      stats,
+    });
   } catch (error) {
     console.log(error);
     return response.status(500).send('restaurant could not be found');
   }
 };
-
 
 module.exports = {
   createRestaurant,
   getAllRestaurant,
   getRestaurantById,
-  getTopFive,
-  getTotalCost,
-  getTotalOrders
+  getMenuById,
+  getMonthsById,
+  getStatsById,
 };

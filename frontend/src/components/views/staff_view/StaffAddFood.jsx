@@ -28,7 +28,7 @@ class StaffAddFood extends Component {
         // `${config.localhost}restaurants/${restaurant_id}`);
         // console.log(result);
         const result = await Axios.get(
-          `${config.localhost}food/menu/${restaurant_id}`,
+          `${config.localhost}restaurants/${restaurant_id}/food`,
         );
         console.log(result);
         if (result.status === 200) {

@@ -21,8 +21,7 @@ const staffCreate = async (request, response) => {
       (await query(
         `
           INSERT INTO staff (staff_id, restaurant_id) 
-          VALUES ($1, 1) 
-          RETURNING staff_id
+          VALUES ($1, 1)
         `,
         [user.user_id],
       ));

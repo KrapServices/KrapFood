@@ -4,8 +4,7 @@ const foodServices = require('../services/foods');
 const router = express.Router();
 
 router.post('/create', foodServices.createFood);
-router.get('/menu/:id', foodServices.getMenu);
-router.post('/update', foodServices.updateItem);
+router.patch('/update', foodServices.updateItem);
 
 
 module.exports = router;
