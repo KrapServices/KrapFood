@@ -14,15 +14,6 @@ function RestaurantCard(props) {
     return Array.from(categories);
   };
 
-  const buildPanes = (categories) => {
-    const panes = [];
-    categories.forEach((category) => panes.push({
-      menuItem: `${category}`,
-      render: () => <Tab.Pane>{this.getFoodListing(category)}</Tab.Pane>,
-    }));
-    return panes;
-  };
-
   const getFoodListing = (category) => {
     const { restaurant } = props;
     const { foods } = restaurant;
@@ -45,7 +36,7 @@ function RestaurantCard(props) {
                   <br />
                   Daily Limit:
                   {' '}
-                  <b>{` ${food.daily_limit}`}</b>
+                  <b>{` ${food.dailyLimit}`}</b>
                   {' '}
                   <br />
                   Available:
@@ -66,6 +57,15 @@ function RestaurantCard(props) {
         })}
       </Item.Group>
     );
+  };
+
+  const buildPanes = (categories) => {
+    const panes = [];
+    categories.forEach((category) => panes.push({
+      menuItem: `${category}`,
+      render: () => <Tab.Pane>{getFoodListing(category)}</Tab.Pane>,
+    }));
+    return panes;
   };
 
   const { restaurant, orderFromThisRestaurant } = props;

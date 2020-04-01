@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React, { Component } from 'react';
 import _ from 'lodash';
 import {
@@ -37,7 +36,7 @@ class CustomerOrderFood extends Component {
       const { listOfRestaurants } = this.state;
       this.setState({
         selectedRestaurantId: id,
-        listOfRestaurants: listOfRestaurants.filter((x) => x.restaurant_id === id),
+        listOfRestaurants: listOfRestaurants.filter((restaurant) => restaurant.restaurantId === id),
       });
     };
     this.loadRestaurants = async () => {
@@ -84,7 +83,7 @@ class CustomerOrderFood extends Component {
       if (selectedRestaurantId === -1) {
         return true;
       }
-      return this.calculateTotal() <= listOfRestaurants[0].price_threshold;
+      return this.calculateTotal() <= listOfRestaurants[0].priceThreshold;
     };
 
     // ---------------------------------------------------------------------------
@@ -131,28 +130,40 @@ class CustomerOrderFood extends Component {
     this.createOrder = async () => {
       const { shoppingCart } = this.state;
       const { user } = this.props;
-      const { customer_id } = user;
+      const { customer_id: customerId } = user;
       // get ID
       const listOfFoods = [];
 
-      const listOfFoodId = new Set();
-      shoppingCart.forEach((x) => listOfFoodId.add(x.food_id));
-      listOfFoodId.forEach((id) => {
-        const count = shoppingCart.filter((x) => x.food_id === id).length;
-        const qtyAndID = { food_id: id, quantity: count };
-        listOfFoods.push(qtyAndID);
+      const uniqueFoods = [];
+      shoppingCart.forEach((food) => {
+        const { restaurantId, foodName } = food;
+        const sameFood = (uniqueFood) => uniqueFood.restaurantId === restaurantId
+            && uniqueFood.foodName === foodName;
+        if (!uniqueFoods.find(sameFood)) {
+          uniqueFoods.push(food);
+        }
       });
+
+      uniqueFoods.forEach((uniqueFood) => {
+        const quantity = shoppingCart.filter((food) => food.restaurantId === uniqueFood.restaurantId && food.foodName === uniqueFood.foodName).length;
+        listOfFoods.push({
+          ...uniqueFood,
+          quantity,
+        });
+      });
+
+      console.log(listOfFoods);
 
       const price = this.calculateTotal();
       try {
         const result = await Axios.post(
           `${config.localhost}orders/`,
           {
-            customer_id,
-            total_cost: price,
+            customerId,
+            totalCost: price,
             status: 'preparing',
             listOfFoods,
-            delivery_location: 'test location',
+            deliveryLocation: 'test location',
           },
           {
             headers: { 'Access-Control-Allow-Origin': true },
@@ -175,8 +186,10 @@ class CustomerOrderFood extends Component {
     this.handleResultSelect = (e, { result }) => {
       const { listOfRestaurants } = this.state;
       this.setState({
-        selectedRestaurantId: result.restaurant_id,
-        listOfRestaurants: listOfRestaurants.filter((res) => res.restaurant_id === result.restaurant_id),
+        selectedRestaurantId: result.restaurantId,
+        listOfRestaurants: listOfRestaurants.filter(
+          (restaurant) => restaurant.restaurantId === result.restaurantId,
+        ),
       });
     };
 
@@ -186,10 +199,13 @@ class CustomerOrderFood extends Component {
       this.setState({ isLoading: true, searchValue: value });
 
       setTimeout(() => {
-        if (searchValue.length < 1) return this.setState(initialState);
+        if (searchValue.length < 1) {
+          this.setState(initialState);
+          return;
+        }
 
         const re = new RegExp(_.escapeRegExp(searchValue), 'i');
-        const isMatch = (result) => re.test(result.restaurant_name);
+        const isMatch = (result) => re.test(result.restaurantName);
         this.setState({
           isLoading: false,
           results: _.filter(listOfRestaurants, isMatch),
@@ -200,7 +216,7 @@ class CustomerOrderFood extends Component {
       <Card>
         <Card.Content>
           <Card.Header>
-            {result.restaurant_name}
+            {result.restaurantName}
           </Card.Header>
           { result.foods.map((food) => <Card.Description>{food.category}</Card.Description>)}
         </Card.Content>
@@ -216,11 +232,11 @@ class CustomerOrderFood extends Component {
     this.mounted = false;
   }
 
-
   render() {
     const {
       listOfRestaurants, shoppingCart, selectedRestaurantId, isLoading, results,
-      searchValue, paymentOpen, payByCash, selectedCreditCard, promotions, isDeliveryFeeCaculated, deliveryFee,
+      searchValue, paymentOpen, payByCash, selectedCreditCard, promotions,
+      isDeliveryFeeCaculated, deliveryFee,
     } = this.state;
     const value = {
       shoppingCart,
@@ -314,7 +330,7 @@ class CustomerOrderFood extends Component {
                   <Header floated="right">
                     {' '}
                     $
-                    {listOfRestaurants[0].price_threshold}
+                    {listOfRestaurants[0].priceThreshold}
                   </Header>
                 </>
               )}
@@ -366,7 +382,7 @@ class CustomerOrderFood extends Component {
                 : <div />}
               <List divided relaxed style={{ marginLeft: '8rem', marginRight: '8rem' }}>
                 {listOfRestaurants.map((restaurant) => (
-                  <React.Fragment key={restaurant.restaurant_id}>
+                  <React.Fragment key={restaurant.restaurantId}>
                     <RestaurantCard
                       restaurant={restaurant}
                       orderFromThisRestaurant={this.orderFromThisRestaurant}

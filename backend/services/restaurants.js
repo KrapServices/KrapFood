@@ -8,26 +8,27 @@ const { query } = require('../database');
 // Utilty functions
 // -----------------------------------------------------------------------------
 
-const getAllRestaurantWithFood = (restaurants) => {
-  const restaurantsWithFood = Promise.all(restaurants.map(async (restaurant) => {
-    const { restaurantId } = restaurant;
-
-    const foods = (await query(
-      `
-        SELECT *
-        FROM foods
-        WHERE restaurant_id = $1
-      `,
-      [restaurantId],
-    )).rows;
-
-    return {
-      ...restaurant,
-      foods,
-    };
+const getRestaurantWithFood = async (restaurant) => {
+  const foods = (await query(
+    `
+      SELECT restaurant_id, category, food_name, daily_limit, availability, price
+      FROM foods 
+      WHERE restaurant_id = $1
+    `,
+    [restaurant.restaurantId],
+  )).rows.map((food) => ({
+    restaurantId: food.restaurant_id,
+    category: food.category,
+    foodName: food.food_name,
+    dailyLimit: food.daily_limit,
+    availability: food.availability,
+    price: food.price,
   }));
 
-  return restaurantsWithFood;
+  return {
+    ...restaurant,
+    foods,
+  };
 };
 
 // =============================================================================
@@ -57,14 +58,17 @@ const getAllRestaurant = async (request, response) => {
     const restaurants = (await query(
       `
         SELECT restaurant_id, restaurant_name, restaurant_location, price_threshold 
-        FROM restaurants`,
+        FROM restaurants
+      `,
     )).rows.map((restaurant) => ({
       restaurantId: restaurant.restaurant_id,
       restaurantName: restaurant.restaurant_name,
       restaurantLocation: restaurant.restaurant_location,
       priceThreshold: restaurant.price_threshold,
     }));
-    const restaurantsWithFood = await getAllRestaurantWithFood(restaurants);
+    const restaurantsWithFood = await Promise.all(restaurants.map(
+      (restaurant) => getRestaurantWithFood(restaurant),
+    ));
     response.status(200).json({ restaurants: restaurantsWithFood });
   } catch (error) {
     console.log(error);
@@ -76,17 +80,19 @@ const getRestaurantById = async (request, response) => {
   try {
     const { id } = request.params;
     const restaurant = (await query(
-      'SELECT * FROM restaurants where restaurant_id = $1', [id],
-    )).rows[0];
-    const food = (await query(
       `
-        SELECT category, food_name, daily_limit, availability, price, price_threshold 
-        FROM foods 
+        SELECT restaurant_id, restaurant_name, restaurant_location, price_threshold 
+        FROM restaurants
         WHERE restaurant_id = $1
       `,
       [id],
-    )).rows;
-    const restaurantWithFood = { ...restaurant, food };
+    )).rows[0];
+    const restaurantWithFood = await getRestaurantWithFood({
+      restaurantId: restaurant.restaurant_id,
+      restaurantName: restaurant.restaurant_name,
+      restaurantLocation: restaurant.restaurant_location,
+      priceThreshold: restaurant.price_threshold,
+    });
     response.status(200).json({ restaurant: restaurantWithFood });
   } catch (error) {
     console.log(error);

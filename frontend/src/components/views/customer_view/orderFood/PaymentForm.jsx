@@ -1,7 +1,7 @@
 import React from 'react';
 import Axios from 'axios';
-import Cards from 'react-credit-cards';
-import { Header, Dropdown } from 'semantic-ui-react';
+import PropTypes from 'prop-types';
+import { Dropdown } from 'semantic-ui-react';
 import config from '../../../../config.json';
 import 'react-credit-cards/es/styles-compiled.css';
 import userContext from '../../../../userContext';
@@ -23,9 +23,9 @@ class PaymentForm extends React.Component {
     };
     this.getCard = async () => {
       const { user } = this.context;
-      const { customer_id } = user;
+      const { customer_id: customerId } = user;
       try {
-        const resultCC = await Axios.get(`${config.localhost}customers/cc/${customer_id}`);
+        const resultCC = await Axios.get(`${config.localhost}customers/cc/${customerId}`);
         if (resultCC.status === 200) {
           console.log(resultCC.data);
           const options = [];
@@ -49,25 +49,24 @@ class PaymentForm extends React.Component {
     this.getCard();
   }
 
-
   render() {
-    const {
-      customerCreditCards, value, options } = this.state;
+    const { value, options } = this.state;
 
     return (
-      <>
-        <Dropdown
+      <Dropdown
         fluid
-          onChange={this.handleChange}
-          options={options}
-          placeholder="Choose a Credit Card"
-          selection
-          value={value}
-        />
-      </>
+        onChange={this.handleChange}
+        options={options}
+        placeholder="Choose a Credit Card"
+        selection
+        value={value}
+      />
     );
   }
 }
 
+PaymentForm.propTypes = {
+  setCard: PropTypes.func.isRequired,
+};
 PaymentForm.contextType = userContext;
 export default PaymentForm;
