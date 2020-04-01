@@ -13,7 +13,7 @@ class StaffAddFood extends Component {
     this.state = {
       category: '',
       food_name: '',
-      daily_limit: 10000000,
+      dailyLimit: 10000000,
       availability: true,
       price: '',
       restaurant_id: '',
@@ -66,7 +66,7 @@ class StaffAddFood extends Component {
       this.setState({
         category: '',
         food_name: '',
-        daily_limit: 10000000,
+        dailyLimit: 10000000,
         availability: true,
         price: '',
         restaurant_id: '',
@@ -88,7 +88,7 @@ class StaffAddFood extends Component {
   }
 
   render() {
-    const { menu, price, food_name, daily_limit, category } = this.state;
+    const { menu, price, food_name, dailyLimit, category } = this.state;
     const { user } = this.context;
     console.log(user.restaurant_id);
     return (
@@ -109,8 +109,8 @@ class StaffAddFood extends Component {
               <Header>Daily Quantity</Header>
               <input
                 placeholder="Daily Quantity"
-                name="daily_limit"
-                value={daily_limit}
+                name="dailyLimit"
+                value={dailyLimit}
                 onChange={this.handleChange}
               />
             </Form.Field>
@@ -144,7 +144,10 @@ class StaffAddFood extends Component {
           <Header as="h1">Menu Items</Header>
           <Item.Group divided style={{ textAlign: 'left' }}>
             {menu.map((food) => (
-              <Item key={food.food_id}>
+              <Item key={{
+                restaurantId: food.restaurantId,
+                foodName: food.foodName
+              }}>
                 <Item.Image src="https://react.semantic-ui.com/images/wireframe/image.png" />
                 <Item.Content>
                   <Item.Header as="h1">{food.food_name}</Item.Header>
@@ -155,7 +158,7 @@ class StaffAddFood extends Component {
                     <br />
                     Daily Limit:
                     {' '}
-                    <b>{` ${food.daily_limit}`}</b>
+                    <b>{` ${food.dailyLimit}`}</b>
                     {' '}
                     <br />
                     Available:

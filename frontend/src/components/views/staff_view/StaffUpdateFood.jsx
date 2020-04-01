@@ -11,20 +11,19 @@ class StaffUpdateFood extends Component {
     super(props);
     this.state = {
       category: '',
-      food_name: '',
-      daily_limit: '',
+      foodName: '',
+      dailyLimit: '',
       availability: '',
       price: '',
-      restaurant_id: '',
-      food_id: '',
+      restaurantId: '',
       menu: [],
-      open_modal: false,
+      openModal: false,
     };
 
 
     this.loadMenu = async () => {
       const { restaurant_id } = this.context.user;
-      this.state.restaurant_id = restaurant_id;
+      this.state.restaurantId = restaurant_id;
       try {
         const result = await Axios.get(
           `${config.localhost}restaurants/${restaurant_id}/food`,
@@ -49,14 +48,12 @@ class StaffUpdateFood extends Component {
       this.setState({
         [name]: value,
       });
-      console.log(this.state.food_id);
     };
 
-    this.updateItem = async (food_id) => {
-      this.state.food_id = food_id;
+    this.updateItem = async (restaurant_id, food_name) => {
       console.log(this.state);
       try {
-        const result = await Axios.patch(
+        await Axios.patch(
           `${config.localhost}food/update`,
           this.state,
           {
@@ -72,9 +69,9 @@ class StaffUpdateFood extends Component {
     };
 
     this.updateState = (food) => {
-      const { food_id , category, daily_limit, availability, price, food_name } = food;
+      const { category, dailyLimit, availability, price, foodName } = food;
       this.setState({
-        food_id, category, daily_limit, availability, price, food_name, open_modal:true
+        category, dailyLimit, availability, price, foodName, openModal: true
       });
     };
   }
@@ -85,16 +82,19 @@ class StaffUpdateFood extends Component {
   }
 
   render() {
-    const { menu, food_name, daily_limit, price, category } = this.state;
+    const { menu, foodName, dailyLimit, price, category } = this.state;
     return (
       <Table>
         <Header as="h1">Menu Items</Header>
         <Item.Group divided style={{ textAlign: 'left' }}>
           {menu.map((food) => (
-            <Item key={food.food_id}>
+            <Item key={{
+                restaurantId: food.restaurantId,
+                foodName: food.foodName
+              }}>
               <Item.Image src="https://react.semantic-ui.com/images/wireframe/image.png" />
               <Item.Content>
-                <Item.Header as="h1">{food.food_name}</Item.Header>
+                <Item.Header as="h1">{food.foodName}</Item.Header>
                 <Item.Description floated="left">
                   Price:
                   <b>{` ${food.price}`}</b>
@@ -102,7 +102,7 @@ class StaffUpdateFood extends Component {
                   <br />
                   Daily Limit:
                   {' '}
-                  <b>{` ${food.daily_limit}`}</b>
+                  <b>{` ${food.dailyLimit}`}</b>
                   {' '}
                   <br />
                   Category:
@@ -127,7 +127,7 @@ class StaffUpdateFood extends Component {
                                 fluid
                                 placeholder="Food Name"
                                 name="food_name"
-                                value={food_name}
+                                value={foodName}
                                 onChange={this.handleChange}
                               />
                             </Form.Field>
@@ -136,8 +136,8 @@ class StaffUpdateFood extends Component {
                               <input
                                 fluid
                                 placeholder="Daily Quantity"
-                                name="daily_limit"
-                                value={daily_limit}
+                                name="dailyLimit"
+                                value={dailyLimit}
                                 onChange={this.handleChange}
                               />
                             </Form.Field>
@@ -163,7 +163,7 @@ class StaffUpdateFood extends Component {
                             </Form.Field>
                             <Button
                               type="submit"
-                              onClick={() => this.updateItem(food.food_id)}
+                              onClick={() => this.updateItem(food.restaurantId, food.foodName)}
                             >
                               Confirm Update
                             </Button>
