@@ -37,11 +37,12 @@ CREATE TABLE applies
 CREATE TABLE contain
 (
     order_id INTEGER, 
-    food_id INTEGER,
+    restaurant_id INTEGER,
+    food_name TEXT,
     quantity INTEGER NOT NULL,
     CONSTRAINT positive_quantity CHECK (quantity > 0),
-    PRIMARY KEY (order_id, food_id),
-    FOREIGN KEY (food_id) REFERENCES foods (food_id),
+    PRIMARY KEY (order_id, restaurant_id, food_name),
+    FOREIGN KEY (restaurant_id, food_name) REFERENCES foods (restaurant_id, food_name),
     FOREIGN KEY (order_id) REFERENCES orders (order_id)
 );
 

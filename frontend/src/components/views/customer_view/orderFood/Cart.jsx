@@ -19,7 +19,7 @@ class Cart extends Component {
             <List.Item key={index}>
               <Card fluid>
                 <Card.Header as="h2" float="left">
-                  {`${food.food_name}`}
+                  {`${food.foodName}`}
                 </Card.Header>
 
                 <Card.Description>
