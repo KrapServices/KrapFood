@@ -34,7 +34,7 @@ app.use('/orders', ordersRouter);
 app.use('/food', foodRouter);
 app.use('/managers', managerRouter);
 app.use('/schedules', scheduleRouter);
-app.use('/customers',customerRouter);
+app.use('/customers', customerRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

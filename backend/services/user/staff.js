@@ -6,8 +6,7 @@ const { query, transact } = require('../../database');
 // create single user for staff
 const staffCreate = async (request, response) => {
   try {
-    const { email, password } = request.body;
-
+    const { email, password, restaurantId } = request.body;
     await transact(async (query) => {
       const user = (await query(
         `
@@ -19,11 +18,8 @@ const staffCreate = async (request, response) => {
       )).rows[0];
 
       (await query(
-        `
-          INSERT INTO staff (staff_id, restaurant_id) 
-          VALUES ($1, 1)
-        `,
-        [user.user_id],
+        'INSERT INTO staff (staff_id, restaurant_id) VALUES ($1, $2) RETURNING staff_id',
+        [user.user_id, restaurantId],
       ));
     });
 

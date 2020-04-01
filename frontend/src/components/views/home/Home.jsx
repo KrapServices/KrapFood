@@ -2,7 +2,7 @@
 /* eslint-disable no-await-in-loop */
 import React, { Component } from 'react';
 import {
-  Container, Segment, Header, Button, Message,
+  Container, Segment, Header, Button, Message, 
 } from 'semantic-ui-react';
 import { Link, withRouter } from 'react-router-dom';
 import ReactRouterPropTypes from 'react-router-prop-types';
@@ -30,7 +30,7 @@ class Home extends Component {
         case 'manager':
           return <Manager />;
         default:
-          return <Message>Please log in to use our application</Message>;
+          // return <Message>Please log in to use our application</Message>;
       }
     };
 
@@ -44,18 +44,18 @@ class Home extends Component {
 
   render() {
     const { user, isLoggedIn } = this.context;
-    const { email } = user;
     return (
       <div>
         <TopBar onLogout={this.onLogout}>
-        <Container fluid textAlign="center">
-          { 
-            isLoggedIn ? <div/> :
-          
-          <Header>Welcome to KrapFood</Header>}
-          {this.renderBody(user.type)}
-      
-        </Container>
+          <Container fluid textAlign="center">
+            {
+          isLoggedIn ? <div />
+
+            : <Header>Welcome to KrapFood</Header>
+}
+            {this.renderBody(user.type)}
+
+          </Container>
         </TopBar>
       </div>
     );
