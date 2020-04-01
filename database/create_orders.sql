@@ -59,3 +59,35 @@ CREATE TABLE delivers
     FOREIGN KEY (rider_id) REFERENCES riders (rider_id),
     FOREIGN KEY (order_id) REFERENCES orders (order_id)
 );
+
+
+
+--all orders from same restaurant
+
+CREATE OR REPLACE FUNCTION same_restaurant() RETURNS TRIGGER 
+    AS $$
+DECLARE
+    restaurant_id_1 SERIAL;
+    restaurant_id_2 SERIAL;
+BEGIN
+    SELECT f1.restaurant_id into restaurant_id_1, f2.restaurant_id into restaurant_id_2
+        FROM contain c join foods f1 on c.food_id = f.food_id, food f2
+        WHERE order_id = NEW.order_id and EXISTS (
+            SELECT 1
+                WHERE f2.food_id <> f1.food_id and f2.restaurant_id = f1.restaurant_id
+        )
+    IF restaurant_id_1 IS NOT NULL and restaurant_id_2 IS NOT NULL THEN 
+        RAISE exception "food cannot be from % and %", restaurant_id_1, restaurant_id_2
+    END IF;
+    RETURN NULL;
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS different_restaurants_trigger ON orders
+    CREATE TRIGGER different_restaurants_trigger 
+    AFTER INSERT ON orders
+    FOR EACH ROW
+    EXECUTE PROCEDURE same_restaurant();
+
+
+
