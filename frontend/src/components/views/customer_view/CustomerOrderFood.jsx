@@ -1,5 +1,4 @@
 /* eslint-disable react/prop-types */
-/* eslint-disable camelcase */
 import React, { Component } from 'react';
 import _ from 'lodash';
 import {
@@ -241,7 +240,7 @@ class CustomerOrderFood extends Component {
                       <>
                         <PaymentForm />
                         {' '}
-                        <br/>
+                        <br />
                         <Button color="orange" onClick={() => this.switchPayment()} inverted>
                           <Icon name="money" />
                           {' '}
@@ -327,7 +326,10 @@ class CustomerOrderFood extends Component {
               <List divided relaxed style={{ marginLeft: '8rem', marginRight: '8rem' }}>
                 {listOfRestaurants.map((restaurant) => (
                   <React.Fragment key={restaurant.restaurant_id}>
-                    <RestaurantCard res={restaurant} orderFromThisRestaurant={this.orderFromThisRestaurant} />
+                    <RestaurantCard
+                      restaurant={restaurant}
+                      orderFromThisRestaurant={this.orderFromThisRestaurant}
+                    />
                   </React.Fragment>
                 ))}
               </List>

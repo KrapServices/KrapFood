@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
-import {
-  Header,
-  Tab,
-} from 'semantic-ui-react';
+import { Tab } from 'semantic-ui-react';
 import userContext from '../../../userContext';
 import CustomerOrderFood from './CustomerOrderFood';
 import CustomerOrderView from './CustomerOrderView';
@@ -17,7 +14,7 @@ class Customer extends Component {
     this.handleTabChange = (e, { activeIndex }) => {
       window.localStorage.setItem('activeIndex', activeIndex);
       this.setState({ activeIndex });
-    }
+    };
   }
 
   componentDidMount() {

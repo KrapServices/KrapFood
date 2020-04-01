@@ -3,6 +3,33 @@ const { query } = require('../database');
 // =============================================================================
 // RESTAURANTS
 // =============================================================================
+
+// -----------------------------------------------------------------------------
+// Utilty functions
+// -----------------------------------------------------------------------------
+
+const getAllRestaurantWithFood = (restaurants) => {
+  const restaurantsWithFood = Promise.all(restaurants.map(async (restaurant) => {
+    const { restaurantId } = restaurant;
+
+    const foods = (await query(
+      `
+        SELECT *
+        FROM foods
+        WHERE restaurant_id = $1
+      `,
+      [restaurantId],
+    )).rows;
+
+    return {
+      ...restaurant,
+      foods,
+    };
+  }));
+
+  return restaurantsWithFood;
+};
+
 // =============================================================================
 // Services for Restaurants
 // =============================================================================
@@ -27,15 +54,21 @@ const createRestaurant = async (request, response) => {
 
 const getAllRestaurant = async (request, response) => {
   try {
-    let restaurants = (await query(
-      'SELECT r.restaurant_id, restaurant_name, restaurant_location, price_threshold from restaurants r',
-    )).rows;
-    restaurants = await getAllRestaurantWithFood(restaurants);
-    console.log(`restaurants: ${restaurants}`);
-    return response.status(200).json({ restaurants });
+    const restaurants = (await query(
+      `
+        SELECT restaurant_id, restaurant_name, restaurant_location, price_threshold 
+        FROM restaurants`,
+    )).rows.map((restaurant) => ({
+      restaurantId: restaurant.restaurant_id,
+      restaurantName: restaurant.restaurant_name,
+      restaurantLocation: restaurant.restaurant_location,
+      priceThreshold: restaurant.price_threshold,
+    }));
+    const restaurantsWithFood = await getAllRestaurantWithFood(restaurants);
+    response.status(200).json({ restaurants: restaurantsWithFood });
   } catch (error) {
     console.log(error);
-    return response.status(500).send('An error occured with getting the restaurants');
+    response.status(500).send('An error occurred when retrieving restaurants.');
   }
 };
 
@@ -46,40 +79,20 @@ const getRestaurantById = async (request, response) => {
       'SELECT * FROM restaurants where restaurant_id = $1', [id],
     )).rows[0];
     const food = (await query(
-      'SELECT food_id, category, food_name, daily_limit, availability, price, price_threshold FROM foods f NATURAL JOIN restaurants where f.restaurant_id = $1', [id],
+      `
+        SELECT category, food_name, daily_limit, availability, price, price_threshold 
+        FROM foods 
+        WHERE restaurant_id = $1
+      `,
+      [id],
     )).rows;
     const restaurantWithFood = { ...restaurant, food };
-    console.log(`Single restaurant: ${restaurant}`);
-    return response.status(200).json({ restaurant: restaurantWithFood });
+    response.status(200).json({ restaurant: restaurantWithFood });
   } catch (error) {
     console.log(error);
-    return response.status(500).send('restaurant could not be found');
+    response.status(500).send('Restaurant could not be found.');
   }
 };
-
-// -----------------------------------------------------------------------------
-// Utilty functions
-// -----------------------------------------------------------------------------
-
-const getAllRestaurantWithFood = async (restaurants ) =>  {
-  let result = [];
-  for ( let eachRestaurant of restaurants) {
-    const id = eachRestaurant['restaurant_id'];
-    const foodQuery = await query(
-      'SELECT * FROM FOODS where restaurant_id = $1' , [id]
-    );
-    if (!(foodQuery == undefined)) {
-      const eachRestaurantFood = foodQuery.rows;
-      eachRestaurant['foods'] = eachRestaurantFood;
-    } else {
-      eachRestaurant['foods'] = [];
-    }
-    result.push(eachRestaurant);
-  }
-  return result;
-}
-
-
 
 module.exports = {
   createRestaurant,

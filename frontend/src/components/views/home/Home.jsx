@@ -1,8 +1,6 @@
-/* eslint-disable no-plusplus */
-/* eslint-disable no-await-in-loop */
 import React, { Component } from 'react';
 import {
-  Container, Segment, Header, Button, Message, ButtonContent,
+  Container, Segment, Header, Button, Message,
 } from 'semantic-ui-react';
 import { Link, withRouter } from 'react-router-dom';
 import ReactRouterPropTypes from 'react-router-prop-types';
@@ -20,6 +18,7 @@ class Home extends Component {
     };
 
     this.renderBody = (userType) => {
+      console.log(userType);
       switch (userType) {
         case 'customer':
           return <Customer />;
@@ -30,7 +29,7 @@ class Home extends Component {
         case 'manager':
           return <Manager />;
         default:
-          // return <Message>Please log in to use our application</Message>;
+          return <Message>Please log in to use our application</Message>;
       }
     };
 
@@ -60,9 +59,9 @@ class Home extends Component {
                 <Message>
                   <Message.Content>Don't have an account yet?</Message.Content>
                 </Message>
-            
+
               </Segment>
-            
+
             ) : (
               <Segment>
                 <Segment.Inline>
