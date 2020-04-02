@@ -3,7 +3,7 @@ import {
   Header, Table, Button, Loader,
 } from 'semantic-ui-react';
 import staffOrderContext from './staffOrderContext';
-import config from '../../../config.json';
+import config from '../../../../config.json';
 import Axios from 'axios';
 
 class StaffCurrentOrders extends Component {

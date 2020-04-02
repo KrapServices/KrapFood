@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import Axios from 'axios';
 import { Table, Dropdown, Loader, Item, Statistic, Header, Card } from 'semantic-ui-react';
-import userContext from '../../../userContext';
-import config from '../../../config.json';
+import userContext from '../../../../userContext';
+import config from '../../../../config.json';
 
 var monthString = new Array();
 monthString[0] = "January";

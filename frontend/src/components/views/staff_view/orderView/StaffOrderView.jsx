@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import Axios from 'axios';
-import config from '../../../config.json';
+import config from '../../../../config.json';
 import StaffCurrentOrders from './StaffCurrentOrders'
 import staffOrderContext from './staffOrderContext';
 import { Grid, Header, Divider } from 'semantic-ui-react';
 
-class StaffUpdateOrder extends Component {
+class StaffOrderView extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -60,4 +60,4 @@ class StaffUpdateOrder extends Component {
       }
 }
 
-export default StaffUpdateOrder;
+export default StaffOrderView;

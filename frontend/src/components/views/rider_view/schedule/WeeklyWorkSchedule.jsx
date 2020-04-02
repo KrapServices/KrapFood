@@ -5,8 +5,8 @@ import PropTypes from 'prop-types';
 import {
   Icon, Table, Input, Button, Header,
 } from 'semantic-ui-react';
-import userContext from '../../../userContext';
-import config from '../../../config.json';
+import userContext from '../../../../userContext';
+import config from '../../../../config.json';
 
 function Cell(props) {
   const [selected, setSelected] = React.useState(false);

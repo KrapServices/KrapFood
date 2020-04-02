@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import userContext from '../../../userContext';
+import userContext from '../../../../userContext';
 
 class StaffCreatePromotion extends Component {
 

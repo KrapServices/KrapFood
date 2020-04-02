@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import './Rider.css';
+import '../Rider.css';
 import { Header, Table, Divider } from 'semantic-ui-react';
-import userContext from '../../../userContext';
+import userContext from '../../../../userContext';
 import WeeklyWorkSchedule from './WeeklyWorkSchedule';
-import config from '../../../config.json';
+import config from '../../../../config.json';
 
 class RiderWorkSchedule extends Component {
   constructor() {

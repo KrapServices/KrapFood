@@ -7,10 +7,10 @@ import {
   Header, Table, Divider, Tab,
 } from 'semantic-ui-react';
 import userContext from '../../../userContext';
-import WeeklyWorkSchedule from './WeeklyWorkSchedule';
+import WeeklyWorkSchedule from './schedule/WeeklyWorkSchedule';
 import config from '../../../config.json';
-import RiderWorkSchedule from './RiderWorkSchedule';
-import RiderViewOrder from './RiderOrderView';
+import RiderWorkSchedule from './schedule/RiderWorkSchedule';
+import RiderViewOrder from './orderView/RiderOrderView';
 
 class Rider extends Component {
   constructor(props) {
