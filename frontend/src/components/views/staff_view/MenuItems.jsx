@@ -42,7 +42,10 @@ class MenuItems extends Component {
         return (
             <Item.Group divided style={{ textAlign: 'left' }}>
             {menu.map((food) => (
-              <Item key={food.food_id}>
+              <Item key={{
+                restaurantId: food.restaurantId,
+                foodName: food.foodName
+              }}>
                 <Item.Image src="https://react.semantic-ui.com/images/wireframe/image.png" />
                 <Item.Content>
                   <Item.Header as="h1">{food.food_name}</Item.Header>
@@ -53,7 +56,7 @@ class MenuItems extends Component {
                     <br />
                     Daily Limit:
                     {' '}
-                    <b>{` ${food.daily_limit}`}</b>
+                    <b>{` ${food.dailyLimit}`}</b>
                     {' '}
                     <br />
                     Available:

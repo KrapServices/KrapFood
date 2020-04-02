@@ -103,42 +103,25 @@ const getRestaurantById = async (request, response) => {
 const getMenuById = async (request, response) => {
   try {
     const { id } = request.params;
-    const food = (await query(
-      `SELECT food_id, category, food_name, daily_limit, availability, price 
-        FROM foods F
-        WHERE F.restaurant_id = $1`,
+    const foods = (await query(
+      `
+        SELECT category, food_name, daily_limit, availability, price 
+        FROM foods
+        WHERE restaurant_id = $1
+      `,
       [id],
-    )).rows;
-    console.log(food);
-    // const menu = food;
-    return response.status(200).json(food);
+    )).rows.map((food) => ({
+      category: food.category,
+      foodName: food.food_name,
+      dailyLimit: food.daily_limit,
+      availability: food.availability,
+      price: food.price,
+    }));
+    return response.status(200).json(foods);
   } catch (error) {
     console.log(error);
     return response.status(500).send('menu could not be found');
   }
-};
-
-
-// -----------------------------------------------------------------------------
-// Utilty functions
-// -----------------------------------------------------------------------------
-
-const getAllRestaurantWithFood = async (restaurants) => {
-  const result = [];
-  for (const eachRestaurant of restaurants) {
-    const id = eachRestaurant.restaurant_id;
-    const foodQuery = await query(
-      'SELECT * FROM FOODS where restaurant_id = $1', [id],
-    );
-    if (!(foodQuery == undefined)) {
-      const eachRestaurantFood = foodQuery.rows;
-      eachRestaurant.foods = eachRestaurantFood;
-    } else {
-      eachRestaurant.foods = [];
-    }
-    result.push(eachRestaurant);
-  }
-  return result;
 };
 
 // -----------------------------------------------------------------------------
@@ -149,11 +132,13 @@ const getMonthsById = async (request, response) => {
     const { id: restaurantId } = request.params;
     const yearMonths = (await query(
       `
-      SELECT DISTINCT EXTRACT(YEAR FROM O.modified_at) AS year, EXTRACT(MONTH FROM O.modified_at) AS month
-      FROM foods F JOIN contain C 
-      ON F.food_id = C.food_id AND F.restaurant_id = $1
-      JOIN orders O ON O.order_id = C.order_id 
-      AND O.status = 'completed'
+        SELECT DISTINCT EXTRACT(YEAR FROM O.modified_at) AS year, EXTRACT(MONTH FROM O.modified_at) AS month
+        FROM foods F JOIN contain C 
+        ON F.restaurant_id = C.restaurant_id 
+        AND f.food_name = C.food_name 
+        AND F.restaurant_id = $1
+        JOIN orders O ON O.order_id = C.order_id 
+        AND O.status = 'completed'
       `,
       [restaurantId],
     )).rows;
@@ -172,7 +157,9 @@ const getStatsById = async (request, response) => {
       `
       SELECT count(distinct O.order_id) AS order_count, COALESCE(sum(price), 0) AS total_cost
       FROM foods F JOIN contain C
-      ON F.food_id = C.food_id AND F.restaurant_id = $1
+      ON F.restaurant_id = C.restaurant_id 
+      AND f.food_name = C.food_name 
+      AND F.restaurant_id = $1
       JOIN orders O ON O.order_id = C.order_id
       AND O.status = 'completed'
       AND EXTRACT(MONTH FROM O.modified_at) = $2 AND EXTRACT(YEAR FROM O.modified_at) = $3
@@ -183,8 +170,27 @@ const getStatsById = async (request, response) => {
       orderCount: stat.order_count,
       totalCost: stat.total_cost,
     }));
+    const topFive = (await query(
+      `
+    WITH foodCount AS (
+      SELECT C.food_name, C.restaurant_id, count(*) AS orderCount
+      FROM foods F JOIN contain C
+      ON F.food_name = C.food_name AND F.restaurant_id = C.restaurant_id AND F.restaurant_id = $1
+      JOIN orders O ON O.order_id = C.order_id
+      AND O.status = 'completed'
+    AND EXTRACT(MONTH FROM O.modified_at) = $2 AND EXTRACT(YEAR FROM O.modified_at) = $3
+      GROUP BY (C.food_name, C.restaurant_id)
+      )
+      SELECT C.food_name, category, price, orderCount
+      FROM foodCount C JOIN foods F ON C.food_name = F.food_name AND C.restaurant_id = F.restaurant_id
+      ORDER BY orderCount
+      LIMIT 5
+        `,
+      [restaurantId, month, year],
+    )).rows;
     return response.status(200).json({
       stats,
+      topFive,
     });
   } catch (error) {
     console.log(error);
