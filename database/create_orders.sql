@@ -61,14 +61,15 @@ CREATE TABLE delivers
     FOREIGN KEY (order_id) REFERENCES orders (order_id)
 );
 
-
-CREATE OR REPLACE FUNCTION assign_delivery_order() RETURNS TRIGGER
+/*
+CREATE OR REPLACE FUNCTION assign_delivery_order(curr TIMESTAMP) RETURNS TRIGGER
     AS $$
 DECLARE
-    f_date DATE;
+    current DATE;
 BEGIN
     -- check schedule for available riders
     -- assign order to available riders
+    RETURN NULL;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -79,17 +80,18 @@ CREATE TRIGGER assign_delivery_order_trigger
     FOR EACH ROW
     WHEN (NEW.status = 'delivering')
     --assign rider
-    EXECUTE PROCEDURE assign_delivery_order();
+    EXECUTE PROCEDURE assign_delivery_order(current_timestamp);
 
 
 
-CREATE OR REPLACE FUNCTION complete_delivery_order() RETURNS TRIGGER
+CREATE OR REPLACE FUNCTION complete_delivery_order(curr TIMESTAMP) RETURNS TRIGGER
     AS $$
 DECLARE
     f_date DATE;
 BEGIN
     -- check schedule for available riders
     -- assign order to available riders
+    RETURN NULL:
 END;
 $$ LANGUAGE plpgsql;
 
@@ -100,4 +102,4 @@ CREATE TRIGGER assign_delivery_order_trigger
     FOR EACH ROW
     WHEN (NEW.status = 'completed')
     --assign rider
-    EXECUTE PROCEDURE complete_delivery_order();
+    EXECUTE PROCEDURE complete_delivery_order(current_timestamp);*/

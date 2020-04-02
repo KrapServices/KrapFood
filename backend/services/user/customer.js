@@ -86,7 +86,20 @@ const getPromotions = async (request, response) => {
     console.log(error);
     return response.status(500).send('card cannot be found');
   }
-}
+};
+
+const getDeliveryLocations = async (request, response) => {
+  try {
+    const { id } = request.params;
+    const locations = (await query(
+      'SELECT distinct created_at, order_id, Delivery_location from orders where customer_id = $1 and status=$2 group by order_id, delivery_location order by created_at DESC limit 5', [id, 'completed'],
+    )).rows;
+    return response.status(200).json({ locations });
+  } catch (error) {
+    console.log(error);
+    return response.status(500).send('card cannot be found');
+  }
+};
 
 module.exports = {
   customerLogin,
@@ -94,4 +107,5 @@ module.exports = {
   customerCreditCardInfo,
   customerCreateCreditCard,
   getPromotions,
+  getDeliveryLocations,
 };

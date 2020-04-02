@@ -15,24 +15,26 @@ class CustomerInfo extends Component {
       customerCreditCards: [],
       promotions: [],
       modalOpen: false,
+      locations: [],
     };
 
     this.handleOpen = () => this.setState({ modalOpen: true });
     this.handleClose = async () => {
-      await this.loadCard();
+      await this.loadInfo();
       this.setState({ modalOpen: false });
     };
 
-    this.loadCard = async () => {
+    this.loadInfo = async () => {
       const { user } = this.context;
       // eslint-disable-next-line camelcase
       const { customer_id } = user;
       // eslint-disable-next-line camelcase
       try {
+        const resultLocations = await Axios.get(`${config.localhost}customers/locations/${customer_id}`);
         const resultCC = await Axios.get(`${config.localhost}customers/cc/${customer_id}`);
         const resultPromo = await Axios.get(`${config.localhost}customers/promotions/`);
         if (resultCC.status === 200 && resultPromo.status === 200) {
-          this.setState({ customerCreditCards: resultCC.data.cards, promotions: resultPromo.data.promotions });
+          this.setState({ customerCreditCards: resultCC.data.cards, promotions: resultPromo.data.promotions, locations: resultLocations.data.locations });
         }
       } catch (error) {
         console.log(error);
@@ -42,14 +44,14 @@ class CustomerInfo extends Component {
 
 
   componentDidMount() {
-    this.loadCard();
+    this.loadInfo();
   }
 
   render() {
-    const { customerCreditCards, modalOpen, promotions } = this.state;
+    const { customerCreditCards, modalOpen, promotions, locations } = this.state;
     return (
       <>
-        <Grid columns="2" style={{ marginLeft: '20%', marginRight: '20%', marginBottom: '2%' }}>
+        <Grid columns="3" style={{ marginLeft: '10%', marginRight: '10%', marginBottom: '2%' }}>
 
           <Grid.Row>
             <Grid.Column>
@@ -108,7 +110,7 @@ class CustomerInfo extends Component {
                 <Header as="h1">Available Promo Codes</Header>
 
                 {
-                  promotions === undefined ? <Header as="h3">No promo codes!</Header>
+                       promotions === undefined || promotions.length === 0 ? <Header as="h3">No promo codes!</Header>
                     : (
                       <Segment.Group>
                         {
@@ -117,6 +119,28 @@ class CustomerInfo extends Component {
                       <Header as="h3">{`Discount: ${promo.discount}`}</Header>
                       <Header as="h3">{`start Time: ${promo.start_time}`}</Header>
                       <Header as="h3">{`end Time: ${promo.end_time}`}</Header>
+                    </Segment>
+                  ))
+                  }
+                      </Segment.Group>
+                    )
+
+                  }
+              </Segment>
+            </Grid.Column>
+            <Grid.Column>
+              <Segment>
+                <Header as="h1">Most Recent Delivery Locations</Header>
+
+                {
+                    locations === undefined || locations.length === 0  ? <Header as="h3">No locations yet!</Header>
+                    : (
+                      <Segment.Group>
+                        {
+                  locations.map((location, index) => (
+                    <Segment key={location.order_id}>
+                       <Header as="h3">{`${index}: ${location.delivery_location}`}</Header>
+                      
                     </Segment>
                   ))
                   }

@@ -10,4 +10,6 @@ router.post('/cc/', customerService.customerCreateCreditCard);
 
 router.get('/promotions/', customerService.getPromotions);
 
+router.get('/locations/:id', customerService.getDeliveryLocations);
+
 module.exports = router;
