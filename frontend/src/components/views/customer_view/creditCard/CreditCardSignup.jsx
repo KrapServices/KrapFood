@@ -46,6 +46,8 @@ class CreditCardSignUp extends React.Component {
             headers: { 'Access-Control-Allow-Origin': true },
           },
         );
+        const { handleClose } = this.props;
+        handleClose();
       } catch (error) {
         //  console.log(error);
         alert('User does not have a credit card preregistered!');
