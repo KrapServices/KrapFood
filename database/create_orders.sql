@@ -80,3 +80,24 @@ CREATE TRIGGER assign_delivery_order_trigger
     WHEN (NEW.status = 'delivering')
     --assign rider
     EXECUTE PROCEDURE assign_delivery_order();
+
+
+
+CREATE OR REPLACE FUNCTION complete_delivery_order() RETURNS TRIGGER
+    AS $$
+DECLARE
+    f_date DATE;
+BEGIN
+    -- check schedule for available riders
+    -- assign order to available riders
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS complete_delivery_order_trigger on Orders CASCADE;
+CREATE TRIGGER assign_delivery_order_trigger 
+    AFTER update of status
+    on orders
+    FOR EACH ROW
+    WHEN (NEW.status = 'completed')
+    --assign rider
+    EXECUTE PROCEDURE complete_delivery_order();
