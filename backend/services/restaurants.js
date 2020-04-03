@@ -183,7 +183,7 @@ const getStatsById = async (request, response) => {
       )
       SELECT C.food_name, category, price, orderCount
       FROM foodCount C JOIN foods F ON C.food_name = F.food_name AND C.restaurant_id = F.restaurant_id
-      ORDER BY orderCount
+      ORDER BY orderCount desc
       LIMIT 5
         `,
       [restaurantId, month, year],

@@ -20,9 +20,19 @@ CREATE TABLE promotions
 (
     promo_id SERIAL,
     discount INTEGER NOT NULL,
+    promo_code TEXT NOT NULL,
     start_time TIMESTAMP NOT NULL,
     end_time TIMESTAMP NOT NULL,
     PRIMARY KEY (promo_id)
+);
+
+CREATE TABLE offers
+(
+    promo_id INTEGER,
+    restaurant_id INTEGER,
+    PRIMARY KEY (promo_id),
+    FOREIGN KEY (promo_id) REFERENCES promotions (promo_id),
+    FOREIGN KEY (restaurant_id) REFERENCES restaurants(restaurant_id) ON DELETE CASCADE
 );
 
 CREATE TABLE applies
