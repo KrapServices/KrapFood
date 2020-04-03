@@ -8,12 +8,26 @@ import UserContext from '../../../userContext';
 import WeeklyWorkSchedule from './WeeklyWorkSchedule';
 import config from '../../../config.json';
 
+function getEarliestDate(dates) {
+  return dates.reduce((prev, curr) => (curr < prev ? curr : prev));
+}
+
+function getLatestDate(dates) {
+  return dates.reduce((prev, curr) => (curr > prev ? curr : prev));
+}
+
+function fixDateRange(dateRange) {
+  return [getEarliestDate(dateRange), getLatestDate(dateRange)];
+}
+
 export default class PartTimeRider extends Component {
   constructor() {
     super();
     this.state = {
-      date: new Date(Date.now()),
+      dateRange: [new Date(Date.now()), new Date(Date.now())],
       shifts: [],
+      dateBuffer: [],
+      waitingForFirstClick: false,
     };
   }
 
@@ -34,7 +48,9 @@ export default class PartTimeRider extends Component {
   }
 
   render() {
-    const { date, shifts } = this.state;
+    const {
+      dateRange, shifts, waitingForFirstClick, dateBuffer,
+    } = this.state;
 
     return (
       <>
@@ -48,10 +64,20 @@ export default class PartTimeRider extends Component {
           <Calendar
             className="calendar"
             onClickDay={(value) => {
-              this.setState({
-                date: value,
-              });
+              if (waitingForFirstClick) {
+                this.setState({
+                  waitingForFirstClick: false,
+                  dateBuffer: [value],
+                });
+              } else {
+                this.setState({
+                  waitingForFirstClick: true,
+                  dateRange: fixDateRange(dateBuffer.concat([value])),
+                  dateBuffer: [],
+                });
+              }
             }}
+            value={dateRange}
           />
 
           <Table>
@@ -63,7 +89,7 @@ export default class PartTimeRider extends Component {
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {shifts
+              {/* {shifts
                 .filter((shift) => shift.date.getDate() === date.getDate())
                 .map((shift, index) => {
                   const { startHour, endHour } = shift;
@@ -74,7 +100,7 @@ export default class PartTimeRider extends Component {
                       <Table.Cell>{endHour}</Table.Cell>
                     </Table.Row>
                   );
-                })}
+                })} */}
             </Table.Body>
           </Table>
         </div>
