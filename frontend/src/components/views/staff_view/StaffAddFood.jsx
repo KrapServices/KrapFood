@@ -12,22 +12,21 @@ class StaffAddFood extends Component {
     super(props);
     this.state = {
       category: '',
-      food_name: '',
-      daily_limit: 10000000,
+      foodName: '',
+      dailyLimit: 10000000,
       availability: true,
       price: '',
-      restaurant_id: '',
+      restaurantId: '',
       menu: [],
     };
 
     this.loadMenu = async () => {
       const { restaurant_id } = this.context.user;
-      this.state.restaurant_id = restaurant_id;
+      this.state.restaurantId = restaurant_id;
       try {
         const result = await Axios.get(
           `${config.localhost}restaurants/${restaurant_id}/food`,
         );
-        console.log(result);
         if (result.status === 200) {
           this.setState({ menu: result.data });
         } else {
@@ -42,7 +41,8 @@ class StaffAddFood extends Component {
       const { user } = this.context;
       try {
         const { restaurant_id } = user;
-        this.state.restaurant_id = restaurant_id;
+        this.state.restaurantId = restaurant_id;
+        console.log(this.state);
         const result = await Axios.post(
           `${config.localhost}food/create`,
           this.state,
@@ -62,11 +62,11 @@ class StaffAddFood extends Component {
     this.clearForm = () => {
       this.setState({
         category: '',
-        food_name: '',
-        daily_limit: 10000000,
+        foodName: '',
+        dailyLimit: 10000000,
         availability: true,
         price: '',
-        restaurant_id: '',
+        restaurantId: '',
       });
     };
 
@@ -85,8 +85,7 @@ class StaffAddFood extends Component {
   }
 
   render() {
-    const { menu, price, food_name, daily_limit, category } = this.state;
-    console.log(this.state);
+    const { menu, price, foodName, dailyLimit, category } = this.state;
     return (
       <Grid columns={2} stackable>
         <Grid.Column>
@@ -96,8 +95,8 @@ class StaffAddFood extends Component {
               <input
                 fluid
                 placeholder="Food Name"
-                name="food_name"
-                value={food_name}
+                name="foodName"
+                value={foodName}
                 onChange={this.handleChange}
               />
             </Form.Field>
@@ -105,8 +104,8 @@ class StaffAddFood extends Component {
               <Header>Daily Quantity</Header>
               <input
                 placeholder="Daily Quantity"
-                name="daily_limit"
-                value={daily_limit}
+                name="dailyLimit"
+                value={dailyLimit}
                 onChange={this.handleChange}
               />
             </Form.Field>

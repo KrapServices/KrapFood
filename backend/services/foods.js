@@ -2,6 +2,7 @@ const { query } = require('../database');
 
 const createFood = async (request, response) => {
   try {
+    console.log(request.body);
     const {
       category, foodName, dailyLimit, availability, price, restaurantId,
     } = request.body;
