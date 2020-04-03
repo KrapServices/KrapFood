@@ -34,7 +34,15 @@ class CustomerInfo extends Component {
         const resultCC = await Axios.get(`${config.localhost}customers/cc/${customer_id}`);
         const resultPromo = await Axios.get(`${config.localhost}customers/promotions/`);
         if (resultCC.status === 200 && resultPromo.status === 200) {
-          this.setState({ customerCreditCards: resultCC.data.cards, promotions: resultPromo.data.promotions, locations: resultLocations.data.locations });
+          console.log(resultLocations.data.locations);
+          const locations = [];
+          const promotions = [];
+          const customerCreditCards = [];
+          
+          resultCC.data.cards.forEach((val) => customerCreditCards.push({ cardNumber: val['card_number'], expiry: val['expiry'] }));
+          resultPromo.data.promotions.forEach((val) => promotions.push({ promoId: val['promo_id'], discount: val['discount'], startTime: val['start_time'], endTime: val['end_time'] }));
+          resultLocations.data.locations.forEach((val) => locations.push({ createdAt: val['created_at'], orderId: val['order_id'], deliveryLocation: val['delivery_location'] }));
+          this.setState({ customerCreditCards: resultCC.data.cards, promotions: resultPromo.data.promotions, locations });
         }
       } catch (error) {
         console.log(error);
@@ -65,8 +73,8 @@ class CustomerInfo extends Component {
                   <Segment.Group>
                     {
               customerCreditCards.map((card) => (
-                <Segment key={card.card_number}>
-                  <Header as="h2">{card.card_number}</Header>
+                <Segment key={card.cardNumber}>
+                  <Header as="h2">{card.cardNumber}</Header>
                   <Header as="h4">{card.expiry}</Header>
                 </Segment>
               ))
@@ -115,10 +123,10 @@ class CustomerInfo extends Component {
                       <Segment.Group>
                         {
                   promotions.map((promo) => (
-                    <Segment key={promo.promo_id}>
+                    <Segment key={promo.promoId}>
                       <Header as="h3">{`Discount: ${promo.discount}`}</Header>
-                      <Header as="h3">{`start Time: ${promo.start_time}`}</Header>
-                      <Header as="h3">{`end Time: ${promo.end_time}`}</Header>
+                      <Header as="h3">{`start Time: ${promo.startTime}`}</Header>
+                      <Header as="h3">{`end Time: ${promo.endTime}`}</Header>
                     </Segment>
                   ))
                   }
@@ -138,8 +146,8 @@ class CustomerInfo extends Component {
                       <Segment.Group>
                         {
                   locations.map((location, index) => (
-                    <Segment key={location.order_id}>
-                       <Header as="h3">{`${index}: ${location.delivery_location}`}</Header>
+                    <Segment key={location.orderId}>
+                       <Header as="h3">{`${index}: ${location.deliveryLocation}`}</Header>
                       
                     </Segment>
                   ))
