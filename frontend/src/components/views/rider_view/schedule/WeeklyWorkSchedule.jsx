@@ -3,7 +3,7 @@ import React from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import {
-  Icon, Table, Input, Button, Header,
+  Icon, Table, Input, Button, Header, Message,
 } from 'semantic-ui-react';
 import userContext from '../../../../userContext';
 import config from '../../../../config.json';
@@ -167,6 +167,7 @@ export default class WeeklyWorkSchedule extends React.Component {
     this.state = {
       date: '',
       shifts: [],
+      error: false,
     };
   }
 
@@ -198,13 +199,14 @@ export default class WeeklyWorkSchedule extends React.Component {
       });
       window.location.reload();
     } catch (error) {
-      console.error(error);
-      alert('Submission failed');
+      this.setState({
+        error: true,
+      });
     }
   }
 
   render() {
-    const { date, shifts } = this.state;
+    const { date, shifts, error } = this.state;
 
     return (
       <>
@@ -221,6 +223,21 @@ export default class WeeklyWorkSchedule extends React.Component {
             });
           }}
         />
+
+        {error
+          ? (
+            <Message
+              error
+              header="Your submission was invalid"
+              list={[
+                'The work week must not overlap with any existing work weeks.',
+                'The minimum number of total work hours is 10.',
+                'The maximum number of total work hours is 48.',
+                'The maximum number of consecutive shifts allowed is 4.',
+              ]}
+            />
+          )
+          : null}
 
         <Table id="picker">
           <Table.Header>

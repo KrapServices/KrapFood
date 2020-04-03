@@ -102,6 +102,7 @@ CREATE TABLE wws_consists
     FOREIGN KEY (day_of_week, start_hour, end_hour) REFERENCES workshift (day_of_week, start_hour, end_hour)
 );
 
+
 CREATE OR REPLACE FUNCTION check_wws_overlap() RETURNS TRIGGER
     AS $$
 DECLARE

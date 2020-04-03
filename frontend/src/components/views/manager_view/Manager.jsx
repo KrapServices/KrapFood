@@ -3,6 +3,7 @@ import axios from 'axios';
 import {
   Form, Table, Button, Divider, Message, Header,
 } from 'semantic-ui-react';
+import Summary from './Summary';
 import userContext from '../../../userContext';
 import config from '../../../config.json';
 
@@ -154,6 +155,10 @@ class Manager extends Component {
             </Table.Body>
           </Table>
         </div>
+
+        <Divider />
+
+        <Summary />
       </>
     );
   }
