@@ -21,7 +21,9 @@ CREATE TABLE customers
 CREATE TABLE cards  
 (
     card_number TEXT,
+    expiry TEXT,
     customer_id INTEGER,
+    name_card Text,
     PRIMARY KEY (customer_id, card_number),
     FOREIGN KEY (customer_id) REFERENCES customers (customer_id) ON DELETE CASCADE
 );
@@ -45,7 +47,7 @@ CREATE TABLE riders
 CREATE TABLE part_time_riders
 (
     rider_id INTEGER,
-    salary_per_hour NUMERIC(5, 2) NOT NULL,
+    salary_per_hour NUMERIC(5, 2) NOT NULL DEFAULT 10.00,
     PRIMARY KEY (rider_id),
     FOREIGN KEY (rider_id) REFERENCES riders (rider_id) ON DELETE CASCADE
 );
@@ -53,7 +55,7 @@ CREATE TABLE part_time_riders
 CREATE TABLE full_time_riders
 (
     rider_id INTEGER,
-    base_salary INTEGER NOT NULL,
+    base_salary INTEGER NOT NULL DEFAULT 2000,
     PRIMARY KEY (rider_id),
     FOREIGN KEY (rider_id) REFERENCES riders (rider_id) ON DELETE CASCADE
 );

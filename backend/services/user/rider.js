@@ -3,10 +3,12 @@ const { query, transact } = require('../../database');
 // RIDERS
 // =============================================================================
 
+// default
+
 // create single user for rider
 const riderCreate = async (request, response) => {
   try {
-    const { email, password } = request.body;
+    const { email, password, shiftType } = request.body;
     const result = await transact(async (query) => {
       const user = (await query(
         'INSERT INTO users (email , password) VALUES ($1,$2) RETURNING user_id',
@@ -16,6 +18,16 @@ const riderCreate = async (request, response) => {
         'INSERT INTO riders (rider_id) VALUES ($1) RETURNING rider_id',
         [user.user_id],
       ));
+      if (shiftType === 'part time') {
+        await (query(
+          'INSERT INTO part_time_riders (rider_id) VALUES ($1) returning rider_id',
+          [user.user_id],
+        ));
+      } else {
+        await (query('INSERT INTO full_time_riders (rider_id) VALUES ($1) returning rider_id',
+          [user.user_id]));
+      }
+      console.log(shiftType);
       return user;
     });
     response.status(201).send('user created');
