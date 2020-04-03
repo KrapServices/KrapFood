@@ -38,10 +38,11 @@ class CustomerInfo extends Component {
           const locations = [];
           const promotions = [];
           const customerCreditCards = [];
-          
-          resultCC.data.cards.forEach((val) => customerCreditCards.push({ cardNumber: val['card_number'], expiry: val['expiry'] }));
-          resultPromo.data.promotions.forEach((val) => promotions.push({ promoId: val['promo_id'], discount: val['discount'], startTime: val['start_time'], endTime: val['end_time'] }));
-          resultLocations.data.locations.forEach((val) => locations.push({ createdAt: val['created_at'], orderId: val['order_id'], deliveryLocation: val['delivery_location'] }));
+          resultCC.data.cards.forEach((val) => customerCreditCards.push({ cardNumber: val.card_number, expiry: val.expiry }));
+          resultPromo.data.promotions.forEach((val) => promotions.push({
+            promoId: val.promo_id, discount: val.discount, startTime: val.start_time, endTime: val.end_time,
+          }));
+          resultLocations.data.locations.forEach((val) => locations.push({ createdAt: val.created_at, orderId: val.order_id, deliveryLocation: val.delivery_location }));
           this.setState({ customerCreditCards: resultCC.data.cards, promotions: resultPromo.data.promotions, locations });
         }
       } catch (error) {
@@ -56,7 +57,9 @@ class CustomerInfo extends Component {
   }
 
   render() {
-    const { customerCreditCards, modalOpen, promotions, locations } = this.state;
+    const {
+      customerCreditCards, modalOpen, promotions, locations,
+    } = this.state;
     return (
       <>
         <Grid columns="3" style={{ marginLeft: '10%', marginRight: '10%', marginBottom: '2%' }}>
@@ -119,9 +122,9 @@ class CustomerInfo extends Component {
 
                 {
                        promotions === undefined || promotions.length === 0 ? <Header as="h3">No promo codes!</Header>
-                    : (
-                      <Segment.Group>
-                        {
+                         : (
+                           <Segment.Group>
+                             {
                   promotions.map((promo) => (
                     <Segment key={promo.promoId}>
                       <Header as="h3">{`Discount: ${promo.discount}`}</Header>
@@ -130,8 +133,8 @@ class CustomerInfo extends Component {
                     </Segment>
                   ))
                   }
-                      </Segment.Group>
-                    )
+                           </Segment.Group>
+                         )
 
                   }
               </Segment>
@@ -141,19 +144,19 @@ class CustomerInfo extends Component {
                 <Header as="h1">Most Recent Delivery Locations</Header>
 
                 {
-                    locations === undefined || locations.length === 0  ? <Header as="h3">No locations yet!</Header>
-                    : (
-                      <Segment.Group>
-                        {
+                    locations === undefined || locations.length === 0 ? <Header as="h3">No locations yet!</Header>
+                      : (
+                        <Segment.Group>
+                          {
                   locations.map((location, index) => (
                     <Segment key={location.orderId}>
-                       <Header as="h3">{`${index}: ${location.deliveryLocation}`}</Header>
-                      
+                      <Header as="h3">{`${index}: ${location.deliveryLocation}`}</Header>
+
                     </Segment>
                   ))
                   }
-                      </Segment.Group>
-                    )
+                        </Segment.Group>
+                      )
 
                   }
               </Segment>

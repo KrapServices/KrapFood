@@ -43,6 +43,20 @@ const customerLogin = async (request, response) => {
   }
 };
 
+const getCustomer = async (request, response) => {
+  try {
+    const { id } = request.params;
+    const customer = (await query(
+      'SELECT customer_id, order_count, points, name FROM customers where customer_id = $1', [id],
+    )).rows[0];
+    return response.status(200).json({ customer });
+  } catch (error) {
+    console.log(error);
+    return response.status(500).send('user cannot be found');
+  }
+};
+
+
 
 const customerCreateCreditCard = async (request, response) => {
   try {
@@ -108,4 +122,5 @@ module.exports = {
   customerCreateCreditCard,
   getPromotions,
   getDeliveryLocations,
+  getCustomer,
 };

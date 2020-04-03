@@ -100,7 +100,6 @@ CREATE TRIGGER complete_delivery_order_customer_trigger
     ON orders
     FOR EACH ROW
     WHEN (NEW.status = 'completed')
-    --assign rider
     EXECUTE PROCEDURE complete_delivery_order_customer();
 
 CREATE OR REPLACE FUNCTION complete_delivery_order_rider() RETURNS TRIGGER
