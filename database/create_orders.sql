@@ -82,27 +82,46 @@ CREATE TRIGGER assign_delivery_order_trigger
     --assign rider
     EXECUTE PROCEDURE assign_delivery_order(current_timestamp);
 
+*/
 
-
-CREATE OR REPLACE FUNCTION complete_delivery_order(curr TIMESTAMP) RETURNS TRIGGER
+CREATE OR REPLACE FUNCTION complete_delivery_order_customer() RETURNS TRIGGER
     AS $$
-DECLARE
-    f_date DATE;
 BEGIN
-    -- check schedule for available riders
-    -- assign order to available riders
+    UPDATE Customers c 
+    SET order_count = order_count + 1, points = point + 1
+    where c.customer_id =  NEW.customer_id
     RETURN NULL:
 END;
 $$ LANGUAGE plpgsql;
 
-DROP TRIGGER IF EXISTS complete_delivery_order_trigger on Orders CASCADE;
-CREATE TRIGGER assign_delivery_order_trigger 
+DROP TRIGGER IF EXISTS complete_delivery_order_customer_trigger on Orders CASCADE;
+CREATE TRIGGER complete_delivery_order_customer_trigger 
     AFTER update of status
     on orders
     FOR EACH ROW
     WHEN (NEW.status = 'completed')
     --assign rider
-    EXECUTE PROCEDURE complete_delivery_order(current_timestamp);*/
+    EXECUTE PROCEDURE complete_delivery_order_customer();
+
+CREATE OR REPLACE FUNCTION complete_delivery_order_rider() RETURNS TRIGGER
+    AS $$
+BEGIN
+    UPDATE delivers d
+    SET collection_time = current
+    where d.order_id = NEW.order_id
+    RETURN NULL:
+END;
+$$ LANGUAGE plpgsql;
+
+
+DROP TRIGGER IF EXISTS complete_delivery_order_rider_trigger on Orders CASCADE;
+CREATE TRIGGER complete_delivery_order_rider_trigger 
+    AFTER update of status
+    on orders
+    FOR EACH ROW
+    WHEN (NEW.status = 'completed')
+    --assign rider
+    EXECUTE PROCEDURE complete_delivery_order_rider();
 
 
 --enforce all food in order from same restaurant
