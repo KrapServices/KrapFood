@@ -87,17 +87,17 @@ CREATE TRIGGER assign_delivery_order_trigger
 CREATE OR REPLACE FUNCTION complete_delivery_order_customer() RETURNS TRIGGER
     AS $$
 BEGIN
-    UPDATE Customers c 
-    SET order_count = order_count + 1, points = point + 1
-    where c.customer_id =  NEW.customer_id
-    RETURN NULL:
+    UPDATE customers c 
+    SET order_count = order_count + 1, points = points + 1
+    WHERE c.customer_id =  NEW.customer_id;
+    RETURN NULL;
 END;
 $$ LANGUAGE plpgsql;
 
-DROP TRIGGER IF EXISTS complete_delivery_order_customer_trigger on Orders CASCADE;
+DROP TRIGGER IF EXISTS complete_delivery_order_customer_trigger ON orders CASCADE;
 CREATE TRIGGER complete_delivery_order_customer_trigger 
-    AFTER update of status
-    on orders
+    AFTER UPDATE OF status
+    ON orders
     FOR EACH ROW
     WHEN (NEW.status = 'completed')
     --assign rider
@@ -107,17 +107,17 @@ CREATE OR REPLACE FUNCTION complete_delivery_order_rider() RETURNS TRIGGER
     AS $$
 BEGIN
     UPDATE delivers d
-    SET collection_time = current
-    where d.order_id = NEW.order_id
-    RETURN NULL:
+    SET collection_time = current_timestamp
+    WHERE d.order_id = NEW.order_id;
+    RETURN NULL;
 END;
 $$ LANGUAGE plpgsql;
 
 
-DROP TRIGGER IF EXISTS complete_delivery_order_rider_trigger on Orders CASCADE;
+DROP TRIGGER IF EXISTS complete_delivery_order_rider_trigger ON Orders CASCADE;
 CREATE TRIGGER complete_delivery_order_rider_trigger 
-    AFTER update of status
-    on orders
+    AFTER UPDATE OF status
+    ON orders
     FOR EACH ROW
     WHEN (NEW.status = 'completed')
     --assign rider
@@ -131,7 +131,7 @@ DECLARE
     restaurant_id_1 INTEGER;
     restaurant_id_2 INTEGER;
 BEGIN
-    SELECT c1.restaurant_id, c2.restaurant_id into restaurant_id_1, restaurant_id_2
+    SELECT c1.restaurant_id, c2.restaurant_id INTO restaurant_id_1, restaurant_id_2
         FROM contain c1, contain c2
         WHERE c1.order_id = c2.order_id and EXISTS (
             SELECT 1
