@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import 'react-calendar/dist/Calendar.css';
 import { Tab } from 'semantic-ui-react';
 import userContext from '../../../userContext';
-import PartTimeRider from './PartTimeRider';
+import PartTimeRiderWorkSchedule from './PartTimeRiderWorkSchedule';
 import RiderViewOrder from './RiderOrderView';
 
 class Rider extends Component {
@@ -30,7 +30,7 @@ class Rider extends Component {
     const { status } = user;
     const { activeIndex } = this.state;
     const panes = status === 'part' ? [
-      { menuItem: 'Schedule', render: () => <Tab.Pane><PartTimeRider /></Tab.Pane> },
+      { menuItem: 'Schedule', render: () => <Tab.Pane><PartTimeRiderWorkSchedule /></Tab.Pane> },
       { menuItem: 'Assigned Orders', render: () => <Tab.Pane><RiderViewOrder /></Tab.Pane> },
       { menuItem: 'Summary', render: () => <Tab.Pane><div /></Tab.Pane> },
     ] : [
