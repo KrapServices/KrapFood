@@ -1,5 +1,3 @@
-/* eslint-disable no-plusplus */
-/* eslint-disable no-await-in-loop */
 import React, { Component } from 'react';
 import {
   Container, Segment, Header, Button, Message,
@@ -20,6 +18,7 @@ class Home extends Component {
     };
 
     this.renderBody = (userType) => {
+      console.log(userType);
       switch (userType) {
         case 'customer':
           return <Customer />;
@@ -44,18 +43,18 @@ class Home extends Component {
 
   render() {
     const { user, isLoggedIn } = this.context;
-    const { email } = user;
     return (
       <div>
         <TopBar onLogout={this.onLogout}>
-        <Container fluid textAlign="center">
-          { 
-            isLoggedIn ? <div/> :
-          
-          <Header>Welcome to KrapFood</Header>}
-          {this.renderBody(user.type)}
-      
-        </Container>
+          <Container fluid textAlign="center">
+            {
+          isLoggedIn ? <div />
+
+            : <Header>Welcome to KrapFood</Header>
+}
+            {this.renderBody(user.type)}
+
+          </Container>
         </TopBar>
       </div>
     );

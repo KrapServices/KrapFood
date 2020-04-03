@@ -5,8 +5,8 @@ import {
   Grid, Header, Divider,
 } from 'semantic-ui-react';
 import Axios from 'axios';
-import config from '../../../config.json';
-import userContext from '../../../userContext';
+import config from '../../../../config.json';
+import userContext from '../../../../userContext';
 import CustomerCurrentOrders from './CustomerCurrentOrders';
 import customerOrderContext from './customerOrderContext';
 

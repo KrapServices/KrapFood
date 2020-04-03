@@ -19,8 +19,6 @@ class Signup extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: '',
-      password: '',
     };
 
     this.handleChange = (event) => {
@@ -130,11 +128,9 @@ class Signup extends Component {
   }
 
   componentDidMount() {
-    // console.log(this.context.test);
   }
 
   render() {
-    const { email, password } = this.state;
     return (
       <>
         <Grid
@@ -154,63 +150,44 @@ class Signup extends Component {
 
             <Form size="large">
               <Segment stacked>
-                <Form.Input
-                  fluid
-                  icon="user"
-                  iconPosition="left"
-                  placeholder="E-mail address"
-                  name="email"
-                  value={email}
-                  onChange={this.handleChange}
-                />
-                <Form.Input
-                  fluid
-                  icon="lock"
-                  iconPosition="left"
-                  placeholder="Password"
-                  type="password"
-                  name="password"
-                  value={password}
-                  onChange={this.handleChange}
-                />
                 <Header>Choose your account type</Header>
                 <Button.Group>
                   <Button
                     color="blue"
-                    size="large"
+                    size="small"
                     compact
-                    animated="fade"
-                    onClick={this.handleSubmitCx}
+                    as={Link}
+                    to="/customer-signup"
                   >
                     <Button.Content visible>Customer</Button.Content>
                     <Button.Content hidden>Sign-up!</Button.Content>
                   </Button>
                   <Button
                     color="green"
-                    size="large"
+                    size="small"
                     compact
-                    animated="fade"
-                    onClick={this.handleSubmitRd}
+                    as={Link}
+                    to="/rider-signup"
                   >
                     <Button.Content visible>Rider</Button.Content>
                     <Button.Content hidden>Sign-up!</Button.Content>
                   </Button>
                   <Button
                     color="yellow"
-                    size="large"
+                    size="small"
                     compact
-                    animated="fade"
-                    onClick={this.handleSubmitStaff}
+                    as={Link}
+                    to="/staff-signup"
                   >
                     <Button.Content visible>Staff</Button.Content>
                     <Button.Content hidden>Sign-up!</Button.Content>
                   </Button>
                   <Button
                     color="teal"
-                    size="large"
+                    size="small"
                     compact
-                    animated="fade"
-                    onClick={this.handleSubmitMg}
+                    as={Link}
+                    to="/manager-signup"
                   >
                     <Button.Content visible>Manager</Button.Content>
                     <Button.Content hidden>Sign-up!</Button.Content>

@@ -25,7 +25,7 @@ class Login extends Component {
       history.push('/');
     };
 
-    this.handleChange = (event ) => {
+    this.handleChange = (event) => {
       const { name, value } = event.target;
       this.setState({
         [name]: value,
@@ -46,7 +46,7 @@ class Login extends Component {
       }
     };
 
-    this.handleLoginManager = async (event ) => {
+    this.handleLoginManager = async (event) => {
       event.preventDefault();
       const { email, password } = this.state;
       const { login } = this.context;
@@ -173,6 +173,7 @@ class Login extends Component {
                 </Button.Group>
               </Segment>
             </Form>
+
             <Message>
               <Message.Header>New to us?</Message.Header>
               <Message.Content>
