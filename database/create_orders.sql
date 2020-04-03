@@ -64,7 +64,6 @@ CREATE TABLE delivers
 
 
 --all orders from same restaurant
-
 CREATE OR REPLACE FUNCTION same_restaurant() RETURNS TRIGGER 
     AS $$
 DECLARE

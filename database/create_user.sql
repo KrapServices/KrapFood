@@ -149,7 +149,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 DROP TRIGGER IF EXISTS wws_hours_trigger ON weekly_work_schedule CASCADE;
-CREATE CONSTRAINT TRIGGER wws_hours_trigger
+CREATE TRIGGER wws_hours_trigger
     AFTER INSERT ON weekly_work_schedule
     DEFERRABLE INITIALLY DEFERRED
     FOR EACH ROW

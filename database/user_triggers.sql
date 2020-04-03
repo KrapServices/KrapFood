@@ -1,4 +1,4 @@
---user ISA constraint
+--user overlap constraint
 CREATE OR REPLACE FUNCTION check_user_overlap() RETURNS TRIGGER
     AS $$
 DECLARE 
@@ -45,7 +45,8 @@ CREATE TRIGGER customer_overlap_trigger
     AFTER INSERT ON customers
     EXECUTE PROCEDURE check_user_overlap();
 
---covering constraint users
+
+--users covering constraint
 CREATE OR REPLACE FUNCTION check_user_covering() RETURNS TRIGGER
     AS $$
 DECLARE 
@@ -55,7 +56,7 @@ BEGIN
     FROM users u
     WHERE NOT EXISTS (
         SELECT 1
-        FROM customer c
+        FROM customers c
         WHERE c.customer_id = u.user_id
     )
     AND
@@ -67,18 +68,18 @@ BEGIN
     AND
     NOT EXISTS (
         SELECT 1
-        FROM manager m
+        FROM managers m
         WHERE m.manager_id = u.user_id
     )
     AND
     NOT EXISTS (
         SELECT 1
-        FROM rider r
+        FROM riders r
         WHERE r.rider_id = u.user_id
     );
 
     IF uncovered_user IS NOT NULL THEN 
-        RAISE exception 'user % by belong to one user type', uncovered_user;
+        RAISE exception 'user % must belong to one user type', uncovered_user;
     END IF;
     RETURN NULL;
 
@@ -87,18 +88,20 @@ $$ LANGUAGE plpgsql;
 
 
 DROP TRIGGER IF EXISTS cover_user_trigger ON users;
-CREATE TRIGGER cover_user_trigger
+CREATE CONSTRAINT TRIGGER cover_user_trigger
     AFTER INSERT ON users
+    DEFERRABLE INITIALLY DEFERRED
+    FOR EACH ROW
     EXECUTE PROCEDURE check_user_covering();
 
 
---riders ISA constraint 
+--riders overlap constraint 
 CREATE OR REPLACE FUNCTION check_rider_overlap() RETURNS TRIGGER
     AS $$
 DECLARE
     overlap_rider_id INTEGER;
 BEGIN
-    SELECT rider_id into overlap_rider_id
+    SELECT p.rider_id into overlap_rider_id
     FROM part_time_riders p, full_time_riders f
     WHERE p.rider_id = f.rider_id;
 
@@ -120,7 +123,7 @@ CREATE TRIGGER full_time_overlap_trigger
     EXECUTE PROCEDURE check_rider_overlap();
     
 
---covering constraint riders
+--riders covering constraint
 CREATE OR REPLACE FUNCTION check_rider_covering() RETURNS TRIGGER
     AS $$
 DECLARE 
@@ -147,8 +150,9 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-
 DROP TRIGGER IF EXISTS cover_rider_trigger ON riders;
-CREATE TRIGGER cover_rider_trigger
+CREATE CONSTRAINT TRIGGER cover_rider_trigger
     AFTER INSERT ON riders
+    DEFERRABLE INITIALLY DEFERRED
+    FOR EACH ROW
     EXECUTE PROCEDURE check_rider_covering();
