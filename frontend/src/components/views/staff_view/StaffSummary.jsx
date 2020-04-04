@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Axios from 'axios';
-import { Table, Dropdown, Loader, Item, Statistic, Header, Card } from 'semantic-ui-react';
+import { Grid, Dropdown, Loader, Item, Statistic, Header } from 'semantic-ui-react';
 import userContext from '../../../userContext';
 import config from '../../../config.json';
 
@@ -78,7 +78,7 @@ class StaffSummary extends Component {
     const { months, month, year, orderCount, totalCost, topFive, isLoading } = this.state;
     return (
       <>
-      <Table>
+      <Grid>
          <Dropdown
             placeholder='Select month'
             fluid
@@ -141,7 +141,7 @@ class StaffSummary extends Component {
         </Item.Group></div>}
           <br />
           <br />
-        </Table>
+        </Grid>
       </>
     );
   }

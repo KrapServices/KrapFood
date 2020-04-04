@@ -20,7 +20,7 @@ CREATE TABLE promotions
 (
     promo_id SERIAL,
     discount INTEGER NOT NULL,
-    promo_code TEXT NOT NULL,
+    promo_name TEXT NOT NULL,
     start_time TIMESTAMP NOT NULL,
     end_time TIMESTAMP NOT NULL,
     PRIMARY KEY (promo_id)
