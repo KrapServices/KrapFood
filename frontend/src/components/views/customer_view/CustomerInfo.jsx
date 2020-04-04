@@ -43,7 +43,7 @@ class CustomerInfo extends Component {
             promoId: val.promo_id, discount: val.discount, startTime: val.start_time, endTime: val.end_time,
           }));
           resultLocations.data.locations.forEach((val) => locations.push({ createdAt: val.created_at, orderId: val.order_id, deliveryLocation: val.delivery_location }));
-          this.setState({ customerCreditCards: resultCC.data.cards, promotions: resultPromo.data.promotions, locations });
+          this.setState({ customerCreditCards, promotions, locations });
         }
       } catch (error) {
         console.log(error);
