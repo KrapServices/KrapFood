@@ -2,6 +2,7 @@
   "queries": [
     "drop_tables.sql",
     "initialize_workshifts.sql",
+    "create_workday.sql",
     "create_restaurants.sql",
     "create_user.sql",
     "create_orders.sql",
