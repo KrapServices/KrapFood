@@ -3,9 +3,9 @@ import {
   Modal, Button, Icon, Header, Segment, Grid,
 } from 'semantic-ui-react';
 import Axios from 'axios';
-import config from '../../../config.json';
-import userContext from '../../../userContext';
-import CreditCardSignUp from './creditCard/CreditCardSignup';
+import config from '../../../../config.json';
+import userContext from '../../../../userContext';
+import CreditCardSignUp from './CreditCardSignup';
 
 
 class CustomerInfo extends Component {
@@ -24,27 +24,60 @@ class CustomerInfo extends Component {
       this.setState({ modalOpen: false });
     };
 
-    this.loadInfo = async () => {
-      const { user } = this.context;
-      // eslint-disable-next-line camelcase
-      const { customer_id } = user;
-      // eslint-disable-next-line camelcase
+    this.loadLocations = async () => {
       try {
-        const resultLocations = await Axios.get(`${config.localhost}customers/locations/${customer_id}`);
-        const resultCC = await Axios.get(`${config.localhost}customers/cc/${customer_id}`);
-        const resultPromo = await Axios.get(`${config.localhost}customers/promotions/`);
-        if (resultCC.status === 200 && resultPromo.status === 200) {
-          console.log(resultLocations.data.locations);
+        const { user } = this.context;
+        const { customerId } = user;
+        const resultLocations = await Axios.get(`${config.localhost}customers/locations/${customerId}`);
+        if (resultLocations.status === 200) {
           const locations = [];
-          const promotions = [];
+          resultLocations.data.locations.forEach((val) => {
+            locations.push({ createdAt: val.created_at, orderId: val.order_id, deliveryLocation: val.delivery_location });
+          });
+          return locations;
+        }
+        return [];
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    this.loadCC = async () => {
+      try {
+        const { user } = this.context;
+        const { customerId } = user;
+        const resultCC = await Axios.get(`${config.localhost}customers/cc/${customerId}`);
+        if (resultCC.status === 200) {
           const customerCreditCards = [];
           resultCC.data.cards.forEach((val) => customerCreditCards.push({ cardNumber: val.card_number, expiry: val.expiry }));
+          return customerCreditCards;
+        }
+        return [];
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    this.loadPromotions = async () => {
+      try {
+        const resultPromo = await Axios.get(`${config.localhost}customers/promotions/`);
+        if (resultPromo.status === 200) {
+          const promotions = [];
           resultPromo.data.promotions.forEach((val) => promotions.push({
             promoId: val.promo_id, discount: val.discount, startTime: val.start_time, endTime: val.end_time,
           }));
-          resultLocations.data.locations.forEach((val) => locations.push({ createdAt: val.created_at, orderId: val.order_id, deliveryLocation: val.delivery_location }));
-          this.setState({ customerCreditCards, promotions, locations });
+          return promotions;
         }
+        return [];
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    this.loadInfo = async () => {
+      try {
+        const [customerCreditCards, promotions, locations] = await Promise.all([this.loadCC(), this.loadPromotions(), this.loadLocations()]);
+        this.setState({ customerCreditCards, promotions, locations });
       } catch (error) {
         console.log(error);
       }

@@ -8,8 +8,9 @@ import Cart from './Cart';
 import config from '../../../../config.json';
 import customerCartContext from './customerCartContext';
 import RestaurantCard from './RestaurantCard';
-import PaymentForm from './PaymentForm';
-import Promotions from './Promotions';
+import PaymentForm from './orderModal/PaymentForm';
+import Promotions from './orderModal/Promotions';
+import DeliveryForm from './orderModal/DeliveryForm';
 
 class CustomerOrderFood extends Component {
   constructor(props) {
@@ -25,7 +26,7 @@ class CustomerOrderFood extends Component {
       payByCash: false,
       selectedCreditCard: {},
       promotions: [''],
-      customerLocation: '',
+      deliveryLocation: '',
       deliveryFee: 0,
       isDeliveryFeeCaculated: false,
     };
@@ -121,16 +122,16 @@ class CustomerOrderFood extends Component {
     this.calculateDeliveryFee = (e, { value }) => {
       console.log(value);
       const deliveryFee = this.determineFee(value);
-      this.setState({ isDeliveryFeeCaculated: true, deliveryFee });
+      this.setState({ isDeliveryFeeCaculated: true, deliveryFee, deliveryLocation: value });
     };
 
     // =========================================================================
     // Axios calls
     // =========================================================================
     this.createOrder = async () => {
-      const { shoppingCart } = this.state;
+      const { shoppingCart, deliveryLocation, deliveryFee } = this.state;
       const { user } = this.props;
-      const { customer_id: customerId } = user;
+      const { customerId } = user;
       // get ID
       const listOfFoods = [];
 
@@ -163,7 +164,8 @@ class CustomerOrderFood extends Component {
             totalCost: price,
             status: 'preparing',
             listOfFoods,
-            deliveryLocation: 'test location',
+            deliveryLocation,
+            deliveryFee,
           },
           {
             headers: { 'Access-Control-Allow-Origin': true },
@@ -304,8 +306,8 @@ class CustomerOrderFood extends Component {
                       </>
                     ) }
                   <Promotions promotions={promotions} setPromotions={this.setPromotions} />
-                  <Header as="h3"> Delivery Location</Header>
-                  <Input focus onChange={this.calculateDeliveryFee} placeholder="Enter  Address" fluid />
+                  <DeliveryForm calculateDeliveryFee={this.calculateDeliveryFee} />
+
                   <Header as="h3">{`Delivery Fee  ${deliveryFee}`}</Header>
                 </Modal.Content>
                 <Modal.Actions>

@@ -29,11 +29,14 @@ const customerCreate = async (request, response) => {
 const customerLogin = async (request, response) => {
   try {
     const { email, password } = request.body;
-    const user = (await query(
-      'SELECT customer_id, order_count, points, name FROM customers where exists( select 1 from users u where email = $1 and password = $2 and customer_id = u.user_id)',
+    let user = (await query(
+      'SELECT customer_id , order_count, points, name FROM customers where exists( select 1 from users u where email = $1 and password = $2 and customer_id = u.user_id)',
       [email, password],
     )).rows[0];
     // append info to user object
+    user = { customerId: user.customer_id, order_count: user.order_count, ...user };
+    delete user.customer_id;
+    delete user.order_count;
     user.type = 'customer';
     console.log(user);
     return response.status(200).json({ user });
@@ -55,7 +58,6 @@ const getCustomer = async (request, response) => {
     return response.status(500).send('user cannot be found');
   }
 };
-
 
 
 const customerCreateCreditCard = async (request, response) => {
@@ -115,6 +117,36 @@ const getDeliveryLocations = async (request, response) => {
   }
 };
 
+const rateOrder = async (request, response) => {
+  try {
+    const { id, rating } = request.body;
+    const ratedOrder = (await query(
+      'UPDATE orders set rating = $1 where order_id = $2 returning rating', [rating, id],
+    )).rows[0];
+    console.log(ratedOrder);
+    return response.status(200).json({ ratedOrder });
+  } catch (error) {
+    console.log(error);
+    return response.status(500).send('order cannot be rated');
+  }
+};
+
+const rateFood = async (request, response) => {
+  try {
+    const {
+      restaurantId, customerId, foodName, review, rating,
+    } = request.body;
+    const ratedFood = (await query(
+      'INSERT INTO food_reviews ( restaurant_id, customer_id, food_name, review, rating) VALUES ($1,$2,$3,$4)', [restaurantId, customerId, foodName, review, rating],
+    )).rows;
+    console.log(ratedFood);
+    return response.status(200).json({ ratedFood });
+  } catch (error) {
+    console.log(error);
+    return response.status(500).send('food cannot be rated');
+  }
+};
+
 module.exports = {
   customerLogin,
   customerCreate,
@@ -123,4 +155,6 @@ module.exports = {
   getPromotions,
   getDeliveryLocations,
   getCustomer,
+  rateOrder,
+  rateFood,
 };

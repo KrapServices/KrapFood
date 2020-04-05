@@ -25,9 +25,9 @@ class CustomerOrderView extends Component {
 
     this.loadOrders = async () => {
       const { user } = this.props;
-      const { customer_id } = user;
-      const updateCx = await Axios.get(`${config.localhost}customers/${customer_id}`);
-      const result = await Axios.get(`${config.localhost}orders/userId/${customer_id}`);
+      const { customerId } = user;
+      const updateCx = await Axios.get(`${config.localhost}customers/${customerId}`);
+      const result = await Axios.get(`${config.localhost}orders/userId/${customerId}`);
       if (result.status === 200) {
         // console.table(result.data.orders);
         const {
@@ -58,7 +58,7 @@ class CustomerOrderView extends Component {
       orders, preparingOrders, deliveringOrders, completedOrders, orderCount, points,
     } = this.state;
     const value = {
-      orders, preparingOrders, deliveringOrders, completedOrders,
+      orders, preparingOrders, deliveringOrders, completedOrders, loadOrders: this.loadOrders,
     };
 
     return (

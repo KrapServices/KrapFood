@@ -1,10 +1,9 @@
 import React from 'react';
 import Axios from 'axios';
-import Cards from 'react-credit-cards';
-import { Header, Dropdown, Input } from 'semantic-ui-react';
-import config from '../../../../config.json';
+import { Input } from 'semantic-ui-react';
+import config from '../../../../../config.json';
 import 'react-credit-cards/es/styles-compiled.css';
-import userContext from '../../../../userContext';
+import userContext from '../../../../../userContext';
 
 class Promotions extends React.Component {
   constructor(props) {
@@ -21,8 +20,6 @@ class Promotions extends React.Component {
       setPromotions(value, 0);
     };
     this.getPromoCodes = async () => {
-      const { user } = this.context;
-      const { customer_id } = user;
       try {
         const resultPromo = await Axios.get(`${config.localhost}customers/promotions/`);
         if (resultPromo.status === 200) {
