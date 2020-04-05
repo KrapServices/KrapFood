@@ -1,9 +1,36 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  Button, Header, Icon, Segment, Menu, Message, Tab, Item,
+  Button, Header, Icon, Segment, Menu, Message, Tab, Item, Modal,
 } from 'semantic-ui-react';
 import CustomerCartContext from './customerCartContext';
+
+
+function ViewReviews(reviews) {
+  if (reviews.length === 0) {
+    return <p>No reviews yet!</p>;
+  }
+  return (
+    <Modal trigger={<Button>Browse Reviews!</Button>}>
+      <Modal.Header>Reviews by our customers</Modal.Header>
+      <Modal.Content>
+
+        <Modal.Description>
+          <Segment.Group>
+            {reviews.map((review, index) => {
+              const key = review + index;
+              return (
+                <Segment key={key}>
+                  {`Review ${index}:  ${review.review}`}
+                </Segment>
+              );
+            })}
+          </Segment.Group>
+        </Modal.Description>
+      </Modal.Content>
+    </Modal>
+  );
+}
 
 function RestaurantCard(props) {
   const cartContext = React.useContext(CustomerCartContext);
@@ -42,6 +69,7 @@ function RestaurantCard(props) {
                   Available:
                   <b>{food.availability ? <Icon name="checkmark" color="green" /> : <Icon name="cancel" color="red" />}</b>
                   {' '}
+                  {ViewReviews(food.reviews)}
                 </Item.Description>
                 { food.availability
                   ? (

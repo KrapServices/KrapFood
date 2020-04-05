@@ -44,6 +44,7 @@ class CustomerOrderFood extends Component {
       const result = await Axios.get(`${config.localhost}restaurants/`);
       if (result.status === 200) {
         this.setState({ listOfRestaurants: result.data.restaurants });
+        console.log(this.state.listOfRestaurants);
       } else {
         alert('cannot load restaurant');
       }
