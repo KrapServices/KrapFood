@@ -105,7 +105,7 @@ class RatingModal extends Component {
                       }
             </Button.Group>
             <br />
-            <Button onClick={this.rateOrder}> rate delivery service</Button>
+            <Button onClick={this.rateOrder} style={{ marginTop: '25px' }}> rate delivery service</Button>
             <br />
             <br />
             <p>
