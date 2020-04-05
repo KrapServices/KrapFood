@@ -1,9 +1,9 @@
-const { query, transact } = require('../../database');
+  const { query, transact } = require('../../database');
 // =============================================================================
 // RIDERS
 // =============================================================================
 
-//default 
+// default
 
 // create single user for rider
 const riderCreate = async (request, response) => {
@@ -18,14 +18,15 @@ const riderCreate = async (request, response) => {
         'INSERT INTO riders (rider_id) VALUES ($1) RETURNING rider_id',
         [user.user_id],
       ));
-      if(shiftType === "part time") {
-        await(query (
+      if (shiftType === 'part time') {
+        await (query(
           'INSERT INTO part_time_riders (rider_id) VALUES ($1) returning rider_id',
-          [user.user_id],))
+          [user.user_id],
+        ));
       } else {
-          await(query('INSERT INTO full_time_riders (rider_id) VALUES ($1) returning rider_id', 
-          [user.user_id],))
-      };
+        await (query('INSERT INTO full_time_riders (rider_id) VALUES ($1) returning rider_id',
+          [user.user_id]));
+      }
       console.log(shiftType);
       return user;
     });
@@ -53,8 +54,8 @@ const riderLogin = async (request, response) => {
         // append info to user object
       user.type = 'rider';
       user = { ...user, ...rider };
-      //console.log(user);
-      //console.log(shiftType);
+      // console.log(user);
+      // console.log(shiftType);
       return user;
     });
     response.status(200).json({ user: result });

@@ -150,7 +150,7 @@ const rateFood = async (request, response) => {
         }
       }
     });
-    return response.status(200);
+    return response.status(200).send();
   } catch (error) {
     console.log(error);
     return response.status(500).send('Seems like you might have already rated some of the food items!');
