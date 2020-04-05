@@ -57,8 +57,9 @@ class CustomerOrderView extends Component {
     const {
       orders, preparingOrders, deliveringOrders, completedOrders, orderCount, points,
     } = this.state;
+    const { user } = this.context;
     const value = {
-      orders, preparingOrders, deliveringOrders, completedOrders, loadOrders: this.loadOrders,
+      orders, preparingOrders, deliveringOrders, completedOrders, loadOrders: this.loadOrders, user,
     };
 
     return (

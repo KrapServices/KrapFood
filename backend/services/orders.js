@@ -69,6 +69,19 @@ const getOrderById = async (request, response) => {
   }
 };
 
+const getFoodInOrderById = async (request, response) => {
+  try {
+    const { id } = request.params;
+    const food = (await query(
+      'SELECT restaurant_id, food_name FROM contain where order_id = $1', [id],
+    )).rows;
+    return response.status(200).json({ food });
+  } catch (error) {
+    console.log(error);
+    return response.status(500).send('food could not be found');
+  }
+};
+
 const getOrderByUserId = async (request, response) => {
   try {
     const { id } = request.params;
@@ -144,6 +157,7 @@ const updateOrderStatus = async (request, response) => {
 module.exports = {
   getAllOrders,
   getOrderById,
+  getFoodInOrderById,
   getOrderByUserId,
   getOrderByRiderId,
   updateOrderStatus,

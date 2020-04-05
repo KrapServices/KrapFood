@@ -134,16 +134,26 @@ const rateOrder = async (request, response) => {
 const rateFood = async (request, response) => {
   try {
     const {
-      restaurantId, customerId, foodName, review, rating,
+      customerId, listOfFood, listOfReview,
     } = request.body;
-    const ratedFood = (await query(
-      'INSERT INTO food_reviews ( restaurant_id, customer_id, food_name, review, rating) VALUES ($1,$2,$3,$4)', [restaurantId, customerId, foodName, review, rating],
-    )).rows;
-    console.log(ratedFood);
-    return response.status(200).json({ ratedFood });
+    listOfFood.forEach(async (value, index) => {
+      const { restaurant_id, food_name } = value;
+      const review = listOfReview[index];
+      if (review !== null) {
+        try {
+          const ratedFood = (await query(
+            'INSERT INTO food_reviews ( restaurant_id, customer_id, food_name, review) VALUES ($1,$2,$3,$4)',
+            [restaurant_id, customerId, food_name, review],
+          ));
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    });
+    return response.status(200);
   } catch (error) {
     console.log(error);
-    return response.status(500).send('food cannot be rated');
+    return response.status(500).send('Seems like you might have already rated some of the food items!');
   }
 };
 

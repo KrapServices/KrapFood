@@ -1,38 +1,18 @@
 import React, { Component } from 'react';
 import {
-  Header, Table, Button, Modal, Icon,
+  Header, Table
 } from 'semantic-ui-react';
-import Axios from 'axios';
-import config from '../../../../config.json';
 import customerOrderContext from './customerOrderContext';
+import RatingModal from './RatingModal';
 
 class CustomerCurrentOrders extends Component {
   constructor(props) {
     super(props);
     this.state = {
     };
-
-    this.rateOrder = async (id, rating) => {
-      console.log(id);
-      try {
-        const ratedOrder = await Axios.patch(`${config.localhost}customers/rateOrder/`,
-          {
-            id,
-            rating,
-          });
-        if (ratedOrder.status === 200) {
-          const { loadOrders } = this.context;
-          loadOrders();
-          alert('rated!');
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
   }
 
   render() {
-
     const {
       preparingOrders, deliveringOrders, completedOrders,
     } = this.context;
@@ -110,19 +90,9 @@ class CustomerCurrentOrders extends Component {
                 <Table.Cell>{order.rating}</Table.Cell>
                 <Table.Cell>
                   {' '}
-                  <Modal trigger={<Button color="green">Rate Order</Button>} basic size="small">
-                    <Header content="Rate this order!" />
-                    <Modal.Content>
-                      <p>
-                        How was your experience ?
-                      </p>
-                    </Modal.Content>
-                    <Modal.Actions>
-                      {
-                        [1, 2, 3, 4, 5].map((num) => <Button key={num} onClick={() => this.rateOrder(order.order_id, num)}>{`${num} stars  `}<Icon color='yellow' name='star'></Icon></Button>)
-                      }
-                    </Modal.Actions>
-                  </Modal>
+                  <RatingModal order={order} />
+
+
                 </Table.Cell>
               </Table.Row>
             ))}

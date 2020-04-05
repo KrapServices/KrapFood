@@ -15,7 +15,7 @@ router.get('/locations/:id', customerService.getDeliveryLocations);
 
 router.patch('/rateOrder/', customerService.rateOrder);
 
-router.patch('/rateFood/', customerService.rateFood);
+router.post('/rateFood/', customerService.rateFood);
 
 router.get('/:id', customerService.getCustomer);
 

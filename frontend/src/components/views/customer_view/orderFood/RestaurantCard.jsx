@@ -23,9 +23,9 @@ function RestaurantCard(props) {
       <Item.Group divided style={{ textAlign: 'left' }}>
         {listOfFood.map((food) => {
           const { restaurantId, foodName } = food;
-
+          const key = restaurantId + foodName;
           return (
-            <Item key={{ restaurantId, foodName }}>
+            <Item key={key}>
               <Item.Image src="https://react.semantic-ui.com/images/wireframe/image.png" />
               <Item.Content>
                 <Item.Header as="h1">{food.foodName}</Item.Header>
