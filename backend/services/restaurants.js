@@ -124,6 +124,40 @@ const getMenuById = async (request, response) => {
   }
 };
 
+const createPromotion = async (request, response) => {
+  try {
+    const {
+      restaurantId, discount, promoName, dateRange,
+    } = request.body;
+    const promo = (await query(
+      `
+        INSERT INTO promotions (discount, promo_name, start_time, end_time) 
+        VALUES ($1, $2, $3, $4)
+        RETURNING promo_id, promo_name
+        `,
+      [discount, promoName, dateRange[0], dateRange[1]],
+    )).rows[0];
+    const restaurant = (await query(
+      `
+        INSERT INTO offers (promo_id, restaurant_id)
+        VALUES ($1, $2)
+        RETURNING restaurant_id
+    `,
+      [promo.promo_id, restaurantId],
+    )).rows[0];
+    response.status(200).json({
+      promo: {
+        restaurantId: restaurant.restaurant_id,
+        promoId: promo.promo_id,
+        promoCode: promo.promo_code,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    response.status(500).send('An error occured with creating the promotion');
+  }
+};
+
 // -----------------------------------------------------------------------------
 // Functions for Staff Dashboard
 // -----------------------------------------------------------------------------
@@ -205,4 +239,5 @@ module.exports = {
   getMenuById,
   getMonthsById,
   getStatsById,
+  createPromotion,
 };

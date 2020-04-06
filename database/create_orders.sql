@@ -20,9 +20,10 @@ CREATE TABLE promotions
 (
     promo_id SERIAL,
     discount INTEGER NOT NULL,
-    promo_name TEXT NOT NULL,
+    promo_name TEXT NOT NULL UNIQUE,
     start_time TIMESTAMP NOT NULL,
     end_time TIMESTAMP NOT NULL,
+    CONSTRAINT check_time_validity CHECK (EXTRACT(EPOCH FROM end_time) > EXTRACT(EPOCH FROM start_time)),
     PRIMARY KEY (promo_id)
 );
 
@@ -70,3 +71,4 @@ CREATE TABLE delivers
     FOREIGN KEY (rider_id) REFERENCES riders (rider_id),
     FOREIGN KEY (order_id) REFERENCES orders (order_id)
 );
+

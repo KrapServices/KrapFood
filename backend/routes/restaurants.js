@@ -6,6 +6,8 @@ const router = express.Router();
 
 router.get('/', services.getAllRestaurant);
 
+router.post('/create', services.createPromotion);
+
 router.get('/:id', services.getRestaurantById);
 
 router.get('/:id/food', services.getMenuById);

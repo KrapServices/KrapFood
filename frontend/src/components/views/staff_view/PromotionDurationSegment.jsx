@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import userContext from '../../../userContext';
 import Calendar from 'react-calendar';
 import { Dropdown, Grid, Button, Form, Header } from 'semantic-ui-react';
+import Axios from 'axios';
+import config from '../../../config.json';
 
 function getEarliestDate(dates) {
     return dates.reduce((prev, curr) => (curr < prev ? curr : prev));
@@ -21,10 +23,9 @@ function generateValues(start, end) {
         arr.push({
             key:i,
             text:i+":00",
-            value:i+":00"
+            value: i
         });
     }
-    console.log(arr);
     return arr;
 }
 
@@ -50,12 +51,9 @@ class PromotionDurationSegment extends Component {
         this.handleChange = (event) => {
             event.preventDefault();
             const { name, value } = event.target;
-            console.log(name);
-            console.log(value);
             this.setState({
               [name]: value,
             });
-            console.log(this.state);
           };
         
         this.handleStartTimeChange = (event, {value}) => {
@@ -66,11 +64,40 @@ class PromotionDurationSegment extends Component {
             this.setState({ endTime: value });
         };
 
+        this.clearForm = () => {
+            this.setState({
+                date: new Date(Date.now()),
+                dateRange: [new Date(Date.now()), new Date(Date.now())],
+                dateBuffer: [],
+                waitingForFirstClick: true,
+                startTime: "",
+                endTime: "",
+                promoName: "",
+                discount: "",
+                restaurantId: "",
+            });
+        }
+
         this.handleSubmit = async () => {
             const { restaurant_id } = this.context.user;
             this.state.restaurantId = restaurant_id;
             console.log(this.state);
-            // how to concantenate date and time together??
+            const { startTime, endTime, restaurantId, dateRange, promoName, discount } = this.state;
+            dateRange[0].setHours(startTime, 0, 0);
+            dateRange[1].setHours(endTime, 0, 0);
+            try {
+                await Axios.post(`${config.localhost}restaurants/create`, {
+                    restaurantId: restaurantId,
+                    dateRange: dateRange,
+                    promoName: promoName,
+                    discount: discount
+                  });
+                alert('promotion created!');
+                this.clearForm();
+            }  catch (error) {
+                console.log(error);
+                alert('error has occured');
+            }
         }
     }
 
