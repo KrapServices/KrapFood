@@ -78,7 +78,6 @@ class StaffSummary extends Component {
     const { months, month, year, orderCount, totalCost, topFive, isLoading } = this.state;
     return (
       <>
-      <Grid>
          <Dropdown
             placeholder='Select month'
             fluid
@@ -96,25 +95,28 @@ class StaffSummary extends Component {
         <br />
         <br />
           {isLoading ? <Loader/> : <div>
-          <Statistic.Group 
-          widths = 'two'
-          style={{
-            justifyContent: 'center',
-          }}
-        >
+          <Grid columns={2}>
+          <Grid.Row>
+          <Grid.Column>
           <Statistic size = "huge">
             <Statistic.Value>{orderCount}</Statistic.Value>
             <Statistic.Label>Orders</Statistic.Label>
           </Statistic>
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
           <Statistic size = "huge">
             <Statistic.Value>{totalCost}</Statistic.Value>
             <Statistic.Label>Total Order Value</Statistic.Label>
           </Statistic>
-          <Header as="h1">Top Five</Header>
-
-        </Statistic.Group>
-
-        <Item.Group divided style={{ textAlign: 'left' }}>
+          <br />
+          </Grid.Column>
+          <Grid.Column>
+          <Header as="h1"
+        textAlign="center">Top Five</Header>
+            <Item.Group divided style={{ textAlign: 'left' }}>
           {topFive.map((food, index) => (
               <Item key={index}>
               {' '}
@@ -138,10 +140,18 @@ class StaffSummary extends Component {
               </Item.Content>
             </Item>
           ))}
-        </Item.Group></div>}
+        </Item.Group>
+            </Grid.Column>
+          </Grid.Row>
+          <Grid.Row>
+          </Grid.Row>
+          </Grid>
+
+        
+
+       </div>}
           <br />
           <br />
-        </Grid>
       </>
     );
   }

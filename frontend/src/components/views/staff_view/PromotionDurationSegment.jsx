@@ -57,10 +57,14 @@ class PromotionDurationSegment extends Component {
           };
         
         this.handleStartTimeChange = (event, {value}) => {
+            const { dateRange } = this.state;
+            dateRange[0].setHours(value);
             this.setState({ startTime: value });
         };
 
         this.handleEndTimeChange = (event, {value}) => {
+            const { dateRange } = this.state;
+            dateRange[1].setHours(value);
             this.setState({ endTime: value });
         };
 
@@ -83,8 +87,8 @@ class PromotionDurationSegment extends Component {
             this.state.restaurantId = restaurant_id;
             console.log(this.state);
             const { startTime, endTime, restaurantId, dateRange, promoName, discount } = this.state;
-            dateRange[0].setHours(startTime, 0, 0);
-            dateRange[1].setHours(endTime, 0, 0);
+            // dateRange[0].setHours(startTime);
+            // dateRange[1].setHours(endTime);
             try {
                 await Axios.post(`${config.localhost}restaurants/create`, {
                     restaurantId: restaurantId,
@@ -94,6 +98,7 @@ class PromotionDurationSegment extends Component {
                   });
                 alert('promotion created!');
                 this.clearForm();
+                window.location.reload();
             }  catch (error) {
                 console.log(error);
                 alert('error has occured');

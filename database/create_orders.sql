@@ -23,7 +23,7 @@ CREATE TABLE promotions
     promo_name TEXT NOT NULL UNIQUE,
     start_time TIMESTAMP NOT NULL,
     end_time TIMESTAMP NOT NULL,
-    CONSTRAINT check_time_validity CHECK (EXTRACT(EPOCH FROM end_time) > EXTRACT(EPOCH FROM start_time)),
+    CONSTRAINT check_time_validity CHECK (EXTRACT(EPOCH FROM end_time) > EXTRACT(EPOCH FROM start_time) AND EXTRACT(EPOCH FROM start_time) >= EXTRACT(EPOCH FROM current_timestamp)),
     PRIMARY KEY (promo_id)
 );
 

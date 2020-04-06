@@ -158,6 +158,29 @@ const createPromotion = async (request, response) => {
   }
 };
 
+const getPromotionsById = async (request, response) => {
+  try {
+    const { id: restaurantId } = request.params;
+    const promotions = (await query(
+      `
+      SELECT DISTINCT P.discount, P.promo_name, P.start_time, P.end_time
+      FROM Promotions P NATURAL JOIN Offers O
+      WHERE O.restaurant_id = $1
+      `,
+      [restaurantId],
+    )).rows.map((promo) => ({
+      discount: promo.discount,
+      promoName: promo.promo_name,
+      startTime: promo.start_time,
+      endTime: promo.end_time,
+    }));
+    return response.status(200).json(promotions);
+  } catch (error) {
+    console.log(error);
+    return response.status(500).send('restaurant could not be found');
+  }
+};
+
 // -----------------------------------------------------------------------------
 // Functions for Staff Dashboard
 // -----------------------------------------------------------------------------
@@ -240,4 +263,5 @@ module.exports = {
   getMonthsById,
   getStatsById,
   createPromotion,
+  getPromotionsById,
 };
