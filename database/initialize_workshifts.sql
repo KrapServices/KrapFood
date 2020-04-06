@@ -1,16 +1,3 @@
-CREATE TABLE workshift
-(
-  day_of_week INTEGER,
-  CHECK (day_of_week >= 1 AND day_of_week <= 7),
-  start_hour TIME,
-  end_hour TIME,
-  CONSTRAINT start_at_10am CHECK (start_hour - '1000' >= '0'),
-  CONSTRAINT end_at_10pm CHECK (end_hour - '2200' <= '0'),
-  CONSTRAINT min_one_hour_shift CHECK (end_hour - start_hour >= '1 hour'),
-  CONSTRAINT max_four_hours_shift CHECK (end_hour - start_hour <= '4 hour'),
-  PRIMARY KEY (day_of_week, start_hour, end_hour)
-);
-
 INSERT INTO workshift VALUES
 (1, '1000', '1100'), (1, '1000', '1200'), (1, '1000', '1300'), (1, '1000', '1400'),
 (1, '1100', '1200'), (1, '1100', '1300'), (1, '1100', '1400'), (1, '1100', '1500'),
