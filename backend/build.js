@@ -25,24 +25,12 @@ async function executeSequentially(files, query) {
   }
 }
 
-async function buildDefinitions(query) {
-  await executeSequentially(definitions, query);
-}
-
-async function buildTriggers(query) {
-  await executeSequentially(triggers, query);
-}
-
-async function buildInstantiations(query) {
-  await executeSequentially(instantiations, query);
-}
-
 async function build() {
   try {
     await transact(async (query) => {
-      await buildDefinitions(query);
-      await buildTriggers(query);
-      await buildInstantiations(query);
+      await executeSequentially(definitions, query);
+      await executeSequentially(triggers, query);
+      await executeSequentially(instantiations, query);
     });
     console.log('Successfully built database.');
     process.exit(0);
