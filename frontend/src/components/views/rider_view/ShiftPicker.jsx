@@ -158,18 +158,13 @@ export default class ShiftPicker extends React.Component {
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>Date</Table.HeaderCell>
-              <Table.HeaderCell>1000 - 1100</Table.HeaderCell>
-              <Table.HeaderCell>1100 - 1200</Table.HeaderCell>
-              <Table.HeaderCell>1200 - 1300</Table.HeaderCell>
-              <Table.HeaderCell>1300 - 1400</Table.HeaderCell>
-              <Table.HeaderCell>1400 - 1500</Table.HeaderCell>
-              <Table.HeaderCell>1500 - 1600</Table.HeaderCell>
-              <Table.HeaderCell>1600 - 1700</Table.HeaderCell>
-              <Table.HeaderCell>1700 - 1800</Table.HeaderCell>
-              <Table.HeaderCell>1800 - 1900</Table.HeaderCell>
-              <Table.HeaderCell>1900 - 2000</Table.HeaderCell>
-              <Table.HeaderCell>2000 - 2100</Table.HeaderCell>
-              <Table.HeaderCell>2100 - 2200</Table.HeaderCell>
+              {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((colNumber) => {
+                const startTime = `${10 + colNumber}00`;
+                const endTime = `${11 + colNumber}00`;
+                return (
+                  <Table.HeaderCell>{`${startTime} - ${endTime}`}</Table.HeaderCell>
+                );
+              })}
             </Table.Row>
           </Table.Header>
 
