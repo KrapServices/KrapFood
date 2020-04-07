@@ -48,6 +48,7 @@ class App extends React.Component {
       );
 
       if (result.status === 200) {
+        console.log(result.data.user);
         window.localStorage.setItem('user', JSON.stringify(result.data.user));
         this.setState({ user: result.data.user, isLoggedIn: true });
       }

@@ -3,7 +3,7 @@ import 'react-calendar/dist/Calendar.css';
 import { Tab } from 'semantic-ui-react';
 import userContext from '../../../userContext';
 import PartTimeRiderWorkSchedule from './PartTimeRiderWorkSchedule';
-import RiderViewOrder from './RiderOrderView';
+import RiderViewOrder from './orderView/RiderOrderView';
 
 class Rider extends Component {
   constructor(props) {

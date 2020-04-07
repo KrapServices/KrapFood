@@ -3,7 +3,7 @@ import { Tab } from 'semantic-ui-react';
 import userContext from '../../../userContext';
 import CustomerOrderFood from './orderFood/CustomerOrderFood';
 import CustomerOrderView from './orderView/CustomerOrderView';
-import CustomerInfo from './CustomerInfo';
+import CustomerInfo from './customerInfo/CustomerInfo';
 
 class Customer extends Component {
   constructor(props) {
@@ -28,7 +28,6 @@ class Customer extends Component {
   render() {
     const { activeIndex } = this.state;
     const { user } = this.context;
-    console.log(user);
     const panes = [
       { menuItem: 'Order Food', render: () => <Tab.Pane><CustomerOrderFood user={user} /></Tab.Pane> },
       { menuItem: 'Your Orders', render: () => <Tab.Pane><CustomerOrderView user={user} /></Tab.Pane> },

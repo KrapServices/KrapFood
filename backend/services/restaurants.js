@@ -12,7 +12,7 @@ const getRestaurantWithFood = async (restaurant) => {
   const foods = (await query(
     `
       SELECT restaurant_id, category, food_name, daily_limit, availability, price
-      FROM foods 
+      FROM foods
       WHERE restaurant_id = $1
     `,
     [restaurant.restaurantId],
@@ -24,10 +24,24 @@ const getRestaurantWithFood = async (restaurant) => {
     availability: food.availability,
     price: food.price,
   }));
-
+  const newFoods = [];
+  await Promise.all(foods.map(async (food) => {
+    const reviews = (await query(
+      `
+      SELECT review_id, customer_id, review 
+      FROM food_reviews 
+      where restaurant_id = $1 
+      and food_name = $2
+      `,
+      [food.restaurantId, food.foodName],
+    )
+    ).rows;
+    const obj = { reviews, ...food };
+    newFoods.push(obj);
+  }));
   return {
     ...restaurant,
-    foods,
+    foods: newFoods,
   };
 };
 

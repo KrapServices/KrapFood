@@ -14,6 +14,8 @@ class CustomerOrderView extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      orderCount: 0,
+      points: 0,
       orders: [],
       preparingOrders: [],
       deliveringOrders: [],
@@ -23,15 +25,21 @@ class CustomerOrderView extends Component {
 
     this.loadOrders = async () => {
       const { user } = this.props;
-      const { customer_id } = user;
-      const result = await Axios.get(`${config.localhost}orders/userId/${customer_id}`);
+      const { customerId } = user;
+      const updateCx = await Axios.get(`${config.localhost}customers/${customerId}`);
+      const result = await Axios.get(`${config.localhost}orders/userId/${customerId}`);
       if (result.status === 200) {
         // console.table(result.data.orders);
         const {
           orders, preparingOrders, deliveringOrders, completedOrders,
         } = result.data;
         this.setState({
-          orders, preparingOrders, deliveringOrders, completedOrders,
+          orders,
+          preparingOrders,
+          deliveringOrders,
+          completedOrders,
+          points: updateCx.data.customer.points,
+          orderCount: updateCx.data.customer.order_count,
         });
         // console.table(this.state);
       } else {
@@ -47,13 +55,11 @@ class CustomerOrderView extends Component {
 
   render() {
     const {
-      orders, preparingOrders, deliveringOrders, completedOrders,
+      orders, preparingOrders, deliveringOrders, completedOrders, orderCount, points,
     } = this.state;
     const { user } = this.context;
-    const numOfOrder = user.order_count;
-    const customerPoints = user.points;
     const value = {
-      orders, preparingOrders, deliveringOrders, completedOrders,
+      orders, preparingOrders, deliveringOrders, completedOrders, loadOrders: this.loadOrders, user,
     };
 
     return (
@@ -64,14 +70,14 @@ class CustomerOrderView extends Component {
               <Header>
                 Number Of Orders Placed:
                 {' '}
-                {numOfOrder}
+                {orderCount}
               </Header>
             </Grid.Column>
             <Grid.Column>
               <Header>
                 Points:
                 {' '}
-                {customerPoints}
+                {points}
               </Header>
             </Grid.Column>
           </Grid>

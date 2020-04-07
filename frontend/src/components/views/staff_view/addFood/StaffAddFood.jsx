@@ -3,8 +3,8 @@ import {
   Button, Form, Grid, Header, Item, Icon,
 } from 'semantic-ui-react';
 import Axios from 'axios';
-import config from '../../../config.json';
-import userContext from '../../../userContext';
+import config from '../../../../config.json';
+import userContext from '../../../../userContext';
 
 
 class StaffAddFood extends Component {

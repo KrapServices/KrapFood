@@ -4,7 +4,8 @@
     "create_restaurants.sql",
     "create_user.sql",
     "create_orders.sql",
-    "create_schedules.sql"
+    "create_schedules.sql",
+    "reviews.sql"
   ],
   "triggers": [
     "order_triggers.sql",
@@ -13,6 +14,8 @@
   ],
   "instantiations": [
     "insert_restaurants.sql",
-    "insert_food.sql"
+    "insert_food.sql",
+    "user_triggers.sql",
+    "order_triggers.sql"
   ]
 }

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import {
-  Container, Segment, Header, Button, Message,
+  Container, Header, Message,
 } from 'semantic-ui-react';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import ReactRouterPropTypes from 'react-router-prop-types';
 import userContext from '../../../userContext';
 import Rider from '../rider_view/Rider';
@@ -18,7 +18,6 @@ class Home extends Component {
     };
 
     this.renderBody = (userType) => {
-      console.log(userType);
       switch (userType) {
         case 'customer':
           return <Customer />;

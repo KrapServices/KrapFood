@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Item, Icon } from 'semantic-ui-react';
 import Axios from 'axios';
 import config from '../../../config.json';
-import userContext from '../../../userContext';
+import userContext from '../../../../userContext';
 
 class MenuItems extends Component {
     constructor(props) {
