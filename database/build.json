@@ -1,10 +1,17 @@
 {
-  "queries": [
+  "definitions": [
     "drop_tables.sql",
-    "initialize_workshifts.sql",
     "create_restaurants.sql",
     "create_user.sql",
     "create_orders.sql",
+    "create_schedules.sql"
+  ],
+  "triggers": [
+    "order_triggers.sql",
+    "schedule_triggers.sql",
+    "user_triggers.sql"
+  ],
+  "instantiations": [
     "insert_restaurants.sql",
     "insert_food.sql"
   ]
