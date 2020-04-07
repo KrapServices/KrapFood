@@ -13,10 +13,10 @@ router.get('/promotions/', customerService.getPromotions);
 
 router.get('/locations/:id', customerService.getDeliveryLocations);
 
-router.patch('/rateOrder/', customerService.rateOrder);
+router.patch('/orders/ratings', customerService.rateOrder);
 
-router.post('/rateFood/', customerService.rateFood);
+router.post('/food/ratings', customerService.rateFood);
 
-router.get('/:id', customerService.getCustomer);
+router.get('/:id', customerService.getCustomerById);
 
 module.exports = router;

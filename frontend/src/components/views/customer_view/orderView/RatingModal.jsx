@@ -27,7 +27,7 @@ class RatingModal extends Component {
         const { user } = this.context;
         const { customerId } = user;
 
-        const ratedFood = await Axios.post(`${config.localhost}customers/rateFood/`, {
+        const ratedFood = await Axios.post(`${config.localhost}customers/food/ratings`, {
           listOfFood,
           listOfReview,
           customerId,
@@ -46,7 +46,7 @@ class RatingModal extends Component {
         const { order } = this.props;
         const id = order.order_id;
         const { stars } = this.state;
-        const ratedOrder = await Axios.patch(`${config.localhost}customers/rateOrder/`,
+        const ratedOrder = await Axios.patch(`${config.localhost}customers/orders/ratings`,
           {
             id,
             rating: stars,
@@ -64,7 +64,7 @@ class RatingModal extends Component {
     this.getFood = async () => {
       try {
         const { order } = this.props;
-        const result = await Axios.get(`${config.localhost}orders/foodInOrder/${order.order_id}`);
+        const result = await Axios.get(`${config.localhost}orders/${order.order_id}/foods`);
         if (result.status === 200) {
           const listOfReview = [];
           result.data.food.map((_) => listOfReview.push(null));

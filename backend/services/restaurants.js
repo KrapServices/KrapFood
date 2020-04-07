@@ -39,9 +39,6 @@ const getRestaurantWithFood = async (restaurant) => {
     const obj = { reviews, ...food };
     newFoods.push(obj);
   }));
-
-
-  console.log(newFoods);
   return {
     ...restaurant,
     foods: newFoods,

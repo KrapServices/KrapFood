@@ -7,7 +7,7 @@ router.get('/', orderServices.getAllOrders);
 
 router.get('/:id', orderServices.getOrderById);
 
-router.get('/foodInOrder/:id', orderServices.getFoodInOrderById);
+router.get('/:id/foods', orderServices.getFoodInOrderById);
 
 router.get('/userId/:id', orderServices.getOrderByUserId);
 

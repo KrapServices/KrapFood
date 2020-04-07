@@ -34,9 +34,9 @@ const customerLogin = async (request, response) => {
       [email, password],
     )).rows[0];
     // append info to user object
-    user = { customerId: user.customer_id, order_count: user.order_count, ...user };
-    delete user.customer_id;
-    delete user.order_count;
+    user = {
+      customerId: user.customer_id, order_count: user.order_count, points: user.points, name: user.name,
+    };
     user.type = 'customer';
     console.log(user);
     return response.status(200).json({ user });
@@ -46,7 +46,7 @@ const customerLogin = async (request, response) => {
   }
 };
 
-const getCustomer = async (request, response) => {
+const getCustomerById = async (request, response) => {
   try {
     const { id } = request.params;
     const customer = (await query(
@@ -164,7 +164,7 @@ module.exports = {
   customerCreateCreditCard,
   getPromotions,
   getDeliveryLocations,
-  getCustomer,
+  getCustomerById,
   rateOrder,
   rateFood,
 };
