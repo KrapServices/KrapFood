@@ -25,9 +25,10 @@ export default class ShiftViewer extends React.Component {
   constructor() {
     super();
     this.state = {
-      dateRange: [new Date(Date.now()), new Date(Date.now())],
+      dateRange: getDateRange([new Date(Date.now())]),
       shifts: [],
       waitingForFirstClick: true,
+      error: false,
     };
   }
 
@@ -35,7 +36,7 @@ export default class ShiftViewer extends React.Component {
     const { user } = this.context;
     const { rider_id: riderId } = user;
     try {
-      const { shifts } = (await axios.get(`${config.localhost}schedules/${riderId}`)).data;
+      const { shifts } = (await axios.get(`${config.localhost}riders/${riderId}/schedules`)).data;
       this.setState({
         shifts: shifts.map((shift) => ({
           ...shift,
@@ -43,18 +44,22 @@ export default class ShiftViewer extends React.Component {
         })),
       });
     } catch (error) {
-      alert('error');
+      this.setState({
+        error: true,
+      });
     }
   }
 
   render() {
     const {
-      dateRange, shifts, waitingForFirstClick,
+      dateRange, shifts, waitingForFirstClick, error,
     } = this.state;
 
     return (
       <>
         <Header as="h2">View your existing work shifts</Header>
+
+        {error ? <Message error>Error occurred while retrieving schedules</Message> : null}
 
         <Message
           size="large"
@@ -92,18 +97,14 @@ export default class ShiftViewer extends React.Component {
           </Table.Header>
           <Table.Body>
             {shifts
-              .filter((shift) => {
-                const startDate = dateRange[0].getDate();
-                const endDate = dateRange[1].getDate();
-                return shift.date.getDate() >= startDate && shift.date.getDate() <= endDate;
-              })
+              .filter((shift) => shift.date >= dateRange[0] && shift.date <= dateRange[1])
               .map((shift) => {
-                const { date, startHour, endHour } = shift;
+                const { date, startTime, endTime } = shift;
                 return (
-                  <Table.Row key={shift}>
+                  <Table.Row>
                     <Table.Cell>{date.toDateString()}</Table.Cell>
-                    <Table.Cell>{startHour}</Table.Cell>
-                    <Table.Cell>{endHour}</Table.Cell>
+                    <Table.Cell>{startTime}</Table.Cell>
+                    <Table.Cell>{endTime}</Table.Cell>
                   </Table.Row>
                 );
               })}
