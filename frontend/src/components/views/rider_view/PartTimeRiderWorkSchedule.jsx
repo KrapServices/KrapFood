@@ -1,7 +1,7 @@
 import React from 'react';
 import 'react-calendar/dist/Calendar.css';
 import { Divider } from 'semantic-ui-react';
-import WeeklyWorkSchedule from './WeeklyWorkSchedule';
+import ShiftPicker from './ShiftPicker';
 import ShiftViewer from './ShiftViewer';
 
 export default function PartTimeRiderWorkSchedule() {
@@ -24,7 +24,7 @@ export default function PartTimeRiderWorkSchedule() {
           marginRight: '20%',
         }}
       >
-        <WeeklyWorkSchedule />
+        <ShiftPicker />
       </div>
     </>
   );

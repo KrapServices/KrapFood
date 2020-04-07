@@ -37,7 +37,7 @@ router.post('/:id/schedules', async (req, res) => {
 
         await transactQuery(
           `
-            INSERT INTO wws_contains VALUES (wws_id, shift_id)
+            INSERT INTO wws_contains (wws_id, shift_id)
             VALUES ($1, $2)
           `,
           [scheduleId, shiftId],
@@ -68,8 +68,9 @@ router.get('/:id/schedules', async (req, res) => {
     const shifts = (await query(
       `
         SELECT work_date, starting_time, ending_time
-        FROM pt_rider_works NATURAL JOIN weekly_work_schedules NATURAL JOIN shifts
+        FROM pt_rider_works NATURAL JOIN weekly_work_schedules NATURAL JOIN wws_contains NATURAL JOIN shifts
         WHERE rider_id = $1
+        ORDER BY work_date, starting_time
       `,
       [riderId],
     )).rows.map((shift) => ({

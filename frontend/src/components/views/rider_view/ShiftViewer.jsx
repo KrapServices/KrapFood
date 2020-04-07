@@ -21,6 +21,36 @@ function getDateRange(dates) {
   return [getEarliestDate(dates), getLatestDate(dates)];
 }
 
+function combine(shifts) {
+  const intervals = [];
+  let currentInterval;
+
+  shifts.forEach((shift) => {
+    const { date, startTime, endTime } = shift;
+    if (currentInterval === undefined) {
+      currentInterval = {
+        date,
+        startTime,
+        endTime,
+      };
+    } else if (currentInterval.date === date && startTime === currentInterval.endTime) {
+      currentInterval = {
+        ...currentInterval,
+        endTime,
+      };
+    } else {
+      intervals.push(currentInterval);
+      currentInterval = {
+        date,
+        startTime,
+        endTime,
+      };
+    }
+  });
+
+  return intervals;
+}
+
 export default class ShiftViewer extends React.Component {
   constructor() {
     super();
@@ -37,8 +67,11 @@ export default class ShiftViewer extends React.Component {
     const { rider_id: riderId } = user;
     try {
       const { shifts } = (await axios.get(`${config.localhost}riders/${riderId}/schedules`)).data;
+
+      const combinedShifts = combine(shifts);
+
       this.setState({
-        shifts: shifts.map((shift) => ({
+        shifts: combinedShifts.map((shift) => ({
           ...shift,
           date: new Date(shift.date),
         })),
@@ -101,7 +134,7 @@ export default class ShiftViewer extends React.Component {
               .map((shift) => {
                 const { date, startTime, endTime } = shift;
                 return (
-                  <Table.Row>
+                  <Table.Row key={date + startTime + endTime}>
                     <Table.Cell>{date.toDateString()}</Table.Cell>
                     <Table.Cell>{startTime}</Table.Cell>
                     <Table.Cell>{endTime}</Table.Cell>
