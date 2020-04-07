@@ -5,7 +5,7 @@
     "create_user.sql",
     "create_orders.sql",
     "create_schedules.sql",
-    "reviews.sql",
+    "reviews.sql"
   ],
   "triggers": [
     "order_triggers.sql",
