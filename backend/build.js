@@ -1,28 +1,43 @@
 const fs = require('fs');
 const { transact } = require('./database');
-const { queries: buildQueries } = require('../database/build.json');
+const { definitions, triggers, instantiations } = require('../database/build.json');
 
-async function build(queries) {
+function getPath(fileName) {
+  return `../database/${fileName}`;
+}
+
+function read(file) {
+  const path = getPath(file);
+  return fs.readFileSync(path, { encoding: 'utf-8' });
+}
+
+async function execute(file, query) {
+  const sqlQuery = read(file);
+  await query(sqlQuery);
+  console.log(`Executed ${file}`);
+}
+
+async function executeSequentially(files, query) {
+  // eslint-disable-next-line no-restricted-syntax
+  for (const file of files) {
+    // eslint-disable-next-line no-await-in-loop
+    await execute(file, query);
+  }
+}
+
+async function build() {
   try {
     await transact(async (query) => {
-      function execute(fileName) {
-        const path = `../database/${fileName}`;
-        const lines = fs.readFileSync(path, { encoding: 'utf-8' });
-        return query(lines);
-      }
-
-      // Do this in order because sql scripts may depend on previous scripts
-      queries.forEach((sqlQuery) => {
-        execute(sqlQuery);
-      });
+      await executeSequentially(definitions, query);
+      await executeSequentially(triggers, query);
+      await executeSequentially(instantiations, query);
     });
     console.log('Successfully built database.');
     process.exit(0);
   } catch (error) {
     console.error(error);
-    console.error('Failed to build database.');
     process.exit(1);
   }
 }
 
-build(buildQueries);
+build();

@@ -1,15 +1,8 @@
 import React, { Component } from 'react';
-import axios from 'axios';
-import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import './Rider.css';
-import {
-  Header, Table, Divider, Tab,
-} from 'semantic-ui-react';
+import { Tab } from 'semantic-ui-react';
 import userContext from '../../../userContext';
-import WeeklyWorkSchedule from './schedule/WeeklyWorkSchedule';
-import config from '../../../config.json';
-import RiderWorkSchedule from './schedule/RiderWorkSchedule';
+import PartTimeRiderWorkSchedule from './PartTimeRiderWorkSchedule';
 import RiderViewOrder from './orderView/RiderOrderView';
 
 class Rider extends Component {
@@ -33,9 +26,14 @@ class Rider extends Component {
   }
 
   render() {
+    const { user } = this.context;
+    const { status } = user;
     const { activeIndex } = this.state;
-    const panes = [
-      { menuItem: 'Schedule', render: () => <Tab.Pane><RiderWorkSchedule /></Tab.Pane> },
+    const panes = status === 'part' ? [
+      { menuItem: 'Schedule', render: () => <Tab.Pane><PartTimeRiderWorkSchedule /></Tab.Pane> },
+      { menuItem: 'Assigned Orders', render: () => <Tab.Pane><RiderViewOrder /></Tab.Pane> },
+      { menuItem: 'Summary', render: () => <Tab.Pane><div /></Tab.Pane> },
+    ] : [
       { menuItem: 'Assigned Orders', render: () => <Tab.Pane><RiderViewOrder /></Tab.Pane> },
       { menuItem: 'Summary', render: () => <Tab.Pane><div /></Tab.Pane> },
     ];
@@ -49,7 +47,6 @@ class Rider extends Component {
           style={{ marginLeft: '50px', marginRight: '50px' }}
         />
       </>
-
     );
   }
 }
