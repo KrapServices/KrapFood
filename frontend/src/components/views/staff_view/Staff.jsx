@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-import userContext from '../../../userContext';
 import { Header, Tab } from 'semantic-ui-react';
-import StaffAddFood from './StaffAddFood';
-import StaffUpdateFood from './StaffUpdateFood';
-import StaffSummary from './StaffSummary';
-import StaffUpdateOrder from './StaffUpdateOrder';
-import StaffCreatePromotion from './StaffCreatePromotion';
-
+import userContext from '../../../userContext';
+import StaffAddFood from './addFood/StaffAddFood';
+import StaffUpdateFood from './updateFood/StaffUpdateFood';
+import StaffSummary from './summary/StaffSummary';
+import StaffCreatePromotion from './promotions/StaffCreatePromotion';
+import StaffOrderView from './orderView/StaffOrderView';
 
 class Staff extends Component {
   constructor() {
@@ -30,13 +29,13 @@ class Staff extends Component {
 
   render() {
     const { activeIndex } = this.state;
-    const {user} = this.context;
-        console.log(this.context);
+    const { user } = this.context;
+    console.log(this.context);
     const panes = [
       { menuItem: 'Add Food Item to Menu', render: () => <Tab.Pane><StaffAddFood /></Tab.Pane> },
       { menuItem: 'Update Food Items', render: () => <Tab.Pane><StaffUpdateFood /></Tab.Pane> },
-      { menuItem: 'Update Orders', render: () => <Tab.Pane><StaffUpdateOrder user={user} /></Tab.Pane> },
-      { menuItem: 'Create Promotions', render: () => <Tab.Pane><StaffCreatePromotion /></Tab.Pane> },
+      { menuItem: 'Update Orders', render: () => <Tab.Pane><StaffOrderView user={user} /></Tab.Pane> },
+      { menuItem: 'Update Orders', render: () => <Tab.Pane><StaffCreatePromotion /></Tab.Pane> },
       { menuItem: 'Summary Information', render: () => <Tab.Pane><StaffSummary /></Tab.Pane> },
     ];
     return (
@@ -45,8 +44,8 @@ class Staff extends Component {
           Welcome, Staff
         </Header>
         <Tab
-         onTabChange={this.handleTabChange}
-         activeIndex={activeIndex}
+          onTabChange={this.handleTabChange}
+          activeIndex={activeIndex}
           menu={{ horizontal: true, compact: true }}
           panes={panes}
           style={{ marginLeft: '50px', marginRight: '50px' }}

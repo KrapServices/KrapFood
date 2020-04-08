@@ -71,4 +71,3 @@ CREATE TABLE delivers
     FOREIGN KEY (rider_id) REFERENCES riders (rider_id),
     FOREIGN KEY (order_id) REFERENCES orders (order_id)
 );
-

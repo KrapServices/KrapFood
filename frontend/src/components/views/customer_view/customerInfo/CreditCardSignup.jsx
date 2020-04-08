@@ -30,7 +30,7 @@ class CreditCardSignUp extends React.Component {
     this.createCard = async () => {
       const { name, number, expiry } = this.state;
       const { user } = this.context;
-      const { customer_id } = user;
+      const { customerId } = user;
       console.log(name);
       console.log(number);
       try {
@@ -40,7 +40,7 @@ class CreditCardSignUp extends React.Component {
             nameCard: name,
             expiry,
             cardNumber: number,
-            customerId: customer_id,
+            customerId,
           },
           {
             headers: { 'Access-Control-Allow-Origin': true },

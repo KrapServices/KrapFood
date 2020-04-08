@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import {
   Grid,
   Form,
@@ -10,6 +9,7 @@ import {
   Icon,
 } from 'semantic-ui-react';
 import { Link, withRouter } from 'react-router-dom';
+import ReactRouterPropTypes from 'react-router-prop-types';
 import Axios from 'axios';
 import userContext from '../../../userContext';
 import config from '../../../config.json';
@@ -219,7 +219,7 @@ class Signup extends Component {
 Signup.contextType = userContext;
 
 Signup.propTypes = {
-  history: PropTypes.arrayOf(PropTypes.string).isRequired,
+  history: ReactRouterPropTypes.history.isRequired,
 };
 
 export default withRouter(Signup);

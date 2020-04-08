@@ -1,19 +1,22 @@
 import React, { Component } from 'react';
 import {
-  Header, Table,
+  Header, Table
 } from 'semantic-ui-react';
 import customerOrderContext from './customerOrderContext';
+import RatingModal from './RatingModal';
 
 class CustomerCurrentOrders extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+    };
   }
 
   render() {
     const {
       preparingOrders, deliveringOrders, completedOrders,
     } = this.context;
+
     return (
       <>
         <Header as="h2">Current Orders being Prepared</Header>
@@ -72,16 +75,25 @@ class CustomerCurrentOrders extends Component {
               <Table.HeaderCell>Status</Table.HeaderCell>
               <Table.HeaderCell>Delivery Location</Table.HeaderCell>
               <Table.HeaderCell>Total Cost</Table.HeaderCell>
+              <Table.HeaderCell>Rating</Table.HeaderCell>
+              <Table.HeaderCell width={2} />
             </Table.Row>
           </Table.Header>
 
           <Table.Body>
             {completedOrders.map((order) => (
-              <Table.Row postiive key={order.order_id}>
+              <Table.Row key={order.order_id}>
                 <Table.Cell>{order.order_id}</Table.Cell>
                 <Table.Cell>{order.status}</Table.Cell>
                 <Table.Cell>{order.delivery_location}</Table.Cell>
                 <Table.Cell>{order.total_cost}</Table.Cell>
+                <Table.Cell>{order.rating}</Table.Cell>
+                <Table.Cell>
+                  {' '}
+                  <RatingModal order={order} />
+
+
+                </Table.Cell>
               </Table.Row>
             ))}
           </Table.Body>

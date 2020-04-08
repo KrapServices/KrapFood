@@ -2,9 +2,9 @@ import React from 'react';
 import Axios from 'axios';
 import PropTypes from 'prop-types';
 import { Dropdown } from 'semantic-ui-react';
-import config from '../../../../config.json';
+import config from '../../../../../config.json';
 import 'react-credit-cards/es/styles-compiled.css';
-import userContext from '../../../../userContext';
+import userContext from '../../../../../userContext';
 
 class PaymentForm extends React.Component {
   constructor(props) {
@@ -16,6 +16,7 @@ class PaymentForm extends React.Component {
     };
 
     this.handleChange = (e, { value }) => {
+      console.log(value);
       const { setCard } = this.props;
       const { customerCreditCards } = this.state;
       setCard(customerCreditCards[value]);
@@ -23,7 +24,7 @@ class PaymentForm extends React.Component {
     };
     this.getCard = async () => {
       const { user } = this.context;
-      const { customer_id: customerId } = user;
+      const { customerId } = user;
       try {
         const resultCC = await Axios.get(`${config.localhost}customers/cc/${customerId}`);
         if (resultCC.status === 200) {
