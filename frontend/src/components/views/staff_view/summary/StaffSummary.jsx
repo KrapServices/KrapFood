@@ -29,11 +29,10 @@ class StaffSummary extends Component {
     };
 
     this.loadMonths = async () => {
-      const { restaurantId } = this.context.user;
-      console.log(restaurantId);
+      const { restaurant_id } = this.context.user;
       try {
         const result = await Axios.get(
-          `${config.localhost}restaurants/${restaurantId}/months`,
+          `${config.localhost}restaurants/${restaurant_id}/months`,
         );
         this.setState({
           months: result.data,
@@ -47,12 +46,12 @@ class StaffSummary extends Component {
     };
 
     this.handleChange = async (e, { value }) => {
-      const { restaurantId } = this.context.user;
+      const { restaurant_id } = this.context.user;
       const month = value[0];
       const year = value[1];
       try {
         const result = await Axios.get(
-          `${config.localhost}restaurants/${restaurantId}/stats/?month=${month}&year=${year}`,
+          `${config.localhost}restaurants/${restaurant_id}/stats/?month=${month}&year=${year}`,
         );
         if (result.status === 200) {
           this.setState({
@@ -141,11 +140,11 @@ class StaffSummary extends Component {
                           <Item.Header as="h1">{food.food_name}</Item.Header>
                           <Item.Description floated="left">
                             Price:
-                      <b>{` ${food.price}`}</b>
+                            <b>{` ${food.price}`}</b>
                             {' '}
                             <br />
                             Category:
-                      {' '}
+                            {' '}
                             <b>{` ${food.category}`}</b>
                             {' '}
                             <br />

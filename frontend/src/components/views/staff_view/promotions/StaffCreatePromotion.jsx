@@ -15,11 +15,11 @@ class StaffCreatePromotion extends Component {
     };
 
     this.loadPromo = async () => {
-      const { restaurantId } = this.context.user;
-      this.state.restaurantId = restaurantId;
+      const { restaurant_id } = this.context.user;
+      this.state.restaurantId = restaurant_id;
       try {
         const result = await Axios.get(
-          `${config.localhost}restaurants/${restaurantId}/promo`,
+          `${config.localhost}restaurants/${restaurant_id}/promo`,
         );
         if (result.status === 200) {
           this.setState({ promotions: result.data });
