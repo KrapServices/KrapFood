@@ -8,11 +8,11 @@ import userContext from '../../../../userContext';
 import config from '../../../../config.json';
 
 function getEarliestDate(dates) {
-  return dates.reduce((prev, curr) => (curr < prev ? curr : prev));
+  return dates.reduce((prev, curr) => (curr < prev ? new Date(+curr) : new Date(+prev)));
 }
 
 function getLatestDate(dates) {
-  return dates.reduce((prev, curr) => (curr > prev ? curr : prev));
+  return dates.reduce((prev, curr) => (curr > prev ? new Date(+curr) : new Date(+prev)));
 }
 
 function getDateRange(dates) {
@@ -89,13 +89,15 @@ class PromotionDurationSegment extends Component {
     this.handleStartTimeChange = (event, { value }) => {
       const { dateRange } = this.state;
       dateRange[0].setHours(value);
-      this.setState({ startTime: value });
+
+      this.setState({ startTime: value, dateRange });
     };
 
     this.handleEndTimeChange = (event, { value }) => {
       const { dateRange } = this.state;
       dateRange[1].setHours(value);
-      this.setState({ endTime: value });
+      this.setState({ endTime: value, dateRange });
+
     };
 
     this.clearForm = () => {
@@ -120,7 +122,7 @@ class PromotionDurationSegment extends Component {
       } = this.state;
       // dateRange[0].setHours(startTime);
       // dateRange[1].setHours(endTime);
-      console.log(this.state);
+      console.table(this.state);
       try {
         await Axios.post(`${config.localhost}restaurants/create`, {
           restaurantId,
@@ -143,6 +145,8 @@ class PromotionDurationSegment extends Component {
     const {
       dateRange, waitingForFirstClick, dateBuffer, startTime, endTime, promoName, discount,
     } = this.state;
+    console.log('state');
+    console.log(this.state);
     return (
       <>
         <Header size="huge">Create a promotion</Header>
@@ -164,12 +168,12 @@ class PromotionDurationSegment extends Component {
                 if (waitingForFirstClick) {
                   this.setState({
                     waitingForFirstClick: false,
-                    dateRange: getDateRange([value]),
+                    dateRange: getDateRange([new Date(+value)]),
                   });
                 } else {
                   this.setState({
                     waitingForFirstClick: true,
-                    dateRange: getDateRange(dateRange.concat([value])),
+                    dateRange: getDateRange(dateRange.concat([new Date(+value)])),
                   });
                 }
               }}
