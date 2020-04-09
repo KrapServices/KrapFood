@@ -126,7 +126,7 @@ class StaffSummary extends Component {
                     {topFive.map((food, index) => (
                       <Item key={index}>
                         {' '}
-                        <Header as="h1">
+                        <Header as="h1" style={{ marginRight: '1rem' }}>
                           {index + 1}
                           .
                         </Header>

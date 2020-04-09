@@ -68,12 +68,12 @@ class StaffCreatePromotion extends Component {
                         <br />
                         Start time:
                         {' '}
-                        <b>{` ${new Date(promo.startTime)}`}</b>
+                        <b>{` ${new Date(promo.startTime).toDateString()}`}</b>
                         {' '}
                         <br />
                         End time:
                         {' '}
-                        <b>{` ${new Date(promo.endTime)}`}</b>
+                        <b>{` ${new Date(promo.endTime).toDateString()}`}</b>
                         {' '}
                         <br />
                       </Item.Description>

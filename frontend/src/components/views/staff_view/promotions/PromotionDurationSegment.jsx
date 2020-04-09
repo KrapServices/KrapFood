@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Calendar from 'react-calendar';
 import {
-  Dropdown, Grid, Button, Form, Header,
+  Dropdown, Grid, Button, Form, Header, Message,
 } from 'semantic-ui-react';
 import Axios from 'axios';
 import userContext from '../../../../userContext';
@@ -15,8 +15,38 @@ function getLatestDate(dates) {
   return dates.reduce((prev, curr) => (curr > prev ? curr : prev));
 }
 
-function fixDateRange(dateRange) {
-  return [getEarliestDate(dateRange), getLatestDate(dateRange)];
+function getDateRange(dates) {
+  return [getEarliestDate(dates), getLatestDate(dates)];
+}
+
+function combine(shifts) {
+  const intervals = [];
+  let currentInterval;
+
+  shifts.forEach((shift) => {
+    const { date, startTime, endTime } = shift;
+    if (currentInterval === undefined) {
+      currentInterval = {
+        date,
+        startTime,
+        endTime,
+      };
+    } else if (currentInterval.date === date && startTime === currentInterval.endTime) {
+      currentInterval = {
+        ...currentInterval,
+        endTime,
+      };
+    } else {
+      intervals.push(currentInterval);
+      currentInterval = {
+        date,
+        startTime,
+        endTime,
+      };
+    }
+  });
+
+  return intervals;
 }
 
 function generateValues(start, end) {
@@ -38,10 +68,9 @@ class PromotionDurationSegment extends Component {
   constructor() {
     super();
     this.state = {
-      date: new Date(Date.now()),
-      dateRange: [new Date(Date.now()), new Date(Date.now())],
-      dateBuffer: [],
+      dateRange: getDateRange([new Date(Date.now())]),
       waitingForFirstClick: true,
+      error: false,
       startTime: '',
       endTime: '',
       promoName: '',
@@ -121,27 +150,32 @@ class PromotionDurationSegment extends Component {
         <Form>
           <Form.Field>
             <Header>Enter Date</Header>
+            <Message
+              size="large"
+              info
+              compact
+            >
+              {waitingForFirstClick ? 'Select start of range' : 'Select end of range'}
+            </Message>
+
             <Calendar
               className="calendar"
               onClickDay={(value) => {
-                this.setState({
-                  date: value,
-                });
                 if (waitingForFirstClick) {
                   this.setState({
                     waitingForFirstClick: false,
-                    dateBuffer: [value],
+                    dateRange: getDateRange([value]),
                   });
                 } else {
                   this.setState({
                     waitingForFirstClick: true,
-                    dateRange: fixDateRange(dateBuffer.concat([value])),
-                    dateBuffer: [],
+                    dateRange: getDateRange(dateRange.concat([value])),
                   });
                 }
               }}
               value={dateRange}
             />
+
           </Form.Field>
           <br />
           <Form.Field>
