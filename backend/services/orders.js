@@ -9,16 +9,16 @@ const { query } = require('../database');
 const createOrder = async (request, response) => {
   try {
     const {
-      totalCost, status, listOfFoods, deliveryLocation, customerId,
+      totalCost, status, listOfFoods, deliveryLocation, customerId, deliveryFee,
     } = request.body;
 
     const order = (await query(
       `
-        INSERT INTO orders (customer_id, delivery_location, total_cost, status) 
-        VALUES ($1, $2, $3, $4)
+        INSERT INTO orders (customer_id, delivery_location, total_cost, status, delivery_fee) 
+        VALUES ($1, $2, $3, $4, $5)
         RETURNING order_id
       `,
-      [customerId, deliveryLocation, totalCost, status],
+      [customerId, deliveryLocation, totalCost, status, deliveryFee],
     )).rows[0];
 
     await Promise.all(listOfFoods.map((food) => {

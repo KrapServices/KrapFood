@@ -6,6 +6,7 @@ CREATE TABLE orders
     status TEXT NOT NULL DEFAULT 'preparing', -- 'preparing' | 'delivering' | 'completed' 
     CHECK (status IN ('preparing', 'delivering', 'completed')),
     delivery_location TEXT NOT NULL,
+    delivery_fee NUMERIC(10, 2) NOT NULL,
     customer_id INTEGER NOT NULL,
     rating INTEGER,
     CONSTRAINT valid_rating CHECK (rating IN (1, 2, 3, 4, 5)),

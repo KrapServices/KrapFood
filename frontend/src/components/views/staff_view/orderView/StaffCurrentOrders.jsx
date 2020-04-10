@@ -27,7 +27,7 @@ class StaffCurrentOrders extends Component {
         });
         // console.table(this.state);
       } else {
-        alert('cannot load orders');
+        alert('no available riders! Pls contact fds manager');
       }
     };
   }
