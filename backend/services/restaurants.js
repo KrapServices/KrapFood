@@ -138,6 +138,63 @@ const getMenuById = async (request, response) => {
   }
 };
 
+const createPromotion = async (request, response) => {
+  try {
+    const {
+      restaurantId, discount, promoName, dateRange,
+    } = request.body;
+    const promo = (await query(
+      `
+        INSERT INTO promotions (discount, promo_name, start_time, end_time) 
+        VALUES ($1, $2, $3, $4)
+        RETURNING promo_id, promo_name
+        `,
+      [discount, promoName, dateRange[0], dateRange[1]],
+    )).rows[0];
+    const restaurant = (await query(
+      `
+        INSERT INTO offers (promo_id, restaurant_id)
+        VALUES ($1, $2)
+        RETURNING restaurant_id
+    `,
+      [promo.promo_id, restaurantId],
+    )).rows[0];
+    response.status(200).json({
+      promo: {
+        restaurantId: restaurant.restaurant_id,
+        promoId: promo.promo_id,
+        promoCode: promo.promo_code,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    response.status(500).send('An error occured with creating the promotion');
+  }
+};
+
+const getPromotionsById = async (request, response) => {
+  try {
+    const { id: restaurantId } = request.params;
+    const promotions = (await query(
+      `
+      SELECT DISTINCT P.discount, P.promo_name, P.start_time, P.end_time
+      FROM Promotions P NATURAL JOIN Offers O
+      WHERE O.restaurant_id = $1
+      `,
+      [restaurantId],
+    )).rows.map((promo) => ({
+      discount: promo.discount,
+      promoName: promo.promo_name,
+      startTime: promo.start_time,
+      endTime: promo.end_time,
+    }));
+    return response.status(200).json(promotions);
+  } catch (error) {
+    console.log(error);
+    return response.status(500).send('restaurant could not be found');
+  }
+};
+
 // -----------------------------------------------------------------------------
 // Functions for Staff Dashboard
 // -----------------------------------------------------------------------------
@@ -197,7 +254,7 @@ const getStatsById = async (request, response) => {
       )
       SELECT C.food_name, category, price, orderCount
       FROM foodCount C JOIN foods F ON C.food_name = F.food_name AND C.restaurant_id = F.restaurant_id
-      ORDER BY orderCount
+      ORDER BY orderCount desc
       LIMIT 5
         `,
       [restaurantId, month, year],
@@ -219,4 +276,6 @@ module.exports = {
   getMenuById,
   getMonthsById,
   getStatsById,
+  createPromotion,
+  getPromotionsById,
 };

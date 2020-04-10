@@ -20,9 +20,20 @@ CREATE TABLE promotions
 (
     promo_id SERIAL,
     discount INTEGER NOT NULL,
+    promo_name TEXT NOT NULL UNIQUE,
     start_time TIMESTAMP NOT NULL,
     end_time TIMESTAMP NOT NULL,
+    CONSTRAINT check_time_validity CHECK (EXTRACT(EPOCH FROM end_time) > EXTRACT(EPOCH FROM start_time) AND EXTRACT(EPOCH FROM start_time) >= EXTRACT(EPOCH FROM current_timestamp)),
     PRIMARY KEY (promo_id)
+);
+
+CREATE TABLE offers
+(
+    promo_id INTEGER,
+    restaurant_id INTEGER,
+    PRIMARY KEY (promo_id),
+    FOREIGN KEY (promo_id) REFERENCES promotions (promo_id),
+    FOREIGN KEY (restaurant_id) REFERENCES restaurants(restaurant_id) ON DELETE CASCADE
 );
 
 CREATE TABLE applies
