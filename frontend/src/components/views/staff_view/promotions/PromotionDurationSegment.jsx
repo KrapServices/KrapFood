@@ -139,8 +139,6 @@ class PromotionDurationSegment extends Component {
     const {
       dateRange, waitingForFirstClick, startTime, endTime, promoName, discount,
     } = this.state;
-    console.log('state');
-    console.log(this.state);
     return (
       <>
         <Header size="huge">Create a promotion</Header>
@@ -239,6 +237,5 @@ class PromotionDurationSegment extends Component {
     );
   }
 }
-
 PromotionDurationSegment.contextType = userContext;
 export default PromotionDurationSegment;

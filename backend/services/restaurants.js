@@ -150,7 +150,7 @@ const createPromotion = async (request, response) => {
         VALUES ($1, $2, $3, $4)
         RETURNING promo_id, promo_name
         `,
-      [discount, promoName, dateRange[0], dateRange[1]],
+      [discount, promoName, new Date(dateRange[0]), new Date(dateRange[1])],
     )).rows[0];
     const restaurant = (await query(
       `
