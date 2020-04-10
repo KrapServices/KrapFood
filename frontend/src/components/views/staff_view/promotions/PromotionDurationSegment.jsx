@@ -88,16 +88,15 @@ class PromotionDurationSegment extends Component {
 
     this.handleStartTimeChange = (event, { value }) => {
       const { dateRange } = this.state;
-      dateRange[0].setHours(value);
+      dateRange[0].setUTCHours(value);
 
       this.setState({ startTime: value, dateRange });
     };
 
     this.handleEndTimeChange = (event, { value }) => {
       const { dateRange } = this.state;
-      dateRange[1].setHours(value);
+      dateRange[1].setUTCHours(value);
       this.setState({ endTime: value, dateRange });
-
     };
 
     this.clearForm = () => {
@@ -143,7 +142,7 @@ class PromotionDurationSegment extends Component {
 
   render() {
     const {
-      dateRange, waitingForFirstClick, dateBuffer, startTime, endTime, promoName, discount,
+      dateRange, waitingForFirstClick, startTime, endTime, promoName, discount,
     } = this.state;
     console.log('state');
     console.log(this.state);

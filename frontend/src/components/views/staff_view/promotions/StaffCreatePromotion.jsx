@@ -5,6 +5,14 @@ import PromotionDurationSegment from './PromotionDurationSegment';
 import userContext from '../../../../userContext';
 import config from '../../../../config.json';
 
+function formatTime(date) {
+  const hour = date.getHours();
+  const minutes = date.getMinutes();
+  const hourString = (hour < 10) ? `0${hour}` : `${hour}`;
+  const minuteString = (minutes < 10) ? `0${minutes}` : `${minutes}`;
+  return `${date.toDateString()}, ${hourString}:${minuteString}`;
+}
+
 class StaffCreatePromotion extends Component {
   constructor() {
     super();
@@ -68,12 +76,14 @@ class StaffCreatePromotion extends Component {
                         <br />
                         Start time:
                         {' '}
-                        <b>{` ${new Date(promo.startTime).toDateString()}`}</b>
+                        <b>
+                          {formatTime(new Date(promo.startTime))}
+                        </b>
                         {' '}
                         <br />
                         End time:
                         {' '}
-                        <b>{` ${new Date(promo.endTime).toDateString()}`}</b>
+                        <b>{formatTime(new Date(promo.endTime))}</b>
                         {' '}
                         <br />
                       </Item.Description>
