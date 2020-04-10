@@ -143,6 +143,7 @@ const createPromotion = async (request, response) => {
     const {
       restaurantId, discount, promoName, dateRange,
     } = request.body;
+    console.log(dateRange);
     const promo = (await query(
       `
         INSERT INTO promotions (discount, promo_name, start_time, end_time) 

@@ -87,16 +87,11 @@ class PromotionDurationSegment extends Component {
     };
 
     this.handleStartTimeChange = (event, { value }) => {
-      const { dateRange } = this.state;
-      dateRange[0].setUTCHours(value);
-
-      this.setState({ startTime: value, dateRange });
+      this.setState({ startTime: value });
     };
 
     this.handleEndTimeChange = (event, { value }) => {
-      const { dateRange } = this.state;
-      dateRange[1].setUTCHours(value);
-      this.setState({ endTime: value, dateRange });
+      this.setState({ endTime: value });
     };
 
     this.clearForm = () => {
@@ -119,9 +114,9 @@ class PromotionDurationSegment extends Component {
       const {
         startTime, endTime, restaurantId, dateRange, promoName, discount,
       } = this.state;
-      // dateRange[0].setHours(startTime);
-      // dateRange[1].setHours(endTime);
-      console.table(this.state);
+      dateRange[0].setHours(startTime);
+      dateRange[1].setHours(endTime);
+      console.log(this.state);
       try {
         await Axios.post(`${config.localhost}restaurants/create`, {
           restaurantId,
