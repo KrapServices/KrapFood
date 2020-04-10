@@ -111,7 +111,7 @@ function RestaurantCard(props) {
         {selectedRestaurantId === restaurantId
           ? (
             <Segment>
-              <Tab menu={{ fluid: true, vertical: true, tabular: true }} panes={panes} />
+              <Tab menu={{ tabular: true }} panes={panes} />
             </Segment>
           )
           : (

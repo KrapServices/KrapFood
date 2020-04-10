@@ -1,11 +1,14 @@
-/*
-CREATE OR REPLACE FUNCTION assign_delivery_order(curr TIMESTAMP) RETURNS TRIGGER
+
+CREATE OR REPLACE FUNCTION assign_delivery_order() RETURNS TRIGGER
     AS $$
-DECLARE
-    current DATE;
 BEGIN
     -- check schedule for available riders
     -- assign order to available riders
+    SELECT shift_id 
+    FROM SHIFTS s
+    WHERE DATE(NEW.created_at) = s.work_date and (NEW.created_at >= s.starting_time and NEW.created_at < (s.ending_time::time - INTERVAL '30 min')) -- only assign to orders to rider w 30 mins left 
+    
+
     RETURN NULL;
 END;
 $$ LANGUAGE plpgsql;
@@ -17,9 +20,8 @@ CREATE TRIGGER assign_delivery_order_trigger
     FOR EACH ROW
     WHEN (NEW.status = 'delivering')
     --assign rider
-    EXECUTE PROCEDURE assign_delivery_order(current_timestamp);
+    EXECUTE PROCEDURE assign_delivery_order();
 
-*/
 
 CREATE OR REPLACE FUNCTION complete_delivery_order_customer() RETURNS TRIGGER
     AS $$

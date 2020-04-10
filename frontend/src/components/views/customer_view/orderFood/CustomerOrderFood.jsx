@@ -250,8 +250,8 @@ class CustomerOrderFood extends Component {
     const price = this.calculateTotal();
     return (
       <customerCartContext.Provider value={value}>
-        <Grid columns={1} stackable>
-          <Grid.Column>
+        <Grid stackable>
+          <Grid.Column width="5">
             <Segment attached="top" color="grey">
               <Header as="h2">Your Cart</Header>
             </Segment>
@@ -363,7 +363,9 @@ class CustomerOrderFood extends Component {
 
               {' '}
             </Message>
-            <Divider />
+          </Grid.Column>
+          <Grid.Column width="11">
+
             <Segment>
               { selectedRestaurantId === -1
                 ? (
