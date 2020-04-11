@@ -70,7 +70,7 @@ CREATE OR REPLACE FUNCTION complete_delivery_order_rider() RETURNS TRIGGER
     AS $$
 BEGIN
     UPDATE delivers d
-    SET collection_time = current_timestamp
+    SET completion_time = current_timestamp
     WHERE d.order_id = NEW.order_id;
     RETURN NULL;
 END;

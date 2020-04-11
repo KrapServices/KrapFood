@@ -111,9 +111,14 @@ const getOrderByRiderId = async (request, response) => {
     )).rows;
     console.log(`orders: ${orders}`);
     // const preparingOrders = orders.filter(x => x.status === 'preparing');
-    const deliveringOrders = orders.filter((x) => x.status === 'delivering');
+    const departToCollectOrders = orders.filter((x) => x.status === 'delivering' && x.departure_time === null && x.arrival_time === null && x.collection_time === null);
+    const arriveToCollectOrders = orders.filter((x) => x.status === 'delivering' && x.departure_time !== null && x.arrival_time === null && x.collection_time === null);
+    const departFromRestaurantOrders = orders.filter((x) => x.status === 'delivering' && x.departure_time !== null && x.arrival_time !== null && x.collection_time === null);
+    const deliveringOrders = orders.filter((x) => x.status === 'delivering' && x.departure_time !== null && x.arrival_time !== null && x.collection_time !== null);
     const completedOrders = orders.filter((x) => x.status === 'completed');
-    return response.status(200).json({ orders, deliveringOrders, completedOrders });
+    return response.status(200).json({
+      orders, deliveringOrders, completedOrders, departToCollectOrders, departFromRestaurantOrders, arriveToCollectOrders,
+    });
   } catch (error) {
     console.log(error);
     return response.status(500).send('orders could not be found');
@@ -153,6 +158,46 @@ const updateOrderStatus = async (request, response) => {
   }
 };
 
+const updateOrderTimingDepartureToRestaurant = async (request, response) => {
+  try {
+    const { id } = request.params;
+    (await query(
+      ' UPDATE DELIVERS set departure_time = NOW()::TIME where order_id = $1;', [id],
+    ));
+    return response.status(200).send();
+  } catch (error) {
+    console.log(error);
+    return response.status(500).send('orders could not be updated');
+  }
+};
+
+const updateOrderTimingArrival = async (request, response) => {
+  try {
+    const { id } = request.params;
+    (await query(
+      ' UPDATE DELIVERS set arrival_time = NOW()::TIME where order_id = $1;', [id],
+    ));
+    return response.status(200).send();
+  } catch (error) {
+    console.log(error);
+    return response.status(500).send('orders could not be updated');
+  }
+};
+
+const updateOrderTimingDepartureFromRestaurant = async (request, response) => {
+  try {
+    const { id } = request.params;
+    (await query(
+      ' UPDATE DELIVERS set collection_time = NOW()::TIME where order_id = $1;', [id],
+    ));
+    return response.status(200).send();
+  } catch (error) {
+    console.log(error);
+    return response.status(500).send('orders could not be updated');
+  }
+};
+
+
 
 module.exports = {
   getAllOrders,
@@ -163,4 +208,7 @@ module.exports = {
   updateOrderStatus,
   createOrder,
   getOrderByRestaurantId,
+  updateOrderTimingDepartureToRestaurant,
+  updateOrderTimingArrival,
+  updateOrderTimingDepartureFromRestaurant,
 };
