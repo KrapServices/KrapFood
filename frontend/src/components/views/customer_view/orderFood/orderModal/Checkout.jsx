@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
 import Axios from 'axios';
 import {
   Modal, Header, Button, Icon, List, Segment,
@@ -56,11 +57,18 @@ class Checkout extends Component {
     // =========================================================================
     // Axios calls
     // =========================================================================
-
+    this.isDisabledOrder = () => {
+      const { isDeliveryFeeCaculated, payByCash, selectedCreditCard } = this.state;
+      if (payByCash) {
+        return !isDeliveryFeeCaculated;
+      }
+      return !isDeliveryFeeCaculated ? true : _.isEmpty(selectedCreditCard);
+    };
 
     this.createOrder = async () => {
+      console.log(this.state);
       const {
-        shoppingCart, deliveryLocation, deliveryFee, promotions,
+        shoppingCart, deliveryLocation, deliveryFee, payByCash, selectedCreditCard, restaurantPromotions, customerPromotions,
       } = this.state;
       const { user } = this.props;
       const { customerId } = user;
@@ -83,7 +91,7 @@ class Checkout extends Component {
         });
       });
 
-      const price = this.calculateTotal();
+      const price = this.calculateFinalCost();
       try {
         const result = await Axios.post(
           `${config.localhost}orders/`,
@@ -94,7 +102,10 @@ class Checkout extends Component {
             listOfFoods,
             deliveryLocation,
             deliveryFee,
-            promotions,
+            payByCash,
+            selectedCreditCard,
+            restaurantPromotions,
+            customerPromotions,
           },
           {
             headers: { 'Access-Control-Allow-Origin': true },
@@ -151,6 +162,7 @@ class Checkout extends Component {
         // apply to each item
         priceList = priceList.map((price) => price * (totalRestaurantDiscount / 100));
       }
+      // TODO: settle customer app wide promo code
       const result = priceList.reduce((prev, curr) => prev + curr, 0);
       const final = result + deliveryFee;
       return final;
@@ -211,7 +223,7 @@ class Checkout extends Component {
             <DeliveryForm calculateDeliveryFee={this.calculateDeliveryFee} />
             <Header as="h3">{`Delivery Fee  ${deliveryFee}`}</Header>
             <Header as="h3">{`Final Cost  ${finalCost}`}</Header>
-      
+
 
           </Modal.Content>
           <Modal.Actions>
@@ -220,7 +232,7 @@ class Checkout extends Component {
               {' '}
               Back to order
             </Button>
-            <Button color="green" onClick={() => this.createOrder()} disabled={!isDeliveryFeeCaculated} inverted>
+            <Button color="green" onClick={() => this.createOrder()} disabled={this.isDisabledOrder()} inverted>
               <Icon name="checkmark" />
               {' '}
               Create Order
