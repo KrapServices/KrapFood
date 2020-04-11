@@ -58,7 +58,7 @@ class RiderOrderView extends Component {
     return (
       <div>
         <riderOrderContext.Provider value={value}>
-          <RiderCurrentOrders />
+          <RiderCurrentOrders loadOrders={this.loadOrders} />
         </riderOrderContext.Provider>
       </div>
     );
