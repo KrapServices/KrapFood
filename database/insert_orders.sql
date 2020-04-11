@@ -1,13 +1,14 @@
+BEGIN;
 INSERT INTO users
     (user_id, email, password)
 VALUES
     (1, 'c0', 'p0');
 
-
 INSERT INTO customers
-    (customer_id, name, order_count, points)
+    (customer_id, name)
 VALUES
-    (1, 'Bob', 1, 0);
+    (1, 'Bob');
+COMMIT;
 
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating)

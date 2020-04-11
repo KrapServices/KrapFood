@@ -6,13 +6,17 @@ const router = express.Router();
 
 router.get('/', services.getAllRestaurant);
 
-router.get('/:id', services.getRestaurantById);
+router.post('/create', services.createPromotion);
 
 router.get('/:id/food', services.getMenuById);
 
 router.get('/:id/stats', services.getStatsById);
 
+router.get('/:id/promo', services.getPromotionsById);
+
 router.get('/:id/months', services.getMonthsById);
+
+router.get('/:id', services.getRestaurantById);
 
 router.post('/', services.createRestaurant);
 
