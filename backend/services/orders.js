@@ -9,7 +9,8 @@ const { query } = require('../database');
 const createOrder = async (request, response) => {
   try {
     const {
-      totalCost, status, listOfFoods, deliveryLocation, customerId, deliveryFee, promotions,
+      totalCost, status, listOfFoods, deliveryLocation, customerId, deliveryFee,
+      restaurantPromotions, customerPromotions, payByCash, selectedCreditCard,
     } = request.body;
 
     const order = (await query(
@@ -20,12 +21,35 @@ const createOrder = async (request, response) => {
       `,
       [customerId, deliveryLocation, totalCost, status, deliveryFee],
     )).rows[0];
-    await Promise.all(promotions.map((promotion) => query(
+    await Promise.all(restaurantPromotions.map((promotion) => query(
+      `
+          INSERT INTO applies (promo_id, order_id) VALUES ($1,$2)
+        `,
+      [promotion.promoId, order.order_id],
+    )));
+    /*
+    await Promise.all(customerPromotions.map((promotion) => query(
       `
           INSERT INTO applies (promo_id, order_id) VALUES ($1,$2)
         `,
       [promotion.promotionId, order.order_id],
-    )));
+    )));*/
+
+    if (payByCash) {
+      await query(
+        `
+        INSERT INTO cash_payments (order_id, cash) VALUES ($1, true)
+        `,
+        [order.order_id],
+      );
+    } else {
+      await query(
+        `
+        INSERT INTO card_payments (order_id, card_number) VALUES ($1, $2)
+        `,
+        [order.order_id, selectedCreditCard.card_number],
+      );
+    }
 
 
     await Promise.all(listOfFoods.map((food) => {

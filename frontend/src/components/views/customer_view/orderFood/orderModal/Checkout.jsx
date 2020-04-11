@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import Axios from 'axios';
 import {
-  Modal, Header, Button, Icon, List, Segment,
+  Modal, Header, Button, Icon, List,
 } from 'semantic-ui-react';
 import PaymentForm from './PaymentForm';
 import Promotions from './Promotions';
@@ -68,8 +68,11 @@ class Checkout extends Component {
     this.createOrder = async () => {
       console.log(this.state);
       const {
-        shoppingCart, deliveryLocation, deliveryFee, payByCash, selectedCreditCard, restaurantPromotions, customerPromotions,
+        deliveryLocation,
+        deliveryFee, payByCash, selectedCreditCard,
+        restaurantPromotions, customerPromotions,
       } = this.state;
+      const { shoppingCart } = this.context;
       const { user } = this.props;
       const { customerId } = user;
       // get ID
@@ -84,7 +87,9 @@ class Checkout extends Component {
         }
       });
       uniqueFoods.forEach((uniqueFood) => {
-        const quantity = shoppingCart.filter((food) => food.restaurantId === uniqueFood.restaurantId && food.foodName === uniqueFood.foodName).length;
+        const quantity = shoppingCart
+          .filter((food) => food.restaurantId === uniqueFood.restaurantId
+          && food.foodName === uniqueFood.foodName).length;
         listOfFoods.push({
           ...uniqueFood,
           quantity,
@@ -93,6 +98,7 @@ class Checkout extends Component {
 
       const price = this.calculateFinalCost();
       try {
+        const { clearCart } = this.context;
         const result = await Axios.post(
           `${config.localhost}orders/`,
           {
@@ -112,7 +118,7 @@ class Checkout extends Component {
           },
         );
         console.log(result);
-        this.clearCart();
+        clearCart();
         alert('order created!');
       } catch (error) {
         //  console.log(error);
@@ -158,7 +164,8 @@ class Checkout extends Component {
       const { shoppingCart } = this.context;
       let priceList = shoppingCart.map((x) => Number(x.price));
       if (restaurantPromotions.length !== 0) {
-        const totalRestaurantDiscount = restaurantPromotions.map((x) => x.discount).reduce((prev, curr) => Number(prev) + Number(curr), 0);
+        const totalRestaurantDiscount = restaurantPromotions
+          .map((x) => x.discount).reduce((prev, curr) => Number(prev) + Number(curr), 0);
         // apply to each item
         priceList = priceList.map((price) => price * (totalRestaurantDiscount / 100));
       }
@@ -176,7 +183,9 @@ class Checkout extends Component {
 
   render() {
     const {
-      payByCash, selectedCreditCard, customerPromotions, deliveryFee, isDeliveryFeeCaculated, restaurantPromotions,
+      payByCash, selectedCreditCard,
+      customerPromotions, deliveryFee,
+      restaurantPromotions,
     } = this.state;
 
     const {
@@ -208,7 +217,10 @@ class Checkout extends Component {
               )
               : (
                 <>
-                  <PaymentForm selectedCreditCard={selectedCreditCard} setCard={(card) => this.setCard(card)} />
+                  <PaymentForm
+                    selectedCreditCard={selectedCreditCard}
+                    setCard={(card) => this.setCard(card)}
+                  />
                   {' '}
                   <br />
                   <br />

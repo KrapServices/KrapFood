@@ -178,12 +178,13 @@ const getPromotionsById = async (request, response) => {
     const { id: restaurantId } = request.params;
     const promotions = (await query(
       `
-      SELECT DISTINCT P.discount, P.promo_name, P.start_time, P.end_time
+      SELECT DISTINCT P.promo_id, P.discount, P.promo_name, P.start_time, P.end_time
       FROM Promotions P NATURAL JOIN Offers O
       WHERE O.restaurant_id = $1
       `,
       [restaurantId],
     )).rows.map((promo) => ({
+      promoId: promo.promo_id,
       discount: promo.discount,
       promoName: promo.promo_name,
       startTime: promo.start_time,

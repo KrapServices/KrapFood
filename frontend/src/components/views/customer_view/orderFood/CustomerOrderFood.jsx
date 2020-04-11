@@ -153,6 +153,7 @@ class CustomerOrderFood extends Component {
       shoppingCart,
       addToCart: this.addToCart,
       removeFromCart: this.removeFromCart,
+      clearCart: this.clearCart,
       selectedRestaurantId,
       closePayment: this.closePayment,
     };

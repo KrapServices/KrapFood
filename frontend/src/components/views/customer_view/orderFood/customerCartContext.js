@@ -5,6 +5,7 @@ const customerCartContext = React.createContext({
   selectedRestaurantId: -1,
   addToCart: () => {},
   removeFromCart: () => {},
+  clearCart: () => {},
   closePayment: () => {},
 }); // Create a context object
 

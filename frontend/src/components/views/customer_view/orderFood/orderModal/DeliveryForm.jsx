@@ -33,7 +33,11 @@ class DeliveryForm extends React.Component {
         if (resultLocations.status === 200) {
           const locations = [];
           resultLocations.data.locations.forEach((val) => {
-            locations.push({ createdAt: val.created_at, orderId: val.order_id, deliveryLocation: val.delivery_location });
+            locations.push({
+              createdAt: val.created_at,
+              orderId: val.order_id,
+              deliveryLocation: val.delivery_location,
+            });
           });
           const options = [];
           locations.forEach((value, index) => {
@@ -67,7 +71,7 @@ class DeliveryForm extends React.Component {
       enterLocation ? 'choose previous Locations' : 'enter new'
     }
         </Button>
-        <br/>
+        <br />
         { enterLocation
 
           ? <Input focus onChange={calculateDeliveryFee} placeholder="Enter  Address" fluid />

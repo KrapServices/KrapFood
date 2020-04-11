@@ -20,7 +20,7 @@ CREATE TABLE customers
 
 CREATE TABLE cards  
 (
-    card_number TEXT,
+    card_number TEXT UNIQUE,
     expiry TEXT,
     customer_id INTEGER,
     name_card Text,

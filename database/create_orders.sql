@@ -20,19 +20,19 @@ CREATE TABLE orders
 CREATE TABLE cash_payments 
 (
     order_id INTEGER,
-    Cash BOOLEAN,
+    cash BOOLEAN,
     PRIMARY KEY (order_id),
     FOREIGN KEY (order_id) REFERENCES orders(order_id)
-)
+);
 
 CREATE TABLE card_payments
 (
     order_id INTEGER,
-    card_id INTEGER,
-    PRIMARY KEY (card_id, order_id),
+    card_number TEXT ,
+    PRIMARY KEY (card_number, order_id),
     FOREIGN KEY (order_id) REFERENCES orders(order_id),
-    FOREIGN KEY (card_id) REFERENCES cards(card_number)
-)
+    FOREIGN KEY (card_number) REFERENCES cards(card_number)
+);
 
 -- Order can have multiple promotions
 CREATE TABLE promotions
