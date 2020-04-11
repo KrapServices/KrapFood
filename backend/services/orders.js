@@ -9,7 +9,7 @@ const { query } = require('../database');
 const createOrder = async (request, response) => {
   try {
     const {
-      totalCost, status, listOfFoods, deliveryLocation, customerId, deliveryFee,
+      totalCost, status, listOfFoods, deliveryLocation, customerId, deliveryFee, promotions,
     } = request.body;
 
     const order = (await query(
@@ -20,6 +20,13 @@ const createOrder = async (request, response) => {
       `,
       [customerId, deliveryLocation, totalCost, status, deliveryFee],
     )).rows[0];
+    await Promise.all(promotions.map((promotion) => query(
+      `
+          INSERT INTO applies (promo_id, order_id) VALUES ($1,$2)
+        `,
+      [promotion.promotionId, order.order_id],
+    )));
+
 
     await Promise.all(listOfFoods.map((food) => {
       const { order_id: orderId } = order;
@@ -196,7 +203,6 @@ const updateOrderTimingDepartureFromRestaurant = async (request, response) => {
     return response.status(500).send('orders could not be updated');
   }
 };
-
 
 
 module.exports = {

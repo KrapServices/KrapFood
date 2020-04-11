@@ -130,12 +130,11 @@ class CustomerOrderFood extends Component {
     // Axios calls
     // =========================================================================
     this.createOrder = async () => {
-      const { shoppingCart, deliveryLocation, deliveryFee } = this.state;
+      const { shoppingCart, deliveryLocation, deliveryFee, promotions } = this.state;
       const { user } = this.props;
       const { customerId } = user;
       // get ID
       const listOfFoods = [];
-
       const uniqueFoods = [];
       shoppingCart.forEach((food) => {
         const { restaurantId, foodName } = food;
@@ -145,7 +144,6 @@ class CustomerOrderFood extends Component {
           uniqueFoods.push(food);
         }
       });
-
       uniqueFoods.forEach((uniqueFood) => {
         const quantity = shoppingCart.filter((food) => food.restaurantId === uniqueFood.restaurantId && food.foodName === uniqueFood.foodName).length;
         listOfFoods.push({
@@ -153,8 +151,6 @@ class CustomerOrderFood extends Component {
           quantity,
         });
       });
-
-      console.log(listOfFoods);
 
       const price = this.calculateTotal();
       try {
@@ -167,6 +163,7 @@ class CustomerOrderFood extends Component {
             listOfFoods,
             deliveryLocation,
             deliveryFee,
+            promotions,
           },
           {
             headers: { 'Access-Control-Allow-Origin': true },
