@@ -1,15 +1,14 @@
 import React from 'react';
+import Proptypes, { object, string } from 'prop-types';
 import Axios from 'axios';
 import { Input } from 'semantic-ui-react';
 import config from '../../../../../config.json';
-import 'react-credit-cards/es/styles-compiled.css';
 import userContext from '../../../../../userContext';
 
 class Promotions extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      promoCodes: [],
     };
 
     this.handleChange = (e, { value }) => {
@@ -19,6 +18,7 @@ class Promotions extends React.Component {
       // -----------------------------------------------------------------------
       setPromotions(value, 0);
     };
+    /*
     this.getPromoCodes = async () => {
       try {
         const resultPromo = await Axios.get(`${config.localhost}customers/promotions/`);
@@ -29,23 +29,22 @@ class Promotions extends React.Component {
         //  console.log(error);
         alert('User does not have a credit card preregistered!');
       }
-    };
+    }; */
   }
 
   componentDidMount() {
-    this.getPromoCodes();
+    // this.getPromoCodes();
   }
 
 
   render() {
-    const { promoCodes } = this.state;
-    const { promotions, setPromotions } = this.props;
+    const { promotions } = this.props;
 
     return (
       <>
         <br />
         {
-          promotions.map((x) => <Input  labelPosition='left' label="Promo Code" onChange={this.handleChange} fluid placeholder="enter promo code" />)
+          promotions.map((x) => <Input key={x} labelPosition="left" label="Promo Code" onChange={this.handleChange} fluid placeholder="enter promo code" />)
       }
         <br />
 
@@ -54,6 +53,9 @@ class Promotions extends React.Component {
     );
   }
 }
-
+Promotions.propTypes = {
+  setPromotions: Proptypes.func.isRequired,
+  promotions: Proptypes.arrayOf(string).isRequired,
+};
 Promotions.contextType = userContext;
 export default Promotions;

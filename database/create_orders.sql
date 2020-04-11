@@ -16,6 +16,24 @@ CREATE TABLE orders
     FOREIGN KEY (customer_id) REFERENCES customers (customer_id) ON DELETE CASCADE
 );
 
+--payment 
+CREATE TABLE cash_payments 
+(
+    order_id INTEGER,
+    Cash BOOLEAN,
+    PRIMARY KEY (order_id),
+    FOREIGN KEY (order_id) REFERENCES orders(order_id)
+)
+
+CREATE TABLE card_payments
+(
+    order_id INTEGER,
+    card_id INTEGER,
+    PRIMARY KEY (card_id, order_id),
+    FOREIGN KEY (order_id) REFERENCES orders(order_id),
+    FOREIGN KEY (card_id) REFERENCES cards(card_number)
+)
+
 -- Order can have multiple promotions
 CREATE TABLE promotions
 (
@@ -27,6 +45,7 @@ CREATE TABLE promotions
     CONSTRAINT check_time_validity CHECK (EXTRACT(EPOCH FROM end_time) > EXTRACT(EPOCH FROM start_time) AND EXTRACT(EPOCH FROM start_time) >= EXTRACT(EPOCH FROM current_timestamp)),
     PRIMARY KEY (promo_id)
 );
+
 
 CREATE TABLE offers
 (
