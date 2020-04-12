@@ -34,6 +34,7 @@ CREATE TABLE card_payments
     FOREIGN KEY (card_number) REFERENCES cards(card_number)
 );
 
+
 -- Order can have multiple promotions
 CREATE TABLE promotions
 (
@@ -75,6 +76,14 @@ CREATE TABLE contain
     PRIMARY KEY (order_id, restaurant_id, food_name),
     FOREIGN KEY (restaurant_id, food_name) REFERENCES foods (restaurant_id, food_name),
     FOREIGN KEY (order_id) REFERENCES orders (order_id)
+);
+
+CREATE TABLE promotional_campaigns 
+(
+    campaign_id SERIAL, 
+    promo_id INTEGER, 
+    PRIMARY KEY (campaign_id, promo_id),
+    FOREIGN KEY (promo_id) REFERENCES promotions(promo_id)
 );
 
 CREATE TABLE delivers
