@@ -8,6 +8,7 @@ require('dotenv').config();
 const indexRouter = require('./routes/index');
 const registrationRouter = require('./routes/registration');
 const restaurantsRouter = require('./routes/restaurants');
+const promoRouter = require('./routes/promotions');
 const ordersRouter = require('./routes/orders');
 const foodRouter = require('./routes/food');
 const managerRouter = require('./routes/manager');
@@ -31,12 +32,14 @@ app.use(cors());
 app.use('/', indexRouter);
 app.use('/registrations', registrationRouter);
 app.use('/restaurants', restaurantsRouter);
+app.use('/promotions', promoRouter);
 app.use('/orders', ordersRouter);
 app.use('/food', foodRouter);
 app.use('/managers', managerRouter);
 app.use('/customers', customerRouter);
 app.use('/riders', riderRouter);
 app.use('/summary', summaryRouter);
+
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

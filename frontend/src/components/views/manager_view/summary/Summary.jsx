@@ -3,7 +3,7 @@ import axios from 'axios';
 import {
   Header, Input, Statistic, Button, Table,
 } from 'semantic-ui-react';
-import config from '../../../config.json';
+import config from '../../../../config.json';
 
 export default class Summary extends React.Component {
   constructor() {
