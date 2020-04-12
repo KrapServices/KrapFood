@@ -1,4 +1,5 @@
 import React from 'react';
+import Proptypes from 'prop-types';
 import Axios from 'axios';
 import Cards from 'react-credit-cards';
 import { Header, Button } from 'semantic-ui-react';
@@ -31,8 +32,6 @@ class CreditCardSignUp extends React.Component {
       const { name, number, expiry } = this.state;
       const { user } = this.context;
       const { customerId } = user;
-      console.log(name);
-      console.log(number);
       try {
         const result = await Axios.post(
           `${config.localhost}customers/cc/`,
@@ -47,7 +46,11 @@ class CreditCardSignUp extends React.Component {
           },
         );
         const { handleClose } = this.props;
-        handleClose();
+        if (result.status === 200) {
+          handleClose();
+        } else {
+          throw new Error();
+        }
       } catch (error) {
         //  console.log(error);
         alert('User does not have a credit card preregistered!');
@@ -108,6 +111,10 @@ class CreditCardSignUp extends React.Component {
     );
   }
 }
+
+CreditCardSignUp.propTypes = {
+  handleClose: Proptypes.func.isRequired,
+};
 
 CreditCardSignUp.contextType = userContext;
 export default CreditCardSignUp;

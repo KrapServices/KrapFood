@@ -128,7 +128,7 @@ class Login extends Component {
                   onChange={this.handleChange}
                 />
 
-                <Header>loging</Header>
+                <Header>Login</Header>
                 <Button.Group>
                   <Button
                     color="blue"

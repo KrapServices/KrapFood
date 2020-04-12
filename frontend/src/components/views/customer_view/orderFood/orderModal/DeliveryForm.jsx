@@ -33,7 +33,11 @@ class DeliveryForm extends React.Component {
         if (resultLocations.status === 200) {
           const locations = [];
           resultLocations.data.locations.forEach((val) => {
-            locations.push({ createdAt: val.created_at, orderId: val.order_id, deliveryLocation: val.delivery_location });
+            locations.push({
+              createdAt: val.created_at,
+              orderId: val.order_id,
+              deliveryLocation: val.delivery_location,
+            });
           });
           const options = [];
           locations.forEach((value, index) => {
@@ -61,13 +65,12 @@ class DeliveryForm extends React.Component {
 
     return (
       <>
-        <Header as="h3"> Delivery Location</Header>
-        <Button style={{ marginTop: '25px;', marginBottom: '25px' }} color="instagram" onClick={() => this.setState({ enterLocation: !enterLocation })} size="medium">
+        <Header as="h2"> Delivery Location</Header>
+        <Button style={{ marginTop: '25px', marginBottom: '25px' }} color="instagram" onClick={() => this.setState({ enterLocation: !enterLocation })} size="medium">
           {
       enterLocation ? 'choose previous Locations' : 'enter new'
     }
         </Button>
-        <br/>
         { enterLocation
 
           ? <Input focus onChange={calculateDeliveryFee} placeholder="Enter  Address" fluid />

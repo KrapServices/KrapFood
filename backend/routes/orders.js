@@ -15,6 +15,12 @@ router.get('/riderId/:id', orderServices.getOrderByRiderId);
 
 router.get('/restaurantId/:id', orderServices.getOrderByRestaurantId);
 
+router.patch('/departToRestaurant/:id', orderServices.updateOrderTimingDepartureToRestaurant);
+
+router.patch('/arriveAtRestaurant/:id', orderServices.updateOrderTimingArrival);
+
+router.patch('/departFromRestaurant/:id', orderServices.updateOrderTimingDepartureFromRestaurant);
+
 router.patch('/:id', orderServices.updateOrderStatus);
 
 router.post('/', orderServices.createOrder);

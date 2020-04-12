@@ -6,6 +6,7 @@ CREATE TABLE orders
     status TEXT NOT NULL DEFAULT 'preparing', -- 'preparing' | 'delivering' | 'completed' 
     CHECK (status IN ('preparing', 'delivering', 'completed')),
     delivery_location TEXT NOT NULL,
+    delivery_fee NUMERIC(10, 2) NOT NULL,
     customer_id INTEGER NOT NULL,
     rating INTEGER,
     CONSTRAINT valid_rating CHECK (rating IN (1, 2, 3, 4, 5)),
@@ -14,6 +15,25 @@ CREATE TABLE orders
     PRIMARY KEY (order_id),
     FOREIGN KEY (customer_id) REFERENCES customers (customer_id) ON DELETE CASCADE
 );
+
+--payment 
+CREATE TABLE cash_payments 
+(
+    order_id INTEGER,
+    cash BOOLEAN,
+    PRIMARY KEY (order_id),
+    FOREIGN KEY (order_id) REFERENCES orders(order_id)
+);
+
+CREATE TABLE card_payments
+(
+    order_id INTEGER,
+    card_number TEXT ,
+    PRIMARY KEY (card_number, order_id),
+    FOREIGN KEY (order_id) REFERENCES orders(order_id),
+    FOREIGN KEY (card_number) REFERENCES cards(card_number)
+);
+
 
 -- Order can have multiple promotions
 CREATE TABLE promotions
@@ -26,6 +46,7 @@ CREATE TABLE promotions
     CONSTRAINT check_time_validity CHECK (EXTRACT(EPOCH FROM end_time) > EXTRACT(EPOCH FROM start_time) AND EXTRACT(EPOCH FROM start_time) >= EXTRACT(EPOCH FROM current_timestamp)),
     PRIMARY KEY (promo_id)
 );
+
 
 CREATE TABLE offers
 (
@@ -55,6 +76,14 @@ CREATE TABLE contain
     PRIMARY KEY (order_id, restaurant_id, food_name),
     FOREIGN KEY (restaurant_id, food_name) REFERENCES foods (restaurant_id, food_name),
     FOREIGN KEY (order_id) REFERENCES orders (order_id)
+);
+
+CREATE TABLE promotional_campaigns 
+(
+    campaign_id SERIAL, 
+    promo_id INTEGER, 
+    PRIMARY KEY (campaign_id, promo_id),
+    FOREIGN KEY (promo_id) REFERENCES promotions(promo_id)
 );
 
 CREATE TABLE delivers

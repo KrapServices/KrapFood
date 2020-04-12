@@ -9,7 +9,7 @@ router.get('/cc/:id', customerService.customerCreditCardInfo);
 
 router.post('/cc/', customerService.customerCreateCreditCard);
 
-router.get('/promotions/', customerService.getPromotions);
+router.get('/promotions/', customerService.getCustomerPromotions);
 
 router.get('/locations/:id', customerService.getDeliveryLocations);
 

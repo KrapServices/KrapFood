@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import _ from 'lodash';
 import {
-  List, Button, Segment, Grid, Header, Search, Divider, Message, Icon, Card, Modal, Input,
+  List, Button, Segment, Grid, Header, Search, Divider, Message, Icon, Card,
 } from 'semantic-ui-react';
 import Axios from 'axios';
 import Cart from './Cart';
 import config from '../../../../config.json';
 import customerCartContext from './customerCartContext';
 import RestaurantCard from './RestaurantCard';
-import PaymentForm from './orderModal/PaymentForm';
-import Promotions from './orderModal/Promotions';
-import DeliveryForm from './orderModal/DeliveryForm';
+import Checkout from './orderModal/Checkout';
 
 class CustomerOrderFood extends Component {
   constructor(props) {
@@ -23,12 +22,6 @@ class CustomerOrderFood extends Component {
       shoppingCart: [],
       selectedRestaurantId: -1,
       paymentOpen: false,
-      payByCash: false,
-      selectedCreditCard: {},
-      promotions: [''],
-      deliveryLocation: '',
-      deliveryFee: 0,
-      isDeliveryFeeCaculated: false,
     };
     // =========================================================================
     // Restaurant state
@@ -44,7 +37,6 @@ class CustomerOrderFood extends Component {
       const result = await Axios.get(`${config.localhost}restaurants/`);
       if (result.status === 200) {
         this.setState({ listOfRestaurants: result.data.restaurants });
-        console.log(this.state.listOfRestaurants);
       } else {
         alert('cannot load restaurant');
       }
@@ -88,99 +80,15 @@ class CustomerOrderFood extends Component {
       return this.calculateTotal() <= listOfRestaurants[0].priceThreshold;
     };
 
-    // ---------------------------------------------------------------------------
-    // credit card
-    // ---------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
+    // Open checkout Modal
+    // -------------------------------------------------------------------------
     this.openPayment = () => {
       this.setState({ paymentOpen: true });
     };
     this.closePayment = () => {
-      this.setState({ paymentOpen: false, isDeliveryFeeCaculated: false, deliveryFee: 0 });
+      this.setState({ paymentOpen: false });
     };
-    this.setCard = (card) => {
-      this.setState({ selectedCreditCard: card });
-    };
-    this.switchPayment = () => {
-      const { payByCash } = this.state;
-      this.setState({ payByCash: !payByCash, selectedCreditCard: {} });
-    };
-
-    // =========================================================================
-    // promo code
-    // =========================================================================
-
-    this.setPromotions = (value, index) => {
-      const { promotions } = this.state;
-      promotions[index] = value;
-      this.setState({ promotions });
-    };
-
-    // -------------------------------------------------------------------------
-    // Delivery Fee
-    // -------------------------------------------------------------------------
-    this.determineFee = (value) => 5;
-
-    this.calculateDeliveryFee = (e, { value }) => {
-      console.log(value);
-      const deliveryFee = this.determineFee(value);
-      this.setState({ isDeliveryFeeCaculated: true, deliveryFee, deliveryLocation: value });
-    };
-
-    // =========================================================================
-    // Axios calls
-    // =========================================================================
-    this.createOrder = async () => {
-      const { shoppingCart, deliveryLocation, deliveryFee } = this.state;
-      const { user } = this.props;
-      const { customerId } = user;
-      // get ID
-      const listOfFoods = [];
-
-      const uniqueFoods = [];
-      shoppingCart.forEach((food) => {
-        const { restaurantId, foodName } = food;
-        const sameFood = (uniqueFood) => uniqueFood.restaurantId === restaurantId
-            && uniqueFood.foodName === foodName;
-        if (!uniqueFoods.find(sameFood)) {
-          uniqueFoods.push(food);
-        }
-      });
-
-      uniqueFoods.forEach((uniqueFood) => {
-        const quantity = shoppingCart.filter((food) => food.restaurantId === uniqueFood.restaurantId && food.foodName === uniqueFood.foodName).length;
-        listOfFoods.push({
-          ...uniqueFood,
-          quantity,
-        });
-      });
-
-      console.log(listOfFoods);
-
-      const price = this.calculateTotal();
-      try {
-        const result = await Axios.post(
-          `${config.localhost}orders/`,
-          {
-            customerId,
-            totalCost: price,
-            status: 'preparing',
-            listOfFoods,
-            deliveryLocation,
-            deliveryFee,
-          },
-          {
-            headers: { 'Access-Control-Allow-Origin': true },
-          },
-        );
-        console.log(result);
-        this.clearCart();
-        alert('order created!');
-      } catch (error) {
-        //  console.log(error);
-        alert('error has occured');
-      }
-    };
-
 
     // -------------------------------------------------------------------------
     // Search stuff
@@ -236,22 +144,24 @@ class CustomerOrderFood extends Component {
   }
 
   render() {
+    const { user } = this.props;
     const {
       listOfRestaurants, shoppingCart, selectedRestaurantId, isLoading, results,
-      searchValue, paymentOpen, payByCash, selectedCreditCard, promotions,
-      isDeliveryFeeCaculated, deliveryFee,
+      searchValue, paymentOpen,
     } = this.state;
     const value = {
       shoppingCart,
       addToCart: this.addToCart,
       removeFromCart: this.removeFromCart,
+      clearCart: this.clearCart,
       selectedRestaurantId,
+      closePayment: this.closePayment,
     };
     const price = this.calculateTotal();
     return (
       <customerCartContext.Provider value={value}>
-        <Grid columns={1} stackable>
-          <Grid.Column>
+        <Grid stackable>
+          <Grid.Column width="5">
             <Segment attached="top" color="grey">
               <Header as="h2">Your Cart</Header>
             </Segment>
@@ -274,58 +184,10 @@ class CustomerOrderFood extends Component {
                 <Button content="Confirm Order" color="green" onClick={() => this.openPayment()} disabled={this.minimum()} />
               </Button.Group>
             </Segment>
-            <>
-              <Modal
-                open={paymentOpen}
-                size="large"
-              >
-                <Header icon="money" content="Confirm your order" />
-                <Modal.Content>
-                  { payByCash
-                    ? (
-                      <>
-                        <h3>Payment will be by Cash on Delivery!</h3>
-                        <br />
-                        <Button color="orange" onClick={() => this.switchPayment()} inverted fluid>
-                          <Icon name="money" />
-                          {' '}
-                          Pay by Credit Card instead
-                        </Button>
-                      </>
-                    )
-                    : (
-                      <>
-                        <PaymentForm selectedCreditCard={selectedCreditCard} setCard={(card) => this.setCard(card)} />
-                        {' '}
-                        <br />
-                        <br />
-                        <Button color="orange" onClick={() => this.switchPayment()} inverted fluid>
-                          <Icon name="money" />
-                          {' '}
-                          Pay by Cash On Delivery
-                        </Button>
-                      </>
-                    ) }
-                  <Promotions promotions={promotions} setPromotions={this.setPromotions} />
-                  <DeliveryForm calculateDeliveryFee={this.calculateDeliveryFee} />
 
-                  <Header as="h3">{`Delivery Fee  ${deliveryFee}`}</Header>
-                </Modal.Content>
-                <Modal.Actions>
-                  <Button color="red" onClick={() => this.closePayment()} inverted>
-                    <Icon name="cancel" />
-                    {' '}
-                    Back to order
-                  </Button>
-                  <Button color="green" onClick={() => this.createOrder()} disabled={!isDeliveryFeeCaculated} inverted>
-                    <Icon name="checkmark" />
-                    {' '}
-                    Create Order
-                  </Button>
-                </Modal.Actions>
-              </Modal>
-            </>
-
+            {paymentOpen
+              ? <Checkout user={user} />
+              : <div />}
             {selectedRestaurantId === -1 ? <div />
               : (
                 <>
@@ -363,7 +225,9 @@ class CustomerOrderFood extends Component {
 
               {' '}
             </Message>
-            <Divider />
+          </Grid.Column>
+          <Grid.Column width="11">
+
             <Segment>
               { selectedRestaurantId === -1
                 ? (
@@ -401,6 +265,9 @@ class CustomerOrderFood extends Component {
     );
   }
 }
+CustomerOrderFood.propTypes = {
+  user: PropTypes.objectOf(Object).isRequired,
+};
 
 CustomerOrderFood.contextType = customerCartContext;
 export default CustomerOrderFood;

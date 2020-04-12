@@ -9,17 +9,48 @@ const { query } = require('../database');
 const createOrder = async (request, response) => {
   try {
     const {
-      totalCost, status, listOfFoods, deliveryLocation, customerId,
+      totalCost, status, listOfFoods, deliveryLocation, customerId, deliveryFee,
+      restaurantPromotions, customerPromotions, payByCash, selectedCreditCard, pointsToRedeem,
     } = request.body;
 
     const order = (await query(
       `
-        INSERT INTO orders (customer_id, delivery_location, total_cost, status) 
-        VALUES ($1, $2, $3, $4)
+        INSERT INTO orders (customer_id, delivery_location, total_cost, status, delivery_fee) 
+        VALUES ($1, $2, $3, $4, $5)
         RETURNING order_id
       `,
-      [customerId, deliveryLocation, totalCost, status],
+      [customerId, deliveryLocation, totalCost, status, deliveryFee],
     )).rows[0];
+    await Promise.all(restaurantPromotions.map((promotion) => query(
+      `
+          INSERT INTO applies (promo_id, order_id) VALUES ($1,$2)
+        `,
+      [promotion.promoId, order.order_id],
+    )));
+    /*
+    await Promise.all(customerPromotions.map((promotion) => query(
+      `
+          INSERT INTO applies (promo_id, order_id) VALUES ($1,$2)
+        `,
+      [promotion.promotionId, order.order_id],
+    ))); */
+
+    if (payByCash) {
+      await query(
+        `
+        INSERT INTO cash_payments (order_id, cash) VALUES ($1, true)
+        `,
+        [order.order_id],
+      );
+    } else {
+      await query(
+        `
+        INSERT INTO card_payments (order_id, card_number) VALUES ($1, $2)
+        `,
+        [order.order_id, selectedCreditCard.card_number],
+      );
+    }
+
 
     await Promise.all(listOfFoods.map((food) => {
       const { order_id: orderId } = order;
@@ -33,6 +64,14 @@ const createOrder = async (request, response) => {
         [orderId, restaurantId, foodName, quantity],
       );
     }));
+
+    await query(
+      `
+      UPDATE CUSTOMERS SET points = points - $1 
+      WHERE CUSTOMER_ID = $2;
+      `,
+      [pointsToRedeem, customerId],
+    );
 
     response.status(200).json({ order });
   } catch (error) {
@@ -111,9 +150,14 @@ const getOrderByRiderId = async (request, response) => {
     )).rows;
     console.log(`orders: ${orders}`);
     // const preparingOrders = orders.filter(x => x.status === 'preparing');
-    const deliveringOrders = orders.filter((x) => x.status === 'delivering');
+    const departToCollectOrders = orders.filter((x) => x.status === 'delivering' && x.departure_time === null && x.arrival_time === null && x.collection_time === null);
+    const arriveToCollectOrders = orders.filter((x) => x.status === 'delivering' && x.departure_time !== null && x.arrival_time === null && x.collection_time === null);
+    const departFromRestaurantOrders = orders.filter((x) => x.status === 'delivering' && x.departure_time !== null && x.arrival_time !== null && x.collection_time === null);
+    const deliveringOrders = orders.filter((x) => x.status === 'delivering' && x.departure_time !== null && x.arrival_time !== null && x.collection_time !== null);
     const completedOrders = orders.filter((x) => x.status === 'completed');
-    return response.status(200).json({ orders, deliveringOrders, completedOrders });
+    return response.status(200).json({
+      orders, deliveringOrders, completedOrders, departToCollectOrders, departFromRestaurantOrders, arriveToCollectOrders,
+    });
   } catch (error) {
     console.log(error);
     return response.status(500).send('orders could not be found');
@@ -153,6 +197,45 @@ const updateOrderStatus = async (request, response) => {
   }
 };
 
+const updateOrderTimingDepartureToRestaurant = async (request, response) => {
+  try {
+    const { id } = request.params;
+    (await query(
+      ' UPDATE DELIVERS set departure_time = NOW()::TIME where order_id = $1;', [id],
+    ));
+    return response.status(200).send();
+  } catch (error) {
+    console.log(error);
+    return response.status(500).send('orders could not be updated');
+  }
+};
+
+const updateOrderTimingArrival = async (request, response) => {
+  try {
+    const { id } = request.params;
+    (await query(
+      ' UPDATE DELIVERS set arrival_time = NOW()::TIME where order_id = $1;', [id],
+    ));
+    return response.status(200).send();
+  } catch (error) {
+    console.log(error);
+    return response.status(500).send('orders could not be updated');
+  }
+};
+
+const updateOrderTimingDepartureFromRestaurant = async (request, response) => {
+  try {
+    const { id } = request.params;
+    (await query(
+      ' UPDATE DELIVERS set collection_time = NOW()::TIME where order_id = $1;', [id],
+    ));
+    return response.status(200).send();
+  } catch (error) {
+    console.log(error);
+    return response.status(500).send('orders could not be updated');
+  }
+};
+
 
 module.exports = {
   getAllOrders,
@@ -163,4 +246,7 @@ module.exports = {
   updateOrderStatus,
   createOrder,
   getOrderByRestaurantId,
+  updateOrderTimingDepartureToRestaurant,
+  updateOrderTimingArrival,
+  updateOrderTimingDepartureFromRestaurant,
 };

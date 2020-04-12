@@ -56,7 +56,7 @@ const riderLogin = async (request, response) => {
       `,
       [email, password],
     )).rows[0];
-
+    rider.type = 'rider';
     response.status(200).json({ user: rider });
   } catch (error) {
     console.error(error);

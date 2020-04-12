@@ -1,11 +1,39 @@
-/*
-CREATE OR REPLACE FUNCTION assign_delivery_order(curr TIMESTAMP) RETURNS TRIGGER
+
+CREATE OR REPLACE FUNCTION assign_delivery_order() RETURNS TRIGGER
     AS $$
 DECLARE
-    current DATE;
+    current_shift_id INTEGER;
+    rider_selected_id INTEGER;
+    order_count INTEGER;
+
 BEGIN
     -- check schedule for available riders
     -- assign order to available riders
+    SELECT distinct shift_id INTO current_shift_id
+    FROM SHIFTS s
+    WHERE DATE(NEW.created_at) = s.work_date 
+    and (NEW.created_at::time >= s.starting_time 
+        and NEW.created_at::time < (s.ending_time)); 
+    
+    with available_riders AS (
+        SELECT distinct r.rider_id
+        FROM mws_contains ms right join ft_rider_works r on ms.mws_id = r.mws_id 
+        WHERE shift_id = current_shift_id
+        UNION
+        SELECT distinct p.rider_id 
+        FROM wws_contains ws right join pt_rider_works p on ws.wws_id = p.wws_id
+        WHERE shift_id = current_shift_id
+    )
+    SELECT distinct r.rider_id, COALESCE(count(distinct d.delivery_id), 0) as qty INTO rider_selected_id
+    FROM (available_riders r left join delivers d on r.rider_id = d.rider_id and d.completion_time IS NULL)
+    Group By r.rider_id      
+    ORDER BY qty
+    limit 1 ; -- find current rider with least number of orders
+    IF rider_selected_id IS NULL THEN
+        RAISE exception 'rider issue %', current_shift_id;
+    END IF; 
+    INSERT INTO delivers (rider_id, order_id, delivery_fee) VALUES (rider_selected_id, NEW.order_id, NEW.delivery_fee); -- assign rider
+    
     RETURN NULL;
 END;
 $$ LANGUAGE plpgsql;
@@ -17,15 +45,14 @@ CREATE TRIGGER assign_delivery_order_trigger
     FOR EACH ROW
     WHEN (NEW.status = 'delivering')
     --assign rider
-    EXECUTE PROCEDURE assign_delivery_order(current_timestamp);
+    EXECUTE PROCEDURE assign_delivery_order();
 
-*/
 
 CREATE OR REPLACE FUNCTION complete_delivery_order_customer() RETURNS TRIGGER
     AS $$
 BEGIN
     UPDATE customers c 
-    SET order_count = order_count + 1, points = points + 1
+    SET order_count = order_count + 1, points = points + NEW.total_cost::INTEGER
     WHERE c.customer_id =  NEW.customer_id;
     RETURN NULL;
 END;
@@ -43,7 +70,7 @@ CREATE OR REPLACE FUNCTION complete_delivery_order_rider() RETURNS TRIGGER
     AS $$
 BEGIN
     UPDATE delivers d
-    SET collection_time = current_timestamp
+    SET completion_time = current_timestamp
     WHERE d.order_id = NEW.order_id;
     RETURN NULL;
 END;
