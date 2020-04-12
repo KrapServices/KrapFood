@@ -32,13 +32,18 @@ class CustomerInfo extends Component {
         if (resultLocations.status === 200) {
           const locations = [];
           resultLocations.data.locations.forEach((val) => {
-            locations.push({ createdAt: val.created_at, orderId: val.order_id, deliveryLocation: val.delivery_location });
+            locations.push({
+              createdAt: val.created_at,
+              orderId: val.order_id,
+              deliveryLocation: val.delivery_location,
+            });
           });
           return locations;
         }
         return [];
       } catch (error) {
         console.log(error);
+        return [];
       }
     };
 
@@ -49,12 +54,16 @@ class CustomerInfo extends Component {
         const resultCC = await Axios.get(`${config.localhost}customers/cc/${customerId}`);
         if (resultCC.status === 200) {
           const customerCreditCards = [];
-          resultCC.data.cards.forEach((val) => customerCreditCards.push({ cardNumber: val.card_number, expiry: val.expiry }));
+          resultCC.data.cards.forEach((val) => customerCreditCards.push({
+            cardNumber: val.card_number,
+            expiry: val.expiry,
+          }));
           return customerCreditCards;
         }
         return [];
       } catch (error) {
         console.log(error);
+        return [];
       }
     };
 
@@ -64,19 +73,26 @@ class CustomerInfo extends Component {
         if (resultPromo.status === 200) {
           const promotions = [];
           resultPromo.data.promotions.forEach((val) => promotions.push({
-            promoId: val.promo_id, discount: val.discount, startTime: val.start_time, endTime: val.end_time,
+            promoId: val.promo_id,
+            discount: val.discount,
+            startTime: val.start_time,
+            endTime: val.end_time,
           }));
           return promotions;
         }
         return [];
       } catch (error) {
         console.log(error);
+        return [];
       }
     };
 
     this.loadInfo = async () => {
       try {
-        const [customerCreditCards, promotions, locations] = await Promise.all([this.loadCC(), this.loadPromotions(), this.loadLocations()]);
+        const [customerCreditCards,
+          promotions,
+          locations,
+        ] = await Promise.all([this.loadCC(), this.loadPromotions(), this.loadLocations()]);
         this.setState({ customerCreditCards, promotions, locations });
       } catch (error) {
         console.log(error);

@@ -37,10 +37,7 @@ class TopBar extends Component {
 
   render() {
     const { user, isLoggedIn } = this.context;
-    const { email } = user;
     const { children, onLogout } = this.props;
-    const fix = true;
-
     return (
       <div>
         <Responsive>
@@ -123,6 +120,7 @@ TopBar.contextType = userContext;
 
 TopBar.propTypes = {
   children: PropTypes.node.isRequired,
+  onLogout: PropTypes.func.isRequired,
 };
 
 export default TopBar;

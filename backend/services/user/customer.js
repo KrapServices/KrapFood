@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 const { query, transact } = require('../../database');
 
 // =============================================================================
@@ -8,7 +9,7 @@ const { query, transact } = require('../../database');
 const customerCreate = async (request, response) => {
   try {
     const { email, password } = request.body;
-    const result = await transact(async (query) => {
+    await transact(async (query) => {
       const user = (await query(
         'INSERT INTO users (email , password) VALUES ($1,$2) RETURNING user_id',
         [email, password],
@@ -35,7 +36,10 @@ const customerLogin = async (request, response) => {
     )).rows[0];
     // append info to user object
     user = {
-      customerId: user.customer_id, order_count: user.order_count, points: user.points, name: user.name,
+      customerId: user.customer_id,
+      order_count: user.order_count,
+      points: user.points,
+      name: user.name,
     };
     user.type = 'customer';
     console.log(user);
@@ -92,10 +96,10 @@ const customerCreditCardInfo = async (request, response) => {
   }
 };
 
-const getPromotions = async (request, response) => {
+const getCustomerPromotions = async (request, response) => {
   try {
     const promotions = (await query(
-      'SELECT * FROM promotions',
+      'SELECT * FROM promotions p Left Outer join Offers o on p.promo_id = o.promo_id',
     )).rows;
     return response.status(200).json({ promotions });
   } catch (error) {
@@ -108,7 +112,14 @@ const getDeliveryLocations = async (request, response) => {
   try {
     const { id } = request.params;
     const locations = (await query(
-      'SELECT distinct created_at, order_id, Delivery_location from orders where customer_id = $1 and status=$2 group by order_id, delivery_location order by created_at DESC limit 5', [id, 'completed'],
+      `
+      SELECT distinct created_at, order_id, Delivery_location 
+      from orders 
+      where customer_id = $1 
+      and status=$2 
+      group by order_id, delivery_location 
+      order by created_at DESC 
+      limit 5`, [id, 'completed'],
     )).rows;
     return response.status(200).json({ locations });
   } catch (error) {
@@ -162,7 +173,7 @@ module.exports = {
   customerCreate,
   customerCreditCardInfo,
   customerCreateCreditCard,
-  getPromotions,
+  getCustomerPromotions,
   getDeliveryLocations,
   getCustomerById,
   rateOrder,

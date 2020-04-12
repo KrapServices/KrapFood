@@ -52,7 +52,7 @@ CREATE OR REPLACE FUNCTION complete_delivery_order_customer() RETURNS TRIGGER
     AS $$
 BEGIN
     UPDATE customers c 
-    SET order_count = order_count + 1, points = points + 1
+    SET order_count = order_count + 1, points = points + NEW.total_cost::INTEGER
     WHERE c.customer_id =  NEW.customer_id;
     RETURN NULL;
 END;
