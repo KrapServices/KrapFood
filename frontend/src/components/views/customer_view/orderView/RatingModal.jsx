@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  Modal, Button, Header, Icon, Segment, Form, Input, TextArea,
+  Modal, Button, Header, Icon, Segment, Form,
 } from 'semantic-ui-react';
 import Axios from 'axios';
 import PropTypes from 'prop-types';

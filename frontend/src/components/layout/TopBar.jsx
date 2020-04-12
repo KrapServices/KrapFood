@@ -3,15 +3,12 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import {
   Container,
-  Grid,
   Header,
   Icon,
   Menu,
   Responsive,
   Segment,
   Visibility,
-  Button,
-
 } from 'semantic-ui-react';
 import userContext from '../../userContext';
 

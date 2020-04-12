@@ -1,8 +1,6 @@
 import React from 'react';
-import Proptypes, { object, string } from 'prop-types';
-import Axios from 'axios';
+import Proptypes, { string } from 'prop-types';
 import { Input } from 'semantic-ui-react';
-import config from '../../../../../config.json';
 import userContext from '../../../../../userContext';
 
 class Promotions extends React.Component {
