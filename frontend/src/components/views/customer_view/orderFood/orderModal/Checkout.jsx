@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Slider from 'react-input-slider';
 import _ from 'lodash';
 import Axios from 'axios';
 import {
-  Modal, Header, Button, Icon, List,
+  Modal, Header, Button, Icon, List, Grid,
 } from 'semantic-ui-react';
 import PaymentForm from './PaymentForm';
 import Promotions from './Promotions';
@@ -22,6 +23,8 @@ class Checkout extends Component {
       deliveryLocation: '',
       deliveryFee: 0,
       isDeliveryFeeCaculated: false,
+      availablePoints: 0,
+      pointsToRedeem: 0,
     };
 
     this.setCard = (card) => {
@@ -71,6 +74,7 @@ class Checkout extends Component {
         deliveryLocation,
         deliveryFee, payByCash, selectedCreditCard,
         restaurantPromotions, customerPromotions,
+        pointsToRedeem,
       } = this.state;
       const { shoppingCart } = this.context;
       const { user } = this.props;
@@ -112,6 +116,7 @@ class Checkout extends Component {
             selectedCreditCard,
             restaurantPromotions,
             customerPromotions,
+            pointsToRedeem,
           },
           {
             headers: { 'Access-Control-Allow-Origin': true },
@@ -142,7 +147,16 @@ class Checkout extends Component {
         console.log('Error has occured');
       }
     };
-    this.DisplayRestaurantPromo = (restaurantPromotions) => (
+    this.DisplayRestaurantPromo = (restaurantPromotions) => (restaurantPromotions.length === 0 ? (
+      <>
+        {' '}
+        <Header as="h2">
+          No Active Restaurant Promotion
+          <Icon name="cancel" />
+        </Header>
+        {' '}
+      </>
+    ) : (
       <>
         <Header as="h2">Current Restaurant promotions</Header>
         <List relaxed ordered>
@@ -158,9 +172,14 @@ class Checkout extends Component {
           ))}
         </List>
       </>
+    )
     );
+    this.caculateActualCost = () => {
+      const { shoppingCart } = this.context;
+      return shoppingCart.map((x) => Number(x.price)).reduce((prev, curr) => prev + curr, 0);
+    };
     this.calculateFinalCost = () => {
-      const { restaurantPromotions, deliveryFee } = this.state;
+      const { restaurantPromotions, deliveryFee, pointsToRedeem } = this.state;
       const { shoppingCart } = this.context;
       let priceList = shoppingCart.map((x) => Number(x.price));
       if (restaurantPromotions.length !== 0) {
@@ -171,29 +190,41 @@ class Checkout extends Component {
       }
       // TODO: settle customer app wide promo code
       const result = priceList.reduce((prev, curr) => prev + curr, 0);
-      const final = result + deliveryFee;
+      const final = result + deliveryFee - pointsToRedeem;
       return final;
+    };
+    this.handleRedeem = (e) => {
+      e.preventDefault();
+      const { value } = e.target;
+      const { availablePoints } = this.state;
+
+      if (Number(value) > Number(availablePoints)) {
+        this.setState({ pointsToRedeem: availablePoints });
+      } else {
+        this.setState({ pointsToRedeem: value });
+      }
     };
   }
 
   async componentDidMount() {
     // get offers from restaurant
     await this.getRestaurantOffers();
+    const { user } = this.props;
+    this.setState({ availablePoints: user.points });
   }
 
   render() {
     const {
       payByCash, selectedCreditCard,
       customerPromotions, deliveryFee,
-      restaurantPromotions,
+      restaurantPromotions, availablePoints, pointsToRedeem,
     } = this.state;
 
     const {
       closePayment,
     } = this.context;
-
+    const actualCost = this.caculateActualCost();
     const finalCost = this.calculateFinalCost();
-    console.log(finalCost);
     return (
       <>
         <Modal
@@ -223,7 +254,6 @@ class Checkout extends Component {
                   />
                   {' '}
                   <br />
-                  <br />
                   <Button color="orange" onClick={() => this.switchPayment()} inverted fluid>
                     <Icon name="money" />
                     {' '}
@@ -233,10 +263,36 @@ class Checkout extends Component {
               ) }
             <Promotions promotions={customerPromotions} setPromotions={this.setPromotions} />
             <DeliveryForm calculateDeliveryFee={this.calculateDeliveryFee} />
-            <Header as="h3">{`Delivery Fee  ${deliveryFee}`}</Header>
-            <Header as="h3">{`Final Cost  ${finalCost}`}</Header>
-
-
+            <Header as="h2">Redeem points</Header>
+            <Header as="h3">{`Available Points: ${availablePoints}`}</Header>
+            { availablePoints <= 0 ? <Header as="h3">No points to redeem</Header> : (
+              <>
+                <Header as="h3">Redeem:</Header>
+                <Slider axis="x" xmin={0} x={pointsToRedeem} xmax={availablePoints} onChange={({ x }) => this.setState((state) => ({ ...state, pointsToRedeem: x }))} />
+                {' '}
+                <br />
+                {' '}
+            <p>{pointsToRedeem}</p>
+              </>
+            ) }
+            <br />
+            <Grid columns="5">
+              <Grid.Column>
+                <Header as="h3">{`Actual Cost: $${actualCost}` }</Header>
+              </Grid.Column>
+              <Grid.Column>
+                <Icon size="big" name="add circle" />
+              </Grid.Column>
+              <Grid.Column>
+                <Header as="h3">{`Delivery Fee:  $${deliveryFee}`}</Header>
+              </Grid.Column>
+              <Grid.Column>
+                <Icon size="big" name="arrow alternate circle right" />
+              </Grid.Column>
+              <Grid.Column>
+                <Header as="h3">{`Final Cost:  $${finalCost}`}</Header>
+              </Grid.Column>
+            </Grid>
           </Modal.Content>
           <Modal.Actions>
             <Button color="red" onClick={() => closePayment()} inverted>

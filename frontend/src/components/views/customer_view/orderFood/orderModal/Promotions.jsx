@@ -1,6 +1,6 @@
 import React from 'react';
 import Proptypes, { string } from 'prop-types';
-import { Input } from 'semantic-ui-react';
+import { Input, Header } from 'semantic-ui-react';
 import userContext from '../../../../../userContext';
 
 class Promotions extends React.Component {
@@ -40,6 +40,7 @@ class Promotions extends React.Component {
 
     return (
       <>
+        <Header as="h2">Promo code</Header>
         <br />
         {
           promotions.map((x) => <Input key={x} labelPosition="left" label="Promo Code" onChange={this.handleChange} fluid placeholder="enter promo code" />)

@@ -70,10 +70,10 @@ const customerCreateCreditCard = async (request, response) => {
       cardNumber, expiry, customerId, nameCard,
     } = request.body;
     console.log(request.body);
-    const result = (await query(
+    await query(
       'INSERT INTO CARDS (card_number, expiry, customer_id, name_card) VALUES ($1,$2,$3,$4)',
       [cardNumber, expiry, customerId, nameCard],
-    )).rows[0];
+    );
     return response.status(200).send();
   } catch (error) {
     console.log(error);

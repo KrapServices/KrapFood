@@ -15,6 +15,7 @@
     "react-calendar": "^3.0.1",
     "react-credit-cards": "^0.8.0",
     "react-dom": "^16.12.0",
+    "react-input-slider": "^5.1.6",
     "react-router-dom": "^5.1.2",
     "react-router-prop-types": "^1.0.4",
     "react-scripts": "^3.4.0",

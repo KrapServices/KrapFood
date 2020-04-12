@@ -10,7 +10,7 @@ const createOrder = async (request, response) => {
   try {
     const {
       totalCost, status, listOfFoods, deliveryLocation, customerId, deliveryFee,
-      restaurantPromotions, customerPromotions, payByCash, selectedCreditCard,
+      restaurantPromotions, customerPromotions, payByCash, selectedCreditCard, pointsToRedeem,
     } = request.body;
 
     const order = (await query(
@@ -33,7 +33,7 @@ const createOrder = async (request, response) => {
           INSERT INTO applies (promo_id, order_id) VALUES ($1,$2)
         `,
       [promotion.promotionId, order.order_id],
-    )));*/
+    ))); */
 
     if (payByCash) {
       await query(
@@ -64,6 +64,14 @@ const createOrder = async (request, response) => {
         [orderId, restaurantId, foodName, quantity],
       );
     }));
+
+    await query(
+      `
+      UPDATE CUSTOMERS SET points = points - $1 
+      WHERE CUSTOMER_ID = $2;
+      `,
+      [pointsToRedeem, customerId],
+    );
 
     response.status(200).json({ order });
   } catch (error) {
