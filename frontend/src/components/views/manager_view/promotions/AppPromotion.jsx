@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { Grid, Item } from 'semantic-ui-react';
+import {
+  Grid, Item, Segment, Header,
+} from 'semantic-ui-react';
 import Axios from 'axios';
 import userContext from '../../../../userContext';
 import config from '../../../../config.json';
@@ -17,16 +19,16 @@ class AppPromotion extends Component {
   constructor() {
     super();
     this.state = {
-      promotions: [],
+      campaigns: [],
     };
 
-    this.loadPromo = async () => {
+    this.loadPromoWithCampaign = async () => {
       try {
         const result = await Axios.get(
-          `${config.localhost}promotions/promo`,
+          `${config.localhost}promotions/promoCampaign`,
         );
         if (result.status === 200) {
-          this.setState({ promotions: result.data });
+          this.setState({ campaigns: result.data.campaigns });
         } else {
           alert('unable to load promotions');
         }
@@ -38,12 +40,12 @@ class AppPromotion extends Component {
 
   /* executed once components are mounted */
   componentDidMount() {
-    this.loadPromo();
+    this.loadPromoWithCampaign();
   }
 
 
   render() {
-    const { promotions } = this.state;
+    const { campaigns } = this.state;
     return (
       <>
         <Grid columns={2} divided>
@@ -52,40 +54,61 @@ class AppPromotion extends Component {
               <PromotionSegment />
             </Grid.Column>
             <Grid.Column>
-              <Item.Group divided style={{ textAlign: 'left' }}>
-                {promotions.map((promo) => (
-                  <Item key={{
-                    restaurantId: promo.restaurantId,
-                    promoName: promo.promoName,
-                  }}
+              <Header as="h2">Campaigns</Header>
+              {
+                campaigns.map((campaign) => (
+                  <Segment
+                    textAlign="justified"
+                    key={
+                {
+                  id: campaign.campaignId,
+                }
+                  }
                   >
-                    <Item.Content>
-                      <Item.Header as="h1">{promo.promoName}</Item.Header>
-                      <Item.Description floated="left">
-                        Discount:
-                        <b>
-                          {` ${promo.discount}`}
-                          % off
-                        </b>
-                        {' '}
-                        <br />
-                        Start time:
-                        {' '}
-                        <b>
-                          {formatTime(new Date(promo.startTime))}
-                        </b>
-                        {' '}
-                        <br />
-                        End time:
-                        {' '}
-                        <b>{formatTime(new Date(promo.endTime))}</b>
-                        {' '}
-                        <br />
-                      </Item.Description>
-                    </Item.Content>
-                  </Item>
-                ))}
-              </Item.Group>
+                    <Header as="h3">
+                      Campaign:
+                      {` ${campaign.campaignName}`}
+                    </Header>
+                    <Segment.Group>
+                      {campaign.promotions.map((promo) => {
+                        const key = promo.promoId + promo.restaurantId + promo.promoName;
+                        return (
+                          <Segment key={key}>
+                            <Item>
+                              <Item.Content>
+                                <Item.Header as="h1">{promo.promoName}</Item.Header>
+                                <Item.Description floated="left">
+                                  Discount:
+                                  <b>
+                                    {` ${promo.discount}`}
+                                    % off
+                                  </b>
+                                  {' '}
+                                  <br />
+                                  Start time:
+                                  {' '}
+                                  <b>
+                                    {formatTime(new Date(promo.startTime))}
+                                  </b>
+                                  {' '}
+                                  <br />
+                                  End time:
+                                  {' '}
+                                  <b>{formatTime(new Date(promo.endTime))}</b>
+                                  {' '}
+                                  <br />
+                                </Item.Description>
+                              </Item.Content>
+                            </Item>
+                          </Segment>
+                        );
+                      })}
+                    </Segment.Group>
+
+
+                  </Segment>
+                ))
+              }
             </Grid.Column>
           </Grid.Row>
         </Grid>

@@ -31,7 +31,7 @@ class Manager extends Component {
     const { user } = this.context;
     console.log(this.context);
     const panes = [
-      { menuItem: 'Create Promotions', render: () => <Tab.Pane><AppPromotion /></Tab.Pane> },
+      { menuItem: 'Create Promotions', render: () => <Tab.Pane><AppPromotion user={user} /></Tab.Pane> },
       { menuItem: 'View Summary', render: () => <Tab.Pane><Summary /></Tab.Pane> },
       { menuItem: 'View Rider Shifts', render: () => <Tab.Pane><RiderViewer /></Tab.Pane> },
       { menuItem: 'Update Password', render: () => <Tab.Pane><PasswordUpdate /></Tab.Pane> },
@@ -45,7 +45,7 @@ class Manager extends Component {
         <Tab
           onTabChange={this.handleTabChange}
           activeIndex={activeIndex}
-          menu={{ horizontal: true, compact: true }}
+          menu={{ compact: true }}
           panes={panes}
           style={{ marginLeft: '50px', marginRight: '50px' }}
         />

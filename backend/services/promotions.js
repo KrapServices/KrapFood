@@ -118,8 +118,8 @@ const getPromosByCampaign = async (campaign) => {
     SELECT P.promo_id as promo_id, discount, promo_name, start_time, end_time
     FROM Includes I JOIN Promotions P ON I.promo_id = P.promo_id
     WHERE campaign_id = $1
-    `
-      [campaign.campaignId],
+    `,
+    [campaign.campaignId],
   )).rows.map((promo) => ({
     promoId: promo.promo_id,
     discount: promo.discount,

@@ -145,7 +145,7 @@ class ManagerSignup extends Component {
 ManagerSignup.contextType = userContext;
 
 ManagerSignup.propTypes = {
-  history: PropTypes.arrayOf(PropTypes.string).isRequired,
+  history: PropTypes.arrayOf(Object).isRequired,
 };
 
 export default withRouter(ManagerSignup);

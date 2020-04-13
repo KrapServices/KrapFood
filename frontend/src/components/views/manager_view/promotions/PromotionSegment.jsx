@@ -21,7 +21,7 @@ function getDateRange(dates) {
 
 function generateValues(start, end) {
   const arr = [];
-  for (let i = start; i <= end; i++) {
+  for (let i = start; i <= end; i += 1) {
     arr.push({
       key: i,
       text: `${i}:00`,
@@ -97,7 +97,8 @@ class PromotionSegment extends Component {
 
     this.handleSubmit = async () => {
       const {
-        startTime, endTime, dateRange, promoName, discount, campaignId, campaignName, customCampaign,
+        startTime, endTime, dateRange, promoName,
+        discount, campaignId, campaignName, customCampaign,
       } = this.state;
       dateRange[0].setHours(startTime);
       dateRange[1].setHours(endTime);
@@ -157,7 +158,9 @@ class PromotionSegment extends Component {
 
   render() {
     const {
-      campaignName, customCampaign, isLoading, campaigns, dateRange, waitingForFirstClick, startTime, endTime, promoName, discount, campaignId,
+      campaignName, customCampaign, isLoading,
+      campaigns, dateRange, waitingForFirstClick,
+      startTime, endTime, promoName, discount, campaignId,
     } = this.state;
     return (
       <>
