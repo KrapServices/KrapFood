@@ -272,7 +272,7 @@ class Checkout extends Component {
                 {' '}
                 <br />
                 {' '}
-            <p>{pointsToRedeem}</p>
+                <p>{pointsToRedeem}</p>
               </>
             ) }
             <br />

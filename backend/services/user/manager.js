@@ -132,9 +132,43 @@ const getRiders = async (req, res) => {
   }
 };
 
+const checkSchedule = async (req, res) => {
+  try {
+    const { workDate, startingTime, endingTime} = req.body;
+
+    const result = (await query(
+      `
+      With currentShifts AS (
+        SELECT DISTINCT shift_id 
+        FROM SHIFTS s 
+        where s.work_date = $1
+        and s.starting_time <= $2
+        and s.ending_time <= $3
+      )
+          SELECT distinct r.rider_id
+          FROM ( mws_contains ms right join ft_rider_works r on ms.mws_id = r.mws_id ) natural join currentShifts
+          UNION
+          SELECT distinct p.rider_id 
+          FROM (wws_contains ws right join pt_rider_works p on ws.wws_id = p.wws_id ) natural join currentShifts
+      `,
+      [workDate, startingTime, endingTime],
+    )).rows.map((rider) => ({
+      riderId: rider.rider_id,
+    }));
+    if (result.length >= 5) {
+      return res.status(200).send({ riders: result });
+    }
+    return res.status(500).send({ riders: result.row });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send('Something went wrong');
+  }
+};
+
 module.exports = {
   managerLogin,
   managerCreate,
   updateManagerPassword,
   getRiders,
+  checkSchedule,
 };
