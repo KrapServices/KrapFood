@@ -142,8 +142,8 @@ const checkSchedule = async (req, res) => {
         SELECT DISTINCT shift_id 
         FROM SHIFTS s 
         where s.work_date = $1
-        and s.starting_time <= $2
-        and s.ending_time <= $3
+        and s.starting_time = $2
+        and s.ending_time = $3
       )
           SELECT distinct r.rider_id
           FROM ( mws_contains ms right join ft_rider_works r on ms.mws_id = r.mws_id ) natural join currentShifts

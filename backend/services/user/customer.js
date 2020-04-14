@@ -99,7 +99,12 @@ const customerCreditCardInfo = async (request, response) => {
 const getCustomerPromotions = async (request, response) => {
   try {
     const promotions = (await query(
-      'SELECT * FROM promotions p Left Outer join Offers o on p.promo_id = o.promo_id',
+      `
+      SELECT * 
+      FROM promotions p Left Outer join Offers o on p.promo_id = o.promo_id 
+      where p.start_time <= current_timestamp
+      and p.end_time > current_timestamp
+      `,
     )).rows;
     return response.status(200).json({ promotions });
   } catch (error) {

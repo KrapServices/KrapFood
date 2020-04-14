@@ -10,7 +10,7 @@ const createOrder = async (request, response) => {
   try {
     const {
       totalCost, status, listOfFoods, deliveryLocation, customerId, deliveryFee,
-      restaurantPromotions, customerPromotions, payByCash, selectedCreditCard, pointsToRedeem,
+      restaurantPromotions, customerPromotionsApplied, payByCash, selectedCreditCard, pointsToRedeem,
     } = request.body;
 
     const order = (await query(
@@ -27,13 +27,12 @@ const createOrder = async (request, response) => {
         `,
       [promotion.promoId, order.order_id],
     )));
-    /*
-    await Promise.all(customerPromotions.map((promotion) => query(
+    await Promise.all(customerPromotionsApplied.map((promotion) => query(
       `
           INSERT INTO applies (promo_id, order_id) VALUES ($1,$2)
         `,
-      [promotion.promotionId, order.order_id],
-    ))); */
+      [promotion.promoId, order.order_id],
+    )));
 
     if (payByCash) {
       await query(

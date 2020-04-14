@@ -1,12 +1,15 @@
 import React from 'react';
 import Proptypes, { string } from 'prop-types';
-import { Input, Header } from 'semantic-ui-react';
+import { Input, Header, Dropdown } from 'semantic-ui-react';
 import userContext from '../../../../../userContext';
 
 class Promotions extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      customerPromotions: [],
+      options: [],
+      value: '',
     };
 
     this.handleChange = (e, { value }) => {
@@ -15,6 +18,9 @@ class Promotions extends React.Component {
       // 0 because only one.
       // -----------------------------------------------------------------------
       setPromotions(value, 0);
+      const { customerPromotions } = this.state;
+      setPromotions(customerPromotions[value]);
+      this.setState({ value });
     };
     /*
     this.getPromoCodes = async () => {
@@ -28,24 +34,40 @@ class Promotions extends React.Component {
         alert('User does not have a credit card preregistered!');
       }
     }; */
+    this.getDropDown = () => {
+      const { promotions } = this.props;
+      const options = [];
+      promotions.forEach((value, index) => {
+        const obj = {};
+        obj.key = index;
+        obj.text = value.card_number;
+        obj.value = index;
+        options.push(obj);
+      });
+      this.setState({ customerPromotions: promotions, options });
+    };
   }
 
   componentDidMount() {
-    // this.getPromoCodes();
+    this.getDropDown();
   }
 
 
   render() {
-    const { promotions } = this.props;
+    const { value, options } = this.state;
 
     return (
       <>
         <Header as="h2">Promo code</Header>
-        <br />
-        {
-          promotions.map((x) => <Input key={x} labelPosition="left" label="Promo Code" onChange={this.handleChange} fluid placeholder="enter promo code" />)
-      }
-        <br />
+
+        <Dropdown
+          fluid
+          onChange={this.handleChange}
+          options={options}
+          placeholder="Choose a Credit Card"
+          selection
+          value={value}
+        />
 
 
       </>

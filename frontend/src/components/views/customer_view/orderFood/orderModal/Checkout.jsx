@@ -4,10 +4,9 @@ import Slider from 'react-input-slider';
 import _ from 'lodash';
 import Axios from 'axios';
 import {
-  Modal, Header, Button, Icon, List, Grid,
+  Modal, Header, Button, Icon, List, Grid, Segment,
 } from 'semantic-ui-react';
 import PaymentForm from './PaymentForm';
-import Promotions from './Promotions';
 import DeliveryForm from './DeliveryForm';
 import customerCartContext from '../customerCartContext';
 import config from '../../../../../config.json';
@@ -19,7 +18,8 @@ class Checkout extends Component {
       payByCash: false,
       selectedCreditCard: {},
       restaurantPromotions: [],
-      customerPromotions: [''],
+      customerPromotions: [],
+      customerPromotionsApplied: Set(),
       deliveryLocation: '',
       deliveryFee: 0,
       isDeliveryFeeCaculated: false,
@@ -73,7 +73,7 @@ class Checkout extends Component {
       const {
         deliveryLocation,
         deliveryFee, payByCash, selectedCreditCard,
-        restaurantPromotions, customerPromotions,
+        restaurantPromotions, customerPromotionsApplied,
         pointsToRedeem,
       } = this.state;
       const { shoppingCart } = this.context;
@@ -115,7 +115,7 @@ class Checkout extends Component {
             payByCash,
             selectedCreditCard,
             restaurantPromotions,
-            customerPromotions,
+            customerPromotionsApplied,
             pointsToRedeem,
           },
           {
@@ -174,12 +174,14 @@ class Checkout extends Component {
       </>
     )
     );
-    this.caculateActualCost = () => {
+    this.calculateActualCost = () => {
       const { shoppingCart } = this.context;
       return shoppingCart.map((x) => Number(x.price)).reduce((prev, curr) => prev + curr, 0);
     };
     this.calculateFinalCost = () => {
-      const { restaurantPromotions, deliveryFee, pointsToRedeem } = this.state;
+      const {
+        restaurantPromotions, deliveryFee, pointsToRedeem, customerPromotionsApplied,
+      } = this.state;
       const { shoppingCart } = this.context;
       let priceList = shoppingCart.map((x) => Number(x.price));
       if (restaurantPromotions.length !== 0) {
@@ -188,8 +190,12 @@ class Checkout extends Component {
         // apply to each item
         priceList = priceList.map((price) => price * (totalRestaurantDiscount / 100));
       }
-      // TODO: settle customer app wide promo code
-      const result = priceList.reduce((prev, curr) => prev + curr, 0);
+      let result = priceList.reduce((prev, curr) => prev + curr, 0);
+      if (customerPromotionsApplied.length !== 0) {
+        const totalCustomerPromoDiscount = Array.from(customerPromotionsApplied)
+          .map((x) => x.discount).reduce((prev, curr) => Number(prev) + Number(curr), 0);
+        result *= (totalCustomerPromoDiscount / 100);
+      }
       const final = result + deliveryFee - pointsToRedeem;
       return final;
     };
@@ -204,6 +210,41 @@ class Checkout extends Component {
         this.setState({ pointsToRedeem: value });
       }
     };
+
+    this.loadCustomerPromotions = async () => {
+      try {
+        const resultPromo = await Axios.get(`${config.localhost}customers/promotions/`);
+        if (resultPromo.status === 200) {
+          const customerPromotions = [];
+          resultPromo.data.promotions.forEach((val) => customerPromotions.push({
+            promoId: val.promo_id,
+            discount: val.discount,
+            promoName: val.promo_name,
+          }));
+          this.setState({ customerPromotions });
+        }
+        this.setState({ customerPromotions: [] });
+      } catch (error) {
+        console.log(error);
+        return [];
+      }
+    };
+
+    this.addCustomerPromotion = (promo) => {
+      const { customerPromotionsApplied } = this.state;
+      customerPromotionsApplied.add(promo);
+      this.setState({ customerPromotionsApplied });
+    };
+
+
+    this.removeCustomerPromotion = (promo) => {
+      const { customerPromotionsApplied } = this.state;
+      const promoIdArray = Array.from(customerPromotionsApplied).map((x) => x.promoId);
+      promoIdArray.filter((id) => id !== promo.promoId);
+      const customerPromotionsAppliedNew = Set();
+      promoIdArray.map((x) => customerPromotionsAppliedNew.add(x));
+      this.setState({ customerPromotionsApplied: customerPromotionsAppliedNew });
+    };
   }
 
   async componentDidMount() {
@@ -216,14 +257,14 @@ class Checkout extends Component {
   render() {
     const {
       payByCash, selectedCreditCard,
-      customerPromotions, deliveryFee,
+      customerPromotions, customerPromotionsApplied, deliveryFee,
       restaurantPromotions, availablePoints, pointsToRedeem,
     } = this.state;
 
     const {
       closePayment,
     } = this.context;
-    const actualCost = this.caculateActualCost();
+    const actualCost = this.calculateActualCost();
     const finalCost = this.calculateFinalCost();
     return (
       <>
@@ -261,7 +302,40 @@ class Checkout extends Component {
                   </Button>
                 </>
               ) }
-            <Promotions promotions={customerPromotions} setPromotions={this.setPromotions} />
+            <Grid columns="2">
+              <Grid.Column>
+                <Segment.Group>
+                  <Header as="h2">Promo code</Header>
+                  {
+              customerPromotions.map((promo) => (
+                <Segment key={promo.promoId}>
+                  Discount:
+                  {' '}
+                  {promo.discount}
+                  <Button onClick={() => this.addCustomerPromotion(promo)}>Apply</Button>
+                </Segment>
+              ))
+            }
+                </Segment.Group>
+              </Grid.Column>
+              <Grid.Column>
+                <Header as="h2">Promo Applied</Header>
+                {
+                Array.from(customerPromotionsApplied).map((appliedPromo) => (
+                  <Segment key={appliedPromo.promoId}>
+                    Discount:
+                    {' '}
+                    {appliedPromo.discount}
+                    <Button color="red" onClick={() => this.removeCustomerPromotion(appliedPromo)}>remove</Button>
+                  </Segment>
+                ))
+              }
+
+              </Grid.Column>
+
+            </Grid>
+
+
             <DeliveryForm calculateDeliveryFee={this.calculateDeliveryFee} />
             <Header as="h2">Redeem points</Header>
             <Header as="h3">{`Available Points: ${availablePoints}`}</Header>
