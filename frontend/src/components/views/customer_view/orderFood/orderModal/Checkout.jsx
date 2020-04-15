@@ -4,7 +4,7 @@ import Slider from 'react-input-slider';
 import _ from 'lodash';
 import Axios from 'axios';
 import {
-  Modal, Header, Button, Icon, List, Grid, Segment,
+  Modal, Header, Button, Icon, List, Grid, Segment, Divider,
 } from 'semantic-ui-react';
 import PaymentForm from './PaymentForm';
 import DeliveryForm from './DeliveryForm';
@@ -19,7 +19,7 @@ class Checkout extends Component {
       selectedCreditCard: {},
       restaurantPromotions: [],
       customerPromotions: [],
-      customerPromotionsApplied: Set(),
+      customerPromotionsApplied: new Set(),
       deliveryLocation: '',
       deliveryFee: 0,
       isDeliveryFeeCaculated: false,
@@ -33,17 +33,6 @@ class Checkout extends Component {
     this.switchPayment = () => {
       const { payByCash } = this.state;
       this.setState({ payByCash: !payByCash, selectedCreditCard: {} });
-    };
-
-
-    // =========================================================================
-    // promo code
-    // =========================================================================
-
-    this.setPromotions = (value, index) => {
-      const { customerPromotions } = this.state;
-      customerPromotions[index] = value;
-      this.setState({ customerPromotions });
     };
 
     // -------------------------------------------------------------------------
@@ -115,7 +104,7 @@ class Checkout extends Component {
             payByCash,
             selectedCreditCard,
             restaurantPromotions,
-            customerPromotionsApplied,
+            customerPromotionsApplied: Array.from(customerPromotionsApplied),
             pointsToRedeem,
           },
           {
@@ -174,6 +163,51 @@ class Checkout extends Component {
       </>
     )
     );
+    this.DisplayCustomerPromo = () => {
+      const { customerPromotionsApplied, customerPromotions } = this.state;
+      console.log(customerPromotions);
+      return (customerPromotions.length === 0 ? (
+        <Header as="h2">
+          No App Wide Promos available
+          <Icon name="cancel" />
+        </Header>
+      )
+        : (
+          <Grid columns="2">
+            <Grid.Column>
+              <Segment.Group>
+                <Segment>
+                  <Header as="h2">Promo code</Header>
+                  {customerPromotions.map((promo) => (
+                    <Segment clearing key={promo.promoId}>
+                      Discount:
+                      {' '}
+                      {promo.discount}
+                      <Button floated="right" onClick={() => this.addCustomerPromotion(promo)}>Apply</Button>
+                    </Segment>
+                  ))}
+                </Segment>
+              </Segment.Group>
+            </Grid.Column>
+            <Grid.Column>
+              <Segment.Group>
+                <Segment>
+                  <Header as="h2">Promo Applied</Header>
+                  {Array.from(customerPromotionsApplied).map((appliedPromo) => (
+                    <Segment key={appliedPromo.promoId} clearing>
+                      Discount:
+                      {' '}
+                      {appliedPromo.discount}
+                      <Button floated="right" color="red" onClick={() => this.removeCustomerPromotion(appliedPromo)}>remove</Button>
+                    </Segment>
+                  ))}
+                </Segment>
+              </Segment.Group>
+            </Grid.Column>
+          </Grid>
+        ));
+    };
+
     this.calculateActualCost = () => {
       const { shoppingCart } = this.context;
       return shoppingCart.map((x) => Number(x.price)).reduce((prev, curr) => prev + curr, 0);
@@ -190,8 +224,9 @@ class Checkout extends Component {
         // apply to each item
         priceList = priceList.map((price) => price * (totalRestaurantDiscount / 100));
       }
+
       let result = priceList.reduce((prev, curr) => prev + curr, 0);
-      if (customerPromotionsApplied.length !== 0) {
+      if (Array.from(customerPromotionsApplied).length !== 0) {
         const totalCustomerPromoDiscount = Array.from(customerPromotionsApplied)
           .map((x) => x.discount).reduce((prev, curr) => Number(prev) + Number(curr), 0);
         result *= (totalCustomerPromoDiscount / 100);
@@ -215,15 +250,8 @@ class Checkout extends Component {
       try {
         const resultPromo = await Axios.get(`${config.localhost}customers/promotions/`);
         if (resultPromo.status === 200) {
-          const customerPromotions = [];
-          resultPromo.data.promotions.forEach((val) => customerPromotions.push({
-            promoId: val.promo_id,
-            discount: val.discount,
-            promoName: val.promo_name,
-          }));
-          this.setState({ customerPromotions });
+          return this.setState({ customerPromotions: resultPromo.data.promotions });
         }
-        this.setState({ customerPromotions: [] });
       } catch (error) {
         console.log(error);
         return [];
@@ -239,9 +267,9 @@ class Checkout extends Component {
 
     this.removeCustomerPromotion = (promo) => {
       const { customerPromotionsApplied } = this.state;
-      const promoIdArray = Array.from(customerPromotionsApplied).map((x) => x.promoId);
-      promoIdArray.filter((id) => id !== promo.promoId);
-      const customerPromotionsAppliedNew = Set();
+      let promoIdArray = Array.from(customerPromotionsApplied).map((x) => x.promoId);
+      promoIdArray = promoIdArray.filter((id) => id !== promo.promoId);
+      const customerPromotionsAppliedNew = new Set();
       promoIdArray.map((x) => customerPromotionsAppliedNew.add(x));
       this.setState({ customerPromotionsApplied: customerPromotionsAppliedNew });
     };
@@ -250,14 +278,14 @@ class Checkout extends Component {
   async componentDidMount() {
     // get offers from restaurant
     await this.getRestaurantOffers();
+    await this.loadCustomerPromotions();
     const { user } = this.props;
     this.setState({ availablePoints: user.points });
   }
 
   render() {
     const {
-      payByCash, selectedCreditCard,
-      customerPromotions, customerPromotionsApplied, deliveryFee,
+      payByCash, selectedCreditCard, deliveryFee,
       restaurantPromotions, availablePoints, pointsToRedeem,
     } = this.state;
 
@@ -274,68 +302,42 @@ class Checkout extends Component {
         >
           <Header icon="money" content="Confirm your order" />
           <Modal.Content>
-            {this.DisplayRestaurantPromo(restaurantPromotions)}
-            { payByCash
-              ? (
-                <>
-                  <h3>Payment will be by Cash on Delivery!</h3>
-                  <br />
-                  <Button color="orange" onClick={() => this.switchPayment()} inverted fluid>
-                    <Icon name="money" />
+            <Segment>
+
+
+              {this.DisplayRestaurantPromo(restaurantPromotions)}
+              <Divider />
+              {this.DisplayCustomerPromo()}
+            </Segment>
+            <Segment>
+              { payByCash
+                ? (
+                  <>
+                    <h3>Payment will be by Cash on Delivery!</h3>
+                    <br />
+                    <Button color="orange" onClick={() => this.switchPayment()} inverted fluid>
+                      <Icon name="money" />
+                      {' '}
+                      Pay by Credit Card instead
+                    </Button>
+                  </>
+                )
+                : (
+                  <>
+                    <PaymentForm
+                      selectedCreditCard={selectedCreditCard}
+                      setCard={(card) => this.setCard(card)}
+                    />
                     {' '}
-                    Pay by Credit Card instead
-                  </Button>
-                </>
-              )
-              : (
-                <>
-                  <PaymentForm
-                    selectedCreditCard={selectedCreditCard}
-                    setCard={(card) => this.setCard(card)}
-                  />
-                  {' '}
-                  <br />
-                  <Button color="orange" onClick={() => this.switchPayment()} inverted fluid>
-                    <Icon name="money" />
-                    {' '}
-                    Pay by Cash On Delivery
-                  </Button>
-                </>
-              ) }
-            <Grid columns="2">
-              <Grid.Column>
-                <Segment.Group>
-                  <Header as="h2">Promo code</Header>
-                  {
-              customerPromotions.map((promo) => (
-                <Segment key={promo.promoId}>
-                  Discount:
-                  {' '}
-                  {promo.discount}
-                  <Button onClick={() => this.addCustomerPromotion(promo)}>Apply</Button>
-                </Segment>
-              ))
-            }
-                </Segment.Group>
-              </Grid.Column>
-              <Grid.Column>
-                <Header as="h2">Promo Applied</Header>
-                {
-                Array.from(customerPromotionsApplied).map((appliedPromo) => (
-                  <Segment key={appliedPromo.promoId}>
-                    Discount:
-                    {' '}
-                    {appliedPromo.discount}
-                    <Button color="red" onClick={() => this.removeCustomerPromotion(appliedPromo)}>remove</Button>
-                  </Segment>
-                ))
-              }
-
-              </Grid.Column>
-
-            </Grid>
-
-
+                    <br />
+                    <Button color="orange" onClick={() => this.switchPayment()} inverted fluid>
+                      <Icon name="money" />
+                      {' '}
+                      Pay by Cash On Delivery
+                    </Button>
+                  </>
+                ) }
+            </Segment>
             <DeliveryForm calculateDeliveryFee={this.calculateDeliveryFee} />
             <Header as="h2">Redeem points</Header>
             <Header as="h3">{`Available Points: ${availablePoints}`}</Header>

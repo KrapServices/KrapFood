@@ -72,12 +72,7 @@ class CustomerInfo extends Component {
         const resultPromo = await Axios.get(`${config.localhost}customers/promotions/`);
         if (resultPromo.status === 200) {
           const promotions = [];
-          resultPromo.data.promotions.forEach((val) => promotions.push({
-            promoId: val.promo_id,
-            discount: val.discount,
-            startTime: val.start_time,
-            endTime: val.end_time,
-          }));
+          resultPromo.data.promotions.forEach((val) => promotions.push(val));
           return promotions;
         }
         return [];

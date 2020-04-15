@@ -100,12 +100,19 @@ const getCustomerPromotions = async (request, response) => {
   try {
     const promotions = (await query(
       `
-      SELECT * 
+      SELECT p.promo_id, p.discount, p.promo_name, p.start_time, p.end_time 
       FROM promotions p Left Outer join Offers o on p.promo_id = o.promo_id 
       where p.start_time <= current_timestamp
       and p.end_time > current_timestamp
       `,
-    )).rows;
+    )).rows.map((promo) => ({
+      promoId: promo.promo_id,
+      discount: promo.discount,
+      promoName: promo.promo_name,
+      startTime: promo.start_time,
+      endTime: promo.end_time,
+    }));
+    console.log(promotions);
     return response.status(200).json({ promotions });
   } catch (error) {
     console.log(error);
