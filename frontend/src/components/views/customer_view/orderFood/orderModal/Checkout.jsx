@@ -252,6 +252,7 @@ class Checkout extends Component {
         if (resultPromo.status === 200) {
           return this.setState({ customerPromotions: resultPromo.data.promotions });
         }
+        return [];
       } catch (error) {
         console.log(error);
         return [];
