@@ -39,6 +39,7 @@ CREATE TABLE promotions
 (
     promo_id SERIAL,
     discount INTEGER NOT NULL,
+    CONSTRAINT check_discount CHECK (discount > 0 AND discount < 100),
     promo_name TEXT NOT NULL UNIQUE,
     start_time TIMESTAMP NOT NULL,
     end_time TIMESTAMP NOT NULL,

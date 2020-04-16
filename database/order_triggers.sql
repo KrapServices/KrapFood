@@ -113,3 +113,68 @@ CREATE CONSTRAINT TRIGGER different_restaurants_trigger
     DEFERRABLE INITIALLY DEFERRED
     FOR EACH ROW
     EXECUTE PROCEDURE same_restaurant();
+
+
+-- check if available quantity for food is sufficient
+CREATE OR REPLACE FUNCTION check_food_availability() RETURNS TRIGGER
+    AS $$
+DECLARE
+    food_quantity INTEGER;
+    food_availability BOOLEAN;
+BEGIN
+    SELECT F.daily_limit, F.availability INTO food_quantity, food_availability
+    FROM foods F
+    WHERE F.food_name = NEW.food_name AND F.restaurant_id = NEW.restaurant_id;
+    IF (food_quantity < NEW.quantity AND food_availability = true) THEN
+        RAISE exception 'insufficient %', NEW.food_name;
+    ELSE
+        RETURN NEW;
+    END IF;
+END
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS check_availability_trigger ON Contain CASCADE;
+CREATE TRIGGER check_availability_trigger
+    BEFORE INSERT 
+    ON Contain
+    FOR EACH ROW
+    EXECUTE FUNCTION check_food_availability();
+
+-- dynamically update daily_limit of item
+CREATE OR REPLACE FUNCTION update_food_quantity() RETURNS TRIGGER
+    AS $$
+BEGIN
+    UPDATE foods f
+    SET daily_limit = daily_limit - NEW.quantity::INTEGER
+    WHERE f.restaurant_id = NEW.restaurant_id AND f.food_name = NEW.food_name;
+    RETURN NULL;
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS update_food_limit_trigger ON Contain CASCADE;
+CREATE TRIGGER update_food_limit_trigger
+    AFTER INSERT 
+    ON Contain
+    FOR EACH ROW
+    EXECUTE FUNCTION update_food_quantity();
+
+
+-- dynamically update availability of item
+CREATE OR REPLACE FUNCTION update_food_availability() RETURNS TRIGGER
+    AS $$
+BEGIN
+    IF (NEW.daily_limit = 0) THEN
+        UPDATE foods
+        SET availability = false
+        WHERE restaurant_id = NEW.restaurant_id AND food_name = NEW.food_name;
+    END IF;
+    RETURN NULL;
+END
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS update_food_availability_trigger ON Foods CASCADE;
+CREATE TRIGGER update_food_availability_trigger
+    AFTER UPDATE OF daily_limit OR INSERT 
+    ON Foods
+    FOR EACH ROW
+    EXECUTE FUNCTION update_food_availability();
