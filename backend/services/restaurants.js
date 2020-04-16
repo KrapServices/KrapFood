@@ -173,7 +173,8 @@ const createPromotion = async (request, response) => {
   }
 };
 
-const getPromotionsById = async (request, response) => {
+const getValidPromotionsById = async (request, response) => {
+  // return only valid active promotions
   try {
     const { id: restaurantId } = request.params;
     const promotions = (await query(
@@ -181,6 +182,8 @@ const getPromotionsById = async (request, response) => {
       SELECT DISTINCT P.promo_id, P.discount, P.promo_name, P.start_time, P.end_time
       FROM Promotions P NATURAL JOIN Offers O
       WHERE O.restaurant_id = $1
+      and P.start_time <= current_timestamp
+      and P.end_time > current_timestamp
       `,
       [restaurantId],
     )).rows.map((promo) => ({
@@ -279,5 +282,5 @@ module.exports = {
   getMonthsById,
   getStatsById,
   createPromotion,
-  getPromotionsById,
+  getValidPromotionsById,
 };

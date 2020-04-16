@@ -12,7 +12,7 @@ router.get('/:id/food', services.getMenuById);
 
 router.get('/:id/stats', services.getStatsById);
 
-router.get('/:id/promo', services.getPromotionsById);
+router.get('/:id/promo', services.getValidPromotionsById);
 
 router.get('/:id/months', services.getMonthsById);
 

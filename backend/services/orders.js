@@ -1,4 +1,4 @@
-const { query } = require('../database');
+const { query, transact } = require('../database');
 
 // -----------------------------------------------------------------------------
 // Orders
@@ -8,72 +8,75 @@ const { query } = require('../database');
 // -----------------------------------------------------------------------------
 const createOrder = async (request, response) => {
   try {
-    const {
-      totalCost, status, listOfFoods, deliveryLocation, customerId, deliveryFee,
-      restaurantPromotions, customerPromotions, payByCash, selectedCreditCard, pointsToRedeem,
-    } = request.body;
+    await transact(async (query) => {
+      const {
+        totalCost, status, listOfFoods, deliveryLocation,
+        customerId, deliveryFee,
+        restaurantPromotions, customerPromotionsApplied,
+        payByCash, selectedCreditCard, pointsToRedeem,
+      } = request.body;
 
-    const order = (await query(
-      `
+      const order = (await query(
+        `
         INSERT INTO orders (customer_id, delivery_location, total_cost, status, delivery_fee) 
         VALUES ($1, $2, $3, $4, $5)
         RETURNING order_id
       `,
-      [customerId, deliveryLocation, totalCost, status, deliveryFee],
-    )).rows[0];
-    await Promise.all(restaurantPromotions.map((promotion) => query(
-      `
-          INSERT INTO applies (promo_id, order_id) VALUES ($1,$2)
-        `,
-      [promotion.promoId, order.order_id],
-    )));
-    /*
-    await Promise.all(customerPromotions.map((promotion) => query(
-      `
-          INSERT INTO applies (promo_id, order_id) VALUES ($1,$2)
-        `,
-      [promotion.promotionId, order.order_id],
-    ))); */
-
-    if (payByCash) {
-      await query(
+        [customerId, deliveryLocation, totalCost, status, deliveryFee],
+      )).rows[0];
+      await Promise.all(restaurantPromotions.map((promotion) => query(
         `
+          INSERT INTO applies (promo_id, order_id) VALUES ($1,$2)
+        `,
+        [promotion.promoId, order.order_id],
+      )));
+      await Promise.all(customerPromotionsApplied.map((promotion) => query(
+        `
+          INSERT INTO applies (promo_id, order_id) VALUES ($1,$2)
+        `,
+        [promotion.promoId, order.order_id],
+      )));
+
+      if (payByCash) {
+        await query(
+          `
         INSERT INTO cash_payments (order_id, cash) VALUES ($1, true)
         `,
-        [order.order_id],
-      );
-    } else {
-      await query(
-        `
+          [order.order_id],
+        );
+      } else {
+        await query(
+          `
         INSERT INTO card_payments (order_id, card_number) VALUES ($1, $2)
         `,
-        [order.order_id, selectedCreditCard.card_number],
-      );
-    }
+          [order.order_id, selectedCreditCard.card_number],
+        );
+      }
 
 
-    await Promise.all(listOfFoods.map((food) => {
-      const { order_id: orderId } = order;
-      const { restaurantId, foodName, quantity } = food;
+      await Promise.all(listOfFoods.map((food) => {
+        const { order_id: orderId } = order;
+        const { restaurantId, foodName, quantity } = food;
 
-      return query(
-        `
+        return query(
+          `
           INSERT INTO contain (order_id, restaurant_id, food_name, quantity)
           VALUES ($1, $2, $3, $4)
         `,
-        [orderId, restaurantId, foodName, quantity],
-      );
-    }));
+          [orderId, restaurantId, foodName, quantity],
+        );
+      }));
 
-    await query(
-      `
+      await query(
+        `
       UPDATE CUSTOMERS SET points = points - $1 
       WHERE CUSTOMER_ID = $2;
       `,
-      [pointsToRedeem, customerId],
-    );
+        [pointsToRedeem, customerId],
+      );
 
-    response.status(200).json({ order });
+      response.status(200).json({ order });
+    });
   } catch (error) {
     console.log(error);
     response.status(500).send('An error occurred when creating the order. Please try again.');

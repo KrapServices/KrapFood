@@ -4,10 +4,9 @@ import Slider from 'react-input-slider';
 import _ from 'lodash';
 import Axios from 'axios';
 import {
-  Modal, Header, Button, Icon, List, Grid,
+  Modal, Header, Button, Icon, List, Grid, Segment, Divider,
 } from 'semantic-ui-react';
 import PaymentForm from './PaymentForm';
-import Promotions from './Promotions';
 import DeliveryForm from './DeliveryForm';
 import customerCartContext from '../customerCartContext';
 import config from '../../../../../config.json';
@@ -19,7 +18,8 @@ class Checkout extends Component {
       payByCash: false,
       selectedCreditCard: {},
       restaurantPromotions: [],
-      customerPromotions: [''],
+      customerPromotions: [],
+      customerPromotionsApplied: new Set(),
       deliveryLocation: '',
       deliveryFee: 0,
       isDeliveryFeeCaculated: false,
@@ -33,17 +33,6 @@ class Checkout extends Component {
     this.switchPayment = () => {
       const { payByCash } = this.state;
       this.setState({ payByCash: !payByCash, selectedCreditCard: {} });
-    };
-
-
-    // =========================================================================
-    // promo code
-    // =========================================================================
-
-    this.setPromotions = (value, index) => {
-      const { customerPromotions } = this.state;
-      customerPromotions[index] = value;
-      this.setState({ customerPromotions });
     };
 
     // -------------------------------------------------------------------------
@@ -73,7 +62,7 @@ class Checkout extends Component {
       const {
         deliveryLocation,
         deliveryFee, payByCash, selectedCreditCard,
-        restaurantPromotions, customerPromotions,
+        restaurantPromotions, customerPromotionsApplied,
         pointsToRedeem,
       } = this.state;
       const { shoppingCart } = this.context;
@@ -115,7 +104,7 @@ class Checkout extends Component {
             payByCash,
             selectedCreditCard,
             restaurantPromotions,
-            customerPromotions,
+            customerPromotionsApplied: Array.from(customerPromotionsApplied),
             pointsToRedeem,
           },
           {
@@ -174,12 +163,59 @@ class Checkout extends Component {
       </>
     )
     );
-    this.caculateActualCost = () => {
+    this.DisplayCustomerPromo = () => {
+      const { customerPromotionsApplied, customerPromotions } = this.state;
+      console.log(customerPromotions);
+      return (customerPromotions.length === 0 ? (
+        <Header as="h2">
+          No App Wide Promos available
+          <Icon name="cancel" />
+        </Header>
+      )
+        : (
+          <Grid columns="2">
+            <Grid.Column>
+              <Segment.Group>
+                <Segment>
+                  <Header as="h2">Promo code</Header>
+                  {customerPromotions.map((promo) => (
+                    <Segment clearing key={promo.promoId}>
+                      Discount:
+                      {' '}
+                      {promo.discount}
+                      <Button floated="right" onClick={() => this.addCustomerPromotion(promo)}>Apply</Button>
+                    </Segment>
+                  ))}
+                </Segment>
+              </Segment.Group>
+            </Grid.Column>
+            <Grid.Column>
+              <Segment.Group>
+                <Segment>
+                  <Header as="h2">Promo Applied</Header>
+                  {Array.from(customerPromotionsApplied).map((appliedPromo) => (
+                    <Segment key={appliedPromo.promoId} clearing>
+                      Discount:
+                      {' '}
+                      {appliedPromo.discount}
+                      <Button floated="right" color="red" onClick={() => this.removeCustomerPromotion(appliedPromo)}>remove</Button>
+                    </Segment>
+                  ))}
+                </Segment>
+              </Segment.Group>
+            </Grid.Column>
+          </Grid>
+        ));
+    };
+
+    this.calculateActualCost = () => {
       const { shoppingCart } = this.context;
       return shoppingCart.map((x) => Number(x.price)).reduce((prev, curr) => prev + curr, 0);
     };
     this.calculateFinalCost = () => {
-      const { restaurantPromotions, deliveryFee, pointsToRedeem } = this.state;
+      const {
+        restaurantPromotions, deliveryFee, pointsToRedeem, customerPromotionsApplied,
+      } = this.state;
       const { shoppingCart } = this.context;
       let priceList = shoppingCart.map((x) => Number(x.price));
       if (restaurantPromotions.length !== 0) {
@@ -188,8 +224,13 @@ class Checkout extends Component {
         // apply to each item
         priceList = priceList.map((price) => price * (totalRestaurantDiscount / 100));
       }
-      // TODO: settle customer app wide promo code
-      const result = priceList.reduce((prev, curr) => prev + curr, 0);
+
+      let result = priceList.reduce((prev, curr) => prev + curr, 0);
+      if (Array.from(customerPromotionsApplied).length !== 0) {
+        const totalCustomerPromoDiscount = Array.from(customerPromotionsApplied)
+          .map((x) => x.discount).reduce((prev, curr) => Number(prev) + Number(curr), 0);
+        result *= (totalCustomerPromoDiscount / 100);
+      }
       const final = result + deliveryFee - pointsToRedeem;
       return final;
     };
@@ -204,26 +245,55 @@ class Checkout extends Component {
         this.setState({ pointsToRedeem: value });
       }
     };
+
+    this.loadCustomerPromotions = async () => {
+      try {
+        const resultPromo = await Axios.get(`${config.localhost}customers/promotions/`);
+        if (resultPromo.status === 200) {
+          return this.setState({ customerPromotions: resultPromo.data.promotions });
+        }
+        return [];
+      } catch (error) {
+        console.log(error);
+        return [];
+      }
+    };
+
+    this.addCustomerPromotion = (promo) => {
+      const { customerPromotionsApplied } = this.state;
+      customerPromotionsApplied.add(promo);
+      this.setState({ customerPromotionsApplied });
+    };
+
+
+    this.removeCustomerPromotion = (promo) => {
+      const { customerPromotionsApplied } = this.state;
+      let promoIdArray = Array.from(customerPromotionsApplied).map((x) => x.promoId);
+      promoIdArray = promoIdArray.filter((id) => id !== promo.promoId);
+      const customerPromotionsAppliedNew = new Set();
+      promoIdArray.map((x) => customerPromotionsAppliedNew.add(x));
+      this.setState({ customerPromotionsApplied: customerPromotionsAppliedNew });
+    };
   }
 
   async componentDidMount() {
     // get offers from restaurant
     await this.getRestaurantOffers();
+    await this.loadCustomerPromotions();
     const { user } = this.props;
     this.setState({ availablePoints: user.points });
   }
 
   render() {
     const {
-      payByCash, selectedCreditCard,
-      customerPromotions, deliveryFee,
+      payByCash, selectedCreditCard, deliveryFee,
       restaurantPromotions, availablePoints, pointsToRedeem,
     } = this.state;
 
     const {
       closePayment,
     } = this.context;
-    const actualCost = this.caculateActualCost();
+    const actualCost = this.calculateActualCost();
     const finalCost = this.calculateFinalCost();
     return (
       <>
@@ -233,35 +303,42 @@ class Checkout extends Component {
         >
           <Header icon="money" content="Confirm your order" />
           <Modal.Content>
-            {this.DisplayRestaurantPromo(restaurantPromotions)}
-            { payByCash
-              ? (
-                <>
-                  <h3>Payment will be by Cash on Delivery!</h3>
-                  <br />
-                  <Button color="orange" onClick={() => this.switchPayment()} inverted fluid>
-                    <Icon name="money" />
+            <Segment>
+
+
+              {this.DisplayRestaurantPromo(restaurantPromotions)}
+              <Divider />
+              {this.DisplayCustomerPromo()}
+            </Segment>
+            <Segment>
+              { payByCash
+                ? (
+                  <>
+                    <h3>Payment will be by Cash on Delivery!</h3>
+                    <br />
+                    <Button color="orange" onClick={() => this.switchPayment()} inverted fluid>
+                      <Icon name="money" />
+                      {' '}
+                      Pay by Credit Card instead
+                    </Button>
+                  </>
+                )
+                : (
+                  <>
+                    <PaymentForm
+                      selectedCreditCard={selectedCreditCard}
+                      setCard={(card) => this.setCard(card)}
+                    />
                     {' '}
-                    Pay by Credit Card instead
-                  </Button>
-                </>
-              )
-              : (
-                <>
-                  <PaymentForm
-                    selectedCreditCard={selectedCreditCard}
-                    setCard={(card) => this.setCard(card)}
-                  />
-                  {' '}
-                  <br />
-                  <Button color="orange" onClick={() => this.switchPayment()} inverted fluid>
-                    <Icon name="money" />
-                    {' '}
-                    Pay by Cash On Delivery
-                  </Button>
-                </>
-              ) }
-            <Promotions promotions={customerPromotions} setPromotions={this.setPromotions} />
+                    <br />
+                    <Button color="orange" onClick={() => this.switchPayment()} inverted fluid>
+                      <Icon name="money" />
+                      {' '}
+                      Pay by Cash On Delivery
+                    </Button>
+                  </>
+                ) }
+            </Segment>
             <DeliveryForm calculateDeliveryFee={this.calculateDeliveryFee} />
             <Header as="h2">Redeem points</Header>
             <Header as="h3">{`Available Points: ${availablePoints}`}</Header>
@@ -272,7 +349,7 @@ class Checkout extends Component {
                 {' '}
                 <br />
                 {' '}
-            <p>{pointsToRedeem}</p>
+                <p>{pointsToRedeem}</p>
               </>
             ) }
             <br />

@@ -67,17 +67,12 @@ class CustomerInfo extends Component {
       }
     };
 
-    this.loadPromotions = async () => {
+    this.loadCustomerPromotions = async () => {
       try {
         const resultPromo = await Axios.get(`${config.localhost}customers/promotions/`);
         if (resultPromo.status === 200) {
           const promotions = [];
-          resultPromo.data.promotions.forEach((val) => promotions.push({
-            promoId: val.promo_id,
-            discount: val.discount,
-            startTime: val.start_time,
-            endTime: val.end_time,
-          }));
+          resultPromo.data.promotions.forEach((val) => promotions.push(val));
           return promotions;
         }
         return [];
@@ -92,7 +87,7 @@ class CustomerInfo extends Component {
         const [customerCreditCards,
           promotions,
           locations,
-        ] = await Promise.all([this.loadCC(), this.loadPromotions(), this.loadLocations()]);
+        ] = await Promise.all([this.loadCC(), this.loadCustomerPromotions(), this.loadLocations()]);
         this.setState({ customerCreditCards, promotions, locations });
       } catch (error) {
         console.log(error);
