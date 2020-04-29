@@ -15,6 +15,7 @@
   "instantiations": [
     "insert_restaurants.sql",
     "insert_food.sql",
+    "insert_orders.sql",
     "user_triggers.sql",
     "order_triggers.sql"
   ]

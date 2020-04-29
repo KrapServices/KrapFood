@@ -182,7 +182,7 @@ const getValidPromotionsById = async (request, response) => {
       SELECT DISTINCT P.promo_id, P.discount, P.promo_name, P.start_time, P.end_time
       FROM Promotions P NATURAL JOIN Offers O
       WHERE O.restaurant_id = $1
-      and P.start_time <= current_timestamp
+      and P.start_time >= current_timestamp
       and P.end_time > current_timestamp
       `,
       [restaurantId],

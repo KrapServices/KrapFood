@@ -11,34 +11,34 @@ VALUES
 COMMIT;
 
 INSERT INTO orders
-    (order_id, total_cost, status, delivery_location, customer_id, rating)
+    (order_id, total_cost, status, delivery_location, customer_id, rating, delivery_fee)
 VALUES
-    (1, 51, 'completed', '4 chicken road', 1, 5);
+    (1, 51, 'completed', '4 chicken road', 1, 5, 5);
 
 INSERT INTO orders
-    (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at)
+    (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (2, 51, 'completed', '4 chicken road', 1, 5, '2020-03-12 01:00:00', '2020-03-13 03:00:00');
+    (2, 51, 'completed', '4 chicken road', 1, 5, '2020-03-12 01:00:00', '2020-03-13 03:00:00', 5);
 
 INSERT INTO orders
-    (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at)
+    (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (3, 51, 'completed', '4 chicken road', 1, 5, '2020-03-12 01:00:00', '2020-03-13 03:00:00');
+    (3, 51, 'completed', '4 chicken road', 1, 5, '2020-03-12 01:00:00', '2020-03-13 03:00:00', 5);
 
 INSERT INTO orders
-    (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at)
+    (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (4, 51, 'completed', '4 chicken road', 1, 5, '2020-03-12 01:00:00', '2020-03-13 03:00:00');
+    (4, 51, 'completed', '4 chicken road', 1, 5, '2020-03-12 01:00:00', '2020-03-13 03:00:00', 5);
 
 INSERT INTO orders
-    (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at)
+    (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (5, 51, 'completed', '4 chicken road', 1, 5, '2020-03-12 01:00:00', '2020-03-13 03:00:00');
+    (5, 51, 'completed', '4 chicken road', 1, 5, '2020-03-12 01:00:00', '2020-03-13 03:00:00', 6);
 
 INSERT INTO orders
-    (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at)
+    (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (6, 51, 'completed', '4 chicken road', 1, 5, '2020-03-12 01:00:00', '2020-03-13 03:00:00');
+    (6, 51, 'completed', '4 chicken road', 1, 5, '2020-03-12 01:00:00', '2020-03-13 03:00:00', 6);
 
 INSERT INTO contain 
     (order_id, restaurant_id, food_name, quantity)

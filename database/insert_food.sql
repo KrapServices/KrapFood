@@ -1,7 +1,7 @@
 INSERT INTO foods
     (food_name, price, daily_limit, restaurant_id, category)
 VALUES
-    ('1 test 1', 51, 1, 1, 'local');
+    ('1 test 1', 51, 1000, 1, 'local');
 INSERT INTO foods
     (food_name, price, restaurant_id, category)
 VALUES

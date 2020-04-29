@@ -126,6 +126,7 @@ class PromotionDurationSegment extends Component {
         });
         alert('promotion created!');
         this.clearForm();
+        console.log('help!');
         window.location.reload();
       } catch (error) {
         console.log(error);
