@@ -10,7 +10,9 @@ router.post('/create', services.createPromotion);
 
 router.get('/:id/food', services.getMenuById);
 
-router.get('/:id/stats', services.getStatsById);
+router.get('/:id/monthlystats', services.getMonthlyStatsById);
+
+router.get('/:id/promostats', services.getPromoStatsById);
 
 router.get('/:id/promo', services.getValidPromotionsById);
 

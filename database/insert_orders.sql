@@ -69,6 +69,16 @@ INSERT INTO full_time_riders
     (rider_id)
 VALUES
     (5);
+
+INSERT INTO users
+    (user_id, email, password)
+VALUES
+    (6, 's0', 'p0');
+INSERT INTO staff
+    (staff_id, restaurant_id)
+VALUES
+    (6, 1);
+
 COMMIT;
 
 BEGIN;

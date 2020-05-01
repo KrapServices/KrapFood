@@ -218,14 +218,45 @@ const getMonthsById = async (request, response) => {
       `,
       [restaurantId],
     )).rows;
-    return response.status(200).json(yearMonths);
+    response.status(200).json(yearMonths);
   } catch (error) {
     console.log(error);
-    return response.status(500).send('restaurant could not be found');
+    response.status(500).send('restaurant could not be found');
   }
 };
 
-const getStatsById = async (request, response) => {
+const getPromoStatsById = async (request, response) => {
+  const { id: restaurantId } = request.params;
+  try {
+    const stats = (await query(
+      `WITH promo_count AS (
+        SELECT O.promo_id, count(distinct A.order_id) AS order_count
+        FROM Offers O JOIN Applies A ON O.promo_id = A.promo_id
+        WHERE O.restaurant_id = $1
+        GROUP BY O.promo_id
+        )
+        SELECT P.promo_id, promo_name, discount, start_time, end_time, (order_count/EXTRACT (day FROM (end_time - start_time))) AS avg_order
+        FROM promo_count C JOIN promotions P ON C.promo_id = P.promo_id
+      `,
+      [restaurantId],
+    )).rows.map((promo) => ({
+      promoId: promo.promo_id,
+      discount: promo.discount,
+      promoName: promo.promo_name,
+      startTime: promo.start_time,
+      endTime: promo.end_time,
+      avgOrder: promo.avg_order,
+    }));
+    response.status(200).json({
+      stats,
+    });
+  } catch (error) {
+    console.log(error);
+    response.status(500).send('restaurant could not be found');
+  }
+};
+
+const getMonthlyStatsById = async (request, response) => {
   try {
     const { id: restaurantId } = request.params;
     const { month, year } = request.query;
@@ -264,13 +295,13 @@ const getStatsById = async (request, response) => {
         `,
       [restaurantId, month, year],
     )).rows;
-    return response.status(200).json({
+    response.status(200).json({
       stats,
       topFive,
     });
   } catch (error) {
     console.log(error);
-    return response.status(500).send('restaurant could not be found');
+    response.status(500).send('restaurant could not be found');
   }
 };
 
@@ -280,7 +311,8 @@ module.exports = {
   getRestaurantById,
   getMenuById,
   getMonthsById,
-  getStatsById,
+  getMonthlyStatsById,
+  getPromoStatsById,
   createPromotion,
   getValidPromotionsById,
 };
