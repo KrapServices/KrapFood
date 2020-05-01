@@ -1,4 +1,4 @@
-const { query } = require('../database');
+const { query, transact } = require('../database');
 
 const createPromotion = async (request, response) => {
   try {
@@ -37,35 +37,32 @@ const createCampaign = async (request, response) => {
     const {
       discount, promoName, dateRange, campaignName,
     } = request.body;
-    const campaign = (await query(
-      `
-      INSERT INTO promotional_campaigns (campaign_name)
-      VALUES ($1)
-      RETURNING campaign_id
-      `,
-      [campaignName],
-    )).rows[0];
-    const promo = (await query(
-      `
-      INSERT INTO promotions (discount, promo_name, start_time, end_time) 
-      VALUES ($1, $2, $3, $4)
-      RETURNING promo_id, promo_name
-      `,
-      [discount, promoName, new Date(dateRange[0]), new Date(dateRange[1])],
-    )).rows[0];
-    const includes = (await query(
-      `
-      INSERT INTO includes (campaign_id, promo_id)
-      VALUES ($1, $2)
-      `,
-      [campaign.campaign_id, promo.promo_id],
-    )).rows[0];
-    response.status(200).json({
-      promo: {
-        promoId: promo.promo_id,
-        campaignId: campaign.campaign_id,
-      },
+    const result = await transact(async (query) => {
+      const campaign = (await query(
+        `
+        INSERT INTO promotional_campaigns (campaign_name)
+        VALUES ($1)
+        RETURNING campaign_id
+        `,
+        [campaignName],
+      )).rows[0];
+      const promo = (await query(
+        `
+        INSERT INTO promotions (discount, promo_name, start_time, end_time) 
+        VALUES ($1, $2, $3, $4)
+        RETURNING promo_id, promo_name
+        `,
+        [discount, promoName, new Date(dateRange[0]), new Date(dateRange[1])],
+      )).rows[0];
+      (await query(
+        `
+        INSERT INTO includes (campaign_id, promo_id)
+        VALUES ($1, $2)
+        `,
+        [campaign.campaign_id, promo.promo_id],
+      ));
     });
+    response.status(200).json(result);
   } catch (error) {
     console.log(error);
     response.status(500).send('An error occured with creating the promotion');

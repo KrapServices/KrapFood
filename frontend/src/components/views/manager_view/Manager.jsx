@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { Header, Tab } from 'semantic-ui-react';
 import userContext from '../../../userContext';
 import PasswordUpdate from './updatePassword/PasswordUpdate';
-import Summary from './summary/Summary';
 import RiderViewer from './viewRiders/RiderViewer';
 import AppPromotion from './promotions/AppPromotion';
+import Summary from './summary/Summary';
 
 class Manager extends Component {
   constructor() {

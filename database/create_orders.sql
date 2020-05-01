@@ -10,8 +10,9 @@ CREATE TABLE orders
     customer_id INTEGER NOT NULL,
     rating INTEGER,
     CONSTRAINT valid_rating CHECK (rating IN (1, 2, 3, 4, 5)),
-    created_at TIMESTAMP NOT NULL DEFAULT current_timestamp,
+    created_at TIMESTAMP NOT NULL DEFAULT current_timestamp, 
     modified_at TIMESTAMP NOT NULL DEFAULT current_timestamp,
+    CONSTRAINT check_time_validity CHECK (EXTRACT(HOUR from created_at) >= 10 AND EXTRACT(HOUR from created_at) <= 22),
     PRIMARY KEY (order_id),
     FOREIGN KEY (customer_id) REFERENCES customers (customer_id) ON DELETE CASCADE
 );
@@ -43,7 +44,7 @@ CREATE TABLE promotions
     promo_name TEXT NOT NULL UNIQUE,
     start_time TIMESTAMP NOT NULL,
     end_time TIMESTAMP NOT NULL,
-    CONSTRAINT check_time_validity CHECK (EXTRACT(EPOCH FROM end_time) > EXTRACT(EPOCH FROM start_time) AND EXTRACT(EPOCH FROM start_time) >= EXTRACT(EPOCH FROM current_timestamp)),
+    CONSTRAINT check_time_validity CHECK (EXTRACT(EPOCH FROM end_time) > EXTRACT(EPOCH FROM start_time)),
     PRIMARY KEY (promo_id)
 );
 
@@ -81,7 +82,7 @@ CREATE TABLE contain
 CREATE TABLE promotional_campaigns 
 (
     campaign_id SERIAL,
-    campaign_name TEXT NOT NULL,
+    campaign_name TEXT NOT NULL UNIQUE,
     PRIMARY KEY (campaign_id)
 );
 
