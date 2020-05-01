@@ -4,8 +4,6 @@ CREATE TABLE food_reviews (
   review_id SERIAL,
   customer_id SERIAL,
   review TEXT,
-  rating INTEGER, 
-  CONSTRAINT valid_rating CHECK (rating IN (1, 2, 3, 4, 5)),
   created_at TIMESTAMP NOT NULL DEFAULT current_timestamp,
   modified_at TIMESTAMP NOT NULL DEFAULT current_timestamp,
   PRIMARY KEY (customer_id, restaurant_id, food_name),

@@ -20,8 +20,8 @@ CREATE TABLE customers
 
 CREATE TABLE cards  
 (
-    card_number TEXT UNIQUE,
-    expiry TEXT,
+    card_number TEXT UNIQUE, --do we need regex check here?
+    expiry TEXT, --do we need regex check here? or should we use date object
     customer_id INTEGER,
     name_card Text,
     PRIMARY KEY (customer_id, card_number),
