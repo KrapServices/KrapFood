@@ -109,75 +109,110 @@ VALUES
     (1, 2);
 COMMIT;
 
-INSERT INTO orders
-    (order_id, total_cost, status, delivery_location, customer_id, rating, delivery_fee)
-VALUES
-    (1, 51, 'completed', '4 chicken road', 1, 5, 5);
-
+-- order 1
+BEGIN TRANSACTION;
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (2, 51, 'completed', '5 chicken road', 1, 5, '2020-03-12 13:00:00', '2020-03-12 15:00:00', 5);
-
-INSERT INTO orders
-    (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
+    (1, 51, 'completed', '5 chicken road', 1, 5, '2020-04-12 13:00:00', '2020-04-12 15:00:00', 5);
+INSERT INTO delivers
+    (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
-    (3, 51, 'completed', '6 chicken road', 1, 5, '2020-03-12 11:00:00', '2020-03-13 13:00:00', 5);
-
-INSERT INTO orders
-    (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
-VALUES
-    (4, 51, 'completed', '7 chicken road', 1, 5, '2020-03-12 11:00:00', '2020-03-13 13:00:00', 5);
-
-INSERT INTO orders
-    (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
-VALUES
-    (5, 51, 'completed', '8 chicken road', 1, 5, '2020-03-12 11:00:00', '2020-03-13 13:00:00', 6);
-
-INSERT INTO orders
-    (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
-VALUES
-    (6, 51, 'completed', '9 chicken road', 1, 5, '2020-03-12 11:00:00', '2020-03-13 13:00:00', 6);
-
+    (1, 5, 1, '13:01:00', '13:15:00', '13:20:00', '13:30:00');
 INSERT INTO contain 
     (order_id, restaurant_id, food_name, quantity)
 VALUES
     (1, 1, '1 test 1', 1);
-
-INSERT INTO contain 
-    (order_id, restaurant_id, food_name, quantity)
-VALUES
-    (2, 1, '1 test 1', 1);
-
-INSERT INTO contain 
-    (order_id, restaurant_id, food_name, quantity)
-VALUES
-    (3, 1, '1 test 2', 1);
-
-INSERT INTO contain 
-    (order_id, restaurant_id, food_name, quantity)
-VALUES
-    (4, 1, '1 test 2', 1);
-
-INSERT INTO contain 
-    (order_id, restaurant_id, food_name, quantity)
-VALUES
-    (5, 1, '1 test 3', 1);
-
-INSERT INTO contain 
-    (order_id, restaurant_id, food_name, quantity)
-VALUES
-    (6, 1, '1 test 4', 1);
-
 INSERT INTO applies
     (promo_id, order_id)
 VALUES
     (1, 1);
+-- insert into orders (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
+-- values (2, 51, 'completed', '5 chicken road', 1, 5, '2020-04-12 13:00:00', '2020-04-12 14:00:00', 5);
 
-INSERT INTO delivers
-    (delivery_id, rider_id, order_id, delivery_fee, departure_time, arrival_time, collection_time, completion_time)
+-- insert into delivers (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
+-- values (2, 5, 2, '13:00:00', '13:01:00', '13:20:00', '13:25:00');
+COMMIT;
+
+-- order 2
+BEGIN;
+INSERT INTO orders
+    (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (1, 5, 2, 6, '13:01:00', '13:15:00', '13:20:00', '13:30:00');
+    (2, 51, 'completed', '5 chicken road', 1, 5, '2020-04-12 13:00:00', '2020-04-12 15:00:00', 5);
+INSERT INTO contain 
+    (order_id, restaurant_id, food_name, quantity)
+VALUES
+    (2, 1, '1 test 1', 1);
+INSERT INTO delivers
+    (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
+VALUES
+    (2, 5, 2, '13:01:00', '13:15:00', '13:20:00', '13:30:00');
+COMMIT; 
+
+-- order 3
+BEGIN; 
+INSERT INTO orders
+    (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
+VALUES
+    (3, 51, 'completed', '6 chicken road', 1, 5, '2020-03-12 13:00:00', '2020-03-13 15:00:00', 5);
+INSERT INTO contain 
+    (order_id, restaurant_id, food_name, quantity)
+VALUES
+    (3, 1, '1 test 2', 1);
+INSERT INTO delivers
+    (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
+VALUES
+    (3, 5, 3, '13:01:00', '13:15:00', '13:20:00', '13:30:00');
+COMMIT;
+
+-- order 4
+BEGIN;
+INSERT INTO orders
+    (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
+VALUES
+    (4, 51, 'completed', '7 chicken road', 1, 5, '2020-03-12 13:00:00', '2020-03-13 15:00:00', 5);
+INSERT INTO contain 
+    (order_id, restaurant_id, food_name, quantity)
+VALUES
+    (4, 1, '1 test 2', 1);
+INSERT INTO delivers
+    (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
+VALUES
+    (4, 5, 4, '13:01:00', '13:15:00', '13:20:00', '13:30:00');
+COMMIT;
+
+-- order 5
+BEGIN;
+INSERT INTO orders
+    (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
+VALUES
+    (5, 51, 'completed', '8 chicken road', 1, 5, '2020-03-12 13:00:00', '2020-03-13 15:00:00', 6);
+INSERT INTO contain 
+    (order_id, restaurant_id, food_name, quantity)
+VALUES
+    (5, 1, '1 test 3', 1);
+INSERT INTO delivers
+    (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
+VALUES
+    (5, 5, 5, '13:01:00', '13:15:00', '13:20:00', '13:30:00');
+COMMIT;
+
+--order 6
+BEGIN;
+INSERT INTO orders
+    (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
+VALUES
+    (6, 51, 'completed', '9 chicken road', 1, 5, '2020-03-12 14:00:00', '2020-03-13 15:00:00', 6);
+INSERT INTO contain 
+    (order_id, restaurant_id, food_name, quantity)
+VALUES
+    (6, 1, '1 test 4', 1);
+INSERT INTO delivers
+    (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
+VALUES
+    (6, 5, 6, '13:01:00', '13:15:00', '13:20:00', '13:30:00');
+COMMIT;
 
 BEGIN; 
 INSERT INTO users (user_id, email, password) VALUES (7, 'abc@test.com', '123');

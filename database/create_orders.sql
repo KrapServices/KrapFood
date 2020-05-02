@@ -17,6 +17,21 @@ CREATE TABLE orders
     FOREIGN KEY (customer_id) REFERENCES customers (customer_id) ON DELETE CASCADE
 );
 
+CREATE TABLE delivers
+(
+    delivery_id SERIAL,
+    rider_id INTEGER NOT NULL,
+    order_id INTEGER NOT NULL UNIQUE,
+    departure_time TIME,
+    arrival_time TIME,
+    completion_time TIME,
+    collection_time TIME,
+    PRIMARY KEY (delivery_id),
+    FOREIGN KEY (rider_id) REFERENCES riders (rider_id),
+    FOREIGN KEY (order_id) REFERENCES orders (order_id)
+);
+
+
 --payment 
 CREATE TABLE cash_payments 
 (
@@ -93,21 +108,4 @@ CREATE TABLE includes
     PRIMARY KEY (campaign_id, promo_id),
     FOREIGN KEY (campaign_id) REFERENCES promotional_campaigns,
     FOREIGN KEY (promo_id) REFERENCES promotions(promo_id)
-);
-
-
-
-CREATE TABLE delivers
-(
-    delivery_id SERIAL,
-    rider_id INTEGER NOT NULL,
-    order_id INTEGER NOT NULL UNIQUE,
-    delivery_fee NUMERIC(10, 2) NOT NULL,
-    departure_time TIME,
-    arrival_time TIME,
-    completion_time TIME,
-    collection_time TIME,
-    PRIMARY KEY (delivery_id),
-    FOREIGN KEY (rider_id) REFERENCES riders (rider_id),
-    FOREIGN KEY (order_id) REFERENCES orders (order_id)
 );

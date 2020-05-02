@@ -3,6 +3,7 @@ import { Header, Tab } from 'semantic-ui-react';
 import CustomerSummary from './CustomerSummary';
 import userContext from '../../../../userContext';
 import OrderSummary from './OrderSummary';
+import RiderSummary from './RiderSummary';
 
 class Summary extends Component {
   constructor() {
@@ -31,7 +32,7 @@ class Summary extends Component {
     const panes = [
       { menuItem: 'Customer Summary', render: () => <Tab.Pane><CustomerSummary /></Tab.Pane> },
       { menuItem: 'Orders Summary', render: () => <Tab.Pane><OrderSummary /></Tab.Pane> },
-      { menuItem: 'Rider Summary', render: () => <Tab.Pane><CustomerSummary /></Tab.Pane> },
+      { menuItem: 'Rider Summary', render: () => <Tab.Pane><RiderSummary /></Tab.Pane> },
     ];
     return (
       <>

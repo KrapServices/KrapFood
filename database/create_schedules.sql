@@ -70,13 +70,13 @@ CREATE TABLE ft_rider_works
 
 -- Examples --
 
--- INSERT INTO users (email, password) VALUES ('abc@test.com', '123');
--- INSERT INTO riders (rider_id) VALUES (1);
--- INSERT INTO part_time_riders (rider_id, salary_per_hour) VALUES (1, 1.00);
+-- INSERT INTO users (user_id, email, password) VALUES (7, 'abc@test.com', '123');
+-- INSERT INTO riders (rider_id) VALUES (7);
+-- INSERT INTO part_time_riders (rider_id, salary_per_hour) VALUES (7, 1.00);
 
--- INSERT INTO users (email, password) VALUES ('def@test.com', '123');
--- INSERT INTO riders (rider_id) VALUES (2);
--- INSERT INTO full_time_riders (rider_id, base_salary) VALUES (2, 1000.00);
+-- INSERT INTO users (user_id, email, password) VALUES (8, 'def@test.com', '123');
+-- INSERT INTO riders (rider_id) VALUES (8);
+-- INSERT INTO full_time_riders (rider_id, base_salary) VALUES (8, 1000.00);
 
 -- INSERT INTO weekly_work_schedules (starting_date, ending_date) VALUES ('2020-04-01', '2020-04-07');
 -- INSERT INTO shifts (work_date, starting_time, ending_time) VALUES ('2020-04-02', '100000', '110000');
@@ -122,8 +122,8 @@ CREATE TABLE ft_rider_works
 -- INSERT INTO wws_contains (wws_id, shift_id) VALUES (2, 19);
 -- INSERT INTO wws_contains (wws_id, shift_id) VALUES (2, 20);
 
--- INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (1, 1);
--- INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (1, 2);
+-- INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (7, 1);
+-- INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (7, 2);
 
 -- INSERT INTO monthly_work_schedules (starting_date, ending_date) VALUES ('2020-04-01', '2020-04-28');
 
@@ -455,4 +455,4 @@ CREATE TABLE ft_rider_works
 -- INSERT INTO mws_contains (mws_id, shift_id) VALUES (1, 179);
 -- INSERT INTO mws_contains (mws_id, shift_id) VALUES (1, 180);
 
--- INSERT INTO ft_rider_works (rider_id, mws_id) VALUES (2, 1);
+-- INSERT INTO ft_rider_works (rider_id, mws_id) VALUES (8, 1);

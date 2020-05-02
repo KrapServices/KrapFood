@@ -32,7 +32,7 @@ BEGIN
     IF rider_selected_id IS NULL THEN
         RAISE exception 'rider issue %', current_shift_id;
     END IF; 
-    INSERT INTO delivers (rider_id, order_id, delivery_fee) VALUES (rider_selected_id, NEW.order_id, NEW.delivery_fee); -- assign rider
+    INSERT INTO delivers (rider_id, order_id) VALUES (rider_selected_id, NEW.order_id); -- assign rider
     
     RETURN NULL;
 END;
@@ -178,3 +178,31 @@ CREATE TRIGGER update_food_availability_trigger
     ON Foods
     FOR EACH ROW
     EXECUTE FUNCTION update_food_availability();
+
+-- check if all completed orders are assigned to delivery drivers
+CREATE OR REPLACE FUNCTION completed_order_assigned() returns TRIGGER
+    AS $$
+DECLARE 
+    violating_order_id INTEGER;
+BEGIN
+    SELECT o.order_id into violating_order_id
+        FROM orders o
+        WHERE o.status = 'completed'
+        AND NOT EXISTS(
+            SELECT 1
+            FROM delivers d
+            WHERE d.order_id = o.order_id
+        );
+    IF violating_order_id IS NOT NULL THEN 
+        RAISE exception 'order % cannot be completed without having been assigned to a rider', violating_order_id;
+    END IF;
+    RETURN NULL;
+END
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS completed_order_assigned_trigger ON orders;
+CREATE CONSTRAINT TRIGGER completed_order_assigned_trigger 
+    AFTER INSERT OR UPDATE ON orders
+    DEFERRABLE INITIALLY DEFERRED
+    FOR EACH ROW
+    EXECUTE PROCEDURE completed_order_assigned();
