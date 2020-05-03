@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Header, Tab } from 'semantic-ui-react';
 import userContext from '../../../userContext';
 import PasswordUpdate from './updatePassword/PasswordUpdate';
-import RiderViewer from './viewRiders/RiderViewer';
 import AppPromotion from './promotions/AppPromotion';
 import Summary from './summary/Summary';
 
@@ -33,7 +32,6 @@ class Manager extends Component {
     const panes = [
       { menuItem: 'Create Promotions', render: () => <Tab.Pane><AppPromotion user={user} /></Tab.Pane> },
       { menuItem: 'View Summary', render: () => <Tab.Pane><Summary /></Tab.Pane> },
-      { menuItem: 'View Rider Shifts', render: () => <Tab.Pane><RiderViewer /></Tab.Pane> },
       { menuItem: 'Update Password', render: () => <Tab.Pane><PasswordUpdate /></Tab.Pane> },
 
     ];

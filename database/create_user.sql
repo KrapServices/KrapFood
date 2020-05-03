@@ -21,9 +21,12 @@ CREATE TABLE customers
 CREATE TABLE cards  
 (
     card_number TEXT UNIQUE, --do we need regex check here?
-    expiry TEXT, --do we need regex check here? or should we use date object
+    expiry_month INTEGER NOT NULL,
+    expiry_year INTEGER NOT NULL,
     customer_id INTEGER,
     name_card Text,
+    CONSTRAINT valid_month CHECK (expiry_month <= 12 AND expiry_month >= 1),
+    CONSTRAINT valid_year CHECK (expiry_year >= 2020),
     PRIMARY KEY (customer_id, card_number),
     FOREIGN KEY (customer_id) REFERENCES customers (customer_id) ON DELETE CASCADE
 );

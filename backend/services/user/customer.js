@@ -69,10 +69,17 @@ const customerCreateCreditCard = async (request, response) => {
     const {
       cardNumber, expiry, customerId, nameCard,
     } = request.body;
+    let month = '';
+    let year = '';
+    if (expiry.length === 4) {
+      month = parseInt(expiry.substring(0, 2), 10);
+      // pad 20 in front
+      year = parseInt(`20${expiry.substring(2, 4)}`, 10);
+    }
     console.log(request.body);
     await query(
-      'INSERT INTO CARDS (card_number, expiry, customer_id, name_card) VALUES ($1,$2,$3,$4)',
-      [cardNumber, expiry, customerId, nameCard],
+      'INSERT INTO CARDS (card_number, expiry_month, expiry_year, customer_id, name_card) VALUES ($1,$2,$3,$4,$5)',
+      [cardNumber, month, year, customerId, nameCard],
     );
     return response.status(200).send();
   } catch (error) {
