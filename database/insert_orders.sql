@@ -79,6 +79,10 @@ INSERT INTO staff
 VALUES
     (6, 1);
 
+--SELECT setval('user_id_seq', max(user_id)) FROM users;
+   
+--SELECT setval('customer_id_seq', max(customer_id))  FROM customers;
+
 COMMIT;
 
 BEGIN;
@@ -603,4 +607,6 @@ INSERT INTO mws_contains (mws_id, shift_id) VALUES (1, 179);
 INSERT INTO mws_contains (mws_id, shift_id) VALUES (1, 180);
 
 INSERT INTO ft_rider_works (rider_id, mws_id) VALUES (8, 1);
+SELECT setval('users_user_id_seq', (SELECT MAX(user_id) from "users"));
+SELECT setval('customers_customer_id_seq', (SELECT MAX(customer_id) from "customers")); -- it adds one automatically to the max value
 COMMIT;
