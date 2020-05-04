@@ -608,5 +608,10 @@ INSERT INTO mws_contains (mws_id, shift_id) VALUES (1, 180);
 
 INSERT INTO ft_rider_works (rider_id, mws_id) VALUES (8, 1);
 SELECT setval('users_user_id_seq', (SELECT MAX(user_id) from "users"));
-SELECT setval('customers_customer_id_seq', (SELECT MAX(customer_id) from "customers")); -- it adds one automatically to the max value
+--SELECT setval('customers_customer_id_seq', (SELECT MAX(customer_id) from "customers")); 
+--SELECT setval('riders_rider_id_seq', (SELECT MAX(rider_id) from "riders")); 
+--SELECT setval('staff_staff_id_seq', (SELECT MAX(staff_id) from "stuff")); 
+SELECT setval('promotions_promo_id_seq', (SELECT MAX(promo_id) from "promotions")); 
+SELECT setval('promotional_campaigns_campaign_id_seq', (SELECT MAX(campaign_id) from "promotional_campaigns"));
+-- it adds one automatically to the max value
 COMMIT;

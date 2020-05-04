@@ -10,7 +10,7 @@ CREATE TABLE users
 
 CREATE TABLE customers
 (
-    customer_id SERIAL,
+    customer_id INTEGER,
     name TEXT,
     order_count INTEGER NOT NULL DEFAULT 0,
     points INTEGER NOT NULL DEFAULT 0,
