@@ -17,20 +17,16 @@ class RiderSummary extends React.Component {
   }
 
   async handleSubmit() {
-    const {rider_id} = this.context.user;
+    const { rider_id } = this.context.user;
     const { startDate, endDate } = this.state;
 
     const stringStartDate = new Date(startDate).toString();
     const stringEndDate = new Date(endDate).toString();
 
-    const url = `${config.localhost}rider/${rider_id}/ridersummary?startDate=${stringStartDate}&endDate=${stringEndDate}`;
-
+    const url = `${config.localhost}riders/${rider_id}/ridersummary?startDate=${stringStartDate}&endDate=${stringEndDate}`;
     const { summary } = (await axios.get(url)).data;
-    console.log(this.state);
-
     this.setState({
-      riderStats: summary.stats,
-
+      riderStats: summary.data.stats,
     });
   }
 
@@ -78,15 +74,15 @@ class RiderSummary extends React.Component {
           }}
         >
           <Statistic>
-            <Statistic.Value>{riderStats[2]}</Statistic.Value>
+            <Statistic.Value>{riderStats[0]}</Statistic.Value>
             <Statistic.Label>Total Work Hours</Statistic.Label>
           </Statistic>
           <Statistic>
-            <Statistic.Value>{riderStats[0]}</Statistic.Value>
+            <Statistic.Value>{riderStats[1]}</Statistic.Value>
             <Statistic.Label>Total Orders</Statistic.Label>
           </Statistic>
           <Statistic>
-            <Statistic.Value>{riderStats[1]}</Statistic.Value>
+            <Statistic.Value>{riderStats[2]}</Statistic.Value>
             <Statistic.Label>Total Pay</Statistic.Label>
           </Statistic>
         </Statistic.Group>
