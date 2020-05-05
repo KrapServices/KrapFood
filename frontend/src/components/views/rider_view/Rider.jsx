@@ -4,6 +4,7 @@ import { Tab } from 'semantic-ui-react';
 import userContext from '../../../userContext';
 import PartTimeRiderWorkSchedule from './PartTimeRiderWorkSchedule';
 import RiderViewOrder from './orderView/RiderOrderView';
+import RiderSummary from './RiderSummary';
 
 class Rider extends Component {
   constructor(props) {
@@ -32,10 +33,10 @@ class Rider extends Component {
     const panes = status === 'part' ? [
       { menuItem: 'Schedule', render: () => <Tab.Pane><PartTimeRiderWorkSchedule /></Tab.Pane> },
       { menuItem: 'Assigned Orders', render: () => <Tab.Pane><RiderViewOrder /></Tab.Pane> },
-      { menuItem: 'Summary', render: () => <Tab.Pane><div /></Tab.Pane> },
+      { menuItem: 'Summary', render: () => <Tab.Pane><RiderSummary /></Tab.Pane> },
     ] : [
       { menuItem: 'Assigned Orders', render: () => <Tab.Pane><RiderViewOrder /></Tab.Pane> },
-      { menuItem: 'Summary', render: () => <Tab.Pane><div /></Tab.Pane> },
+      { menuItem: 'Summary', render: () => <Tab.Pane><RiderSummary /></Tab.Pane> },
     ];
     return (
       <>

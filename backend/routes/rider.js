@@ -1,5 +1,6 @@
 const express = require('express');
 const { transact, query } = require('../database');
+const services = require('../services/user/rider');
 
 const router = express.Router();
 
@@ -85,5 +86,7 @@ router.get('/:id/schedules', async (req, res) => {
     res.status(500).json({});
   }
 });
+
+router.get('/:id/ridersummary', services.getRiderStats);
 
 module.exports = router;
