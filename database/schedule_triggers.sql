@@ -80,32 +80,37 @@ DECLARE
   time_of_five_hour_shift TIME;
 BEGIN
   SELECT S1.work_date, S1.starting_time INTO work_date, time_of_five_hour_shift
-  FROM wws_contains NATURAL JOIN shifts S1
+  FROM wws_contains C1 NATURAL JOIN shifts S1
   WHERE EXISTS (
     SELECT 1
-    FROM wws_contains NATURAL JOIN shifts S2
+    FROM wws_contains C2 NATURAL JOIN shifts S2
     WHERE S2.ending_time = S1.starting_time + INTERVAL '1 hour'
     AND S2.work_date = S1.work_date
+    AND C1.wws_id = C2.wws_id
   ) AND EXISTS (
     SELECT 1
-    FROM wws_contains NATURAL JOIN shifts S2
+    FROM wws_contains C2 NATURAL JOIN shifts S2
     WHERE S2.ending_time = S1.starting_time + INTERVAL '2 hour'
     AND S2.work_date = S1.work_date
+    AND C1.wws_id = C2.wws_id
   ) AND EXISTS (
     SELECT 1
-    FROM wws_contains NATURAL JOIN shifts S2
+    FROM wws_contains C2 NATURAL JOIN shifts S2
     WHERE S2.ending_time = S1.starting_time + INTERVAL '3 hour'
     AND S2.work_date = S1.work_date
+    AND C1.wws_id = C2.wws_id
   ) AND EXISTS (
     SELECT 1
-    FROM wws_contains NATURAL JOIN shifts S2
+    FROM wws_contains C2 NATURAL JOIN shifts S2
     WHERE S2.ending_time = S1.starting_time + INTERVAL '4 hour'
     AND S2.work_date = S1.work_date
+    AND C1.wws_id = C2.wws_id
   ) AND EXISTS (
     SELECT 1
-    FROM wws_contains NATURAL JOIN shifts S2
+    FROM wws_contains C2 NATURAL JOIN shifts S2
     WHERE S2.ending_time = S1.starting_time + INTERVAL '5 hour'
     AND S2.work_date = S1.work_date
+    AND C1.wws_id = C2.wws_id
   );
   IF work_date IS NOT NULL AND time_of_five_hour_shift IS NOT NULL THEN
     RAISE exception '% has a five hour shift at %', work_date, time_of_five_hour_shift;
@@ -332,32 +337,37 @@ DECLARE
   time_of_five_hour_shift TIME;
 BEGIN
   SELECT S1.work_date, S1.starting_time INTO work_date, time_of_five_hour_shift
-  FROM mws_contains NATURAL JOIN shifts S1
+  FROM mws_contains C1 NATURAL JOIN shifts S1
   WHERE EXISTS (
     SELECT 1
-    FROM mws_contains NATURAL JOIN shifts S2
+    FROM mws_contains C2 NATURAL JOIN shifts S2
     WHERE S2.ending_time = S1.starting_time + INTERVAL '1 hour'
     AND S2.work_date = S1.work_date
+    AND C2.mws_id = C1.mws_id
   ) AND EXISTS (
     SELECT 1
-    FROM mws_contains NATURAL JOIN shifts S2
+    FROM mws_contains C2 NATURAL JOIN shifts S2
     WHERE S2.ending_time = S1.starting_time + INTERVAL '2 hour'
     AND S2.work_date = S1.work_date
+    AND C2.mws_id = C1.mws_id
   ) AND EXISTS (
     SELECT 1
-    FROM mws_contains NATURAL JOIN shifts S2
+    FROM mws_contains C2 NATURAL JOIN shifts S2
     WHERE S2.ending_time = S1.starting_time + INTERVAL '3 hour'
     AND S2.work_date = S1.work_date
+    AND C2.mws_id = C1.mws_id
   ) AND EXISTS (
     SELECT 1
-    FROM mws_contains NATURAL JOIN shifts S2
+    FROM mws_contains C2 NATURAL JOIN shifts S2
     WHERE S2.ending_time = S1.starting_time + INTERVAL '4 hour'
     AND S2.work_date = S1.work_date
+    AND C2.mws_id = C1.mws_id
   ) AND EXISTS (
     SELECT 1
-    FROM mws_contains NATURAL JOIN shifts S2
+    FROM mws_contains C2 NATURAL JOIN shifts S2
     WHERE S2.ending_time = S1.starting_time + INTERVAL '5 hour'
     AND S2.work_date = S1.work_date
+    AND C2.mws_id = C1.mws_id
   );
   IF work_date IS NOT NULL AND time_of_five_hour_shift IS NOT NULL THEN
     RAISE exception '% has a five hour shift at %', work_date, time_of_five_hour_shift;
