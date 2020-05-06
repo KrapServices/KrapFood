@@ -25,10 +25,9 @@ class RiderSummary extends React.Component {
 
     const url = `${config.localhost}riders/${rider_id}/ridersummary/?startDate=${primitiveStartDate}&endDate=${primitiveEndDate}`;
     const { response } = (await axios.get(url));
-    console.log(response.status);
     const { summary } = response.data;
     this.setState({
-      riderStats: summary,
+      riderStats: summary.stats,
     });
   }
 

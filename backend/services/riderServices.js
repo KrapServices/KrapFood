@@ -142,9 +142,7 @@ const getRiderStats = async (request, response) => {
     }));
 
     response.status(200).json(stats);
-    console.log(stats);
-    console.log('wtf');
-    console.log(response.data);
+
   } catch (error) {
     console.error(error);
     response.status(500).send('unable to retrieve rider stats');
