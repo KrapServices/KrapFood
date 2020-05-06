@@ -185,7 +185,7 @@ class CustomerInfo extends Component {
             </Grid.Column>
             <Grid.Column>
               <Segment>
-                <Header as="h1">Most Recent Delivery Locations</Header>
+                <Header as="h1">Most Recent Delivery Locations (up to 5)</Header>
 
                 {
                     locations === undefined || locations.length === 0 ? <Header as="h3">No locations yet!</Header>
@@ -194,7 +194,7 @@ class CustomerInfo extends Component {
                           {
                   locations.map((location, index) => (
                     <Segment key={location.orderId}>
-                      <Header as="h3">{`${index}: ${location.deliveryLocation}`}</Header>
+                      <Header as="h3">{`Location: ${location.deliveryLocation}`}</Header>
 
                     </Segment>
                   ))

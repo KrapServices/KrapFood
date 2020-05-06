@@ -24,11 +24,11 @@ class TopBar extends Component {
         case 'customer':
           return <Header size="huge" as="h1" inverted> Welcome, Customer</Header>;
         case 'rider':
-          return <Header inverted>Rider</Header>;
+          return <Header inverted>Welcome, Rider</Header>;
         case 'staff':
-          return <Header inverted>Staff</Header>;
+          return <Header inverted>Welcome, Staff</Header>;
         case 'manager':
-          return <Header inverted>Manager</Header>;
+          return <Header inverted>Welcome, Manager</Header>;
         default:
           return <Header inverted>Super User</Header>;
       }
