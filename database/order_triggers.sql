@@ -216,60 +216,31 @@ DECLARE
 BEGIN
     IF NEW.rider_id IN (SELECT rider_id FROM part_time_riders) THEN
     SELECT D.rider_id, D.order_id INTO not_on_shift_rider_id, violating_order_id
-    FROM Delivers D
+    FROM Delivers D JOIN Orders O ON D.order_id = O.order_id
     WHERE D.rider_id = NEW.rider_id
-    AND D.order_id = NEW.order_id
     AND NOT EXISTS (
         SELECT 1
-        FROM pt_rider_works PRW, wws_contains WC, Shifts S, Orders O
-        WHERE D.departure_time >= S.starting_time
+        FROM pt_rider_works P NATURAL JOIN wws_contains C NATURAL JOIN shifts S
+        WHERE P.rider_id = D.rider_id
+        AND D.departure_time >= S.starting_time
+        AND D.completion_time <= S.ending_time
         AND EXTRACT(YEAR FROM S.work_date) = EXTRACT(YEAR FROM O.created_at)
         AND EXTRACT(MONTH FROM S.work_date) = EXTRACT(MONTH FROM O.created_at)
         AND EXTRACT(DAY FROM S.work_date) = EXTRACT(DAY FROM O.created_at)
-        AND PRW.rider_id = D.rider_id
-        AND PRW.wws_id = WC.wws_id
-        AND WC.shift_id = S.shift_id
-        AND O.order_id = D.order_id)
-    OR NOT EXISTS (
-        SELECT 1
-        FROM pt_rider_works PRW, wws_contains WC, Shifts S, Orders O
-        WHERE D.completion_time <= S.ending_time
-        AND EXTRACT(YEAR FROM S.work_date) = EXTRACT(YEAR FROM O.created_at)
-        AND EXTRACT(MONTH FROM S.work_date) = EXTRACT(MONTH FROM O.created_at)
-        AND EXTRACT(DAY FROM S.work_date) = EXTRACT(DAY FROM O.created_at)
-        AND PRW.rider_id = D.rider_id
-        AND PRW.wws_id = WC.wws_id
-        AND WC.shift_id = S.shift_id
-        AND O.order_id = D.order_id
     );
     END IF;
     IF NEW.rider_id IN (SELECT rider_id FROM full_time_riders) THEN
     SELECT D.rider_id, D.order_id INTO not_on_shift_rider_id, violating_order_id
-    FROM Delivers D
+    FROM Delivers D JOIN Orders O ON D.order_id = O.order_id
     WHERE D.rider_id = NEW.rider_id
-    AND D.order_id = NEW.order_id
     AND NOT EXISTS (
         SELECT 1
-        FROM ft_rider_works FRW, mws_contains MC, Shifts S, Orders O
-        WHERE D.departure_time >= S.starting_time
+        FROM ft_rider_works F NATURAL JOIN mws_contains C NATURAL JOIN shifts S
+        WHERE F.rider_id = D.rider_id
+        AND D.departure_time >= S.starting_time AND D.completion_time <= S.ending_time
         AND EXTRACT(YEAR FROM S.work_date) = EXTRACT(YEAR FROM O.created_at)
         AND EXTRACT(MONTH FROM S.work_date) = EXTRACT(MONTH FROM O.created_at)
         AND EXTRACT(DAY FROM S.work_date) = EXTRACT(DAY FROM O.created_at)
-        AND FRW.rider_id = D.rider_id
-        AND FRW.mws_id = MC.mws_id
-        AND MC.shift_id = S.shift_id
-        AND O.order_id = D.order_id)
-    OR NOT EXISTS (
-        SELECT 1
-        FROM ft_rider_works FRW, mws_contains MC, Shifts S, Orders O
-        WHERE D.completion_time <= S.ending_time
-        AND EXTRACT(YEAR FROM S.work_date) = EXTRACT(YEAR FROM O.created_at)
-        AND EXTRACT(MONTH FROM S.work_date) = EXTRACT(MONTH FROM O.created_at)
-        AND EXTRACT(DAY FROM S.work_date) = EXTRACT(DAY FROM O.created_at)
-        AND FRW.rider_id = D.rider_id
-        AND FRW.mws_id = MC.mws_id
-        AND MC.shift_id = S.shift_id
-        AND O.order_id = D.order_id
     );
     END IF;
     IF violating_order_id IS NOT NULL THEN
