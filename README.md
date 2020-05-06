@@ -50,6 +50,6 @@ We will run the frontend in your browser
 We will build the database and start the backend server
 1. Open terminal in backend folder or type ```cd backend``` from root directory 
 2. Type ```npm run build``` to run the script that will build the database and the generate data for the application
-3. Type ```npm run start``` to start the frontend application on **localhost:5000**
+3. Type ```npm run start``` to start the backend application on **localhost:5000**
 
 *The application should be running in your browser now*
