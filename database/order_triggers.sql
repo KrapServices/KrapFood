@@ -214,6 +214,7 @@ DECLARE
     not_on_shift_rider_id INTEGER;
     violating_order_id INTEGER;
 BEGIN
+    IF NEW.rider_id IN (SELECT rider_id FROM part_time_riders) THEN
     SELECT D.rider_id, D.order_id INTO not_on_shift_rider_id, violating_order_id
     FROM Delivers D
     WHERE D.rider_id = NEW.rider_id
@@ -229,7 +230,7 @@ BEGIN
         AND PRW.wws_id = WC.wws_id
         AND WC.shift_id = S.shift_id
         AND O.order_id = D.order_id)
-    AND NOT EXISTS (
+    OR NOT EXISTS (
         SELECT 1
         FROM pt_rider_works PRW, wws_contains WC, Shifts S, Orders O
         WHERE D.completion_time <= S.ending_time
@@ -241,7 +242,8 @@ BEGIN
         AND WC.shift_id = S.shift_id
         AND O.order_id = D.order_id
     );
-    IF violating_order_id IS NULL THEN
+    END IF;
+    IF NEW.rider_id IN (SELECT rider_id FROM full_time_riders) THEN
     SELECT D.rider_id, D.order_id INTO not_on_shift_rider_id, violating_order_id
     FROM Delivers D
     WHERE D.rider_id = NEW.rider_id
@@ -257,7 +259,7 @@ BEGIN
         AND FRW.mws_id = MC.mws_id
         AND MC.shift_id = S.shift_id
         AND O.order_id = D.order_id)
-    AND NOT EXISTS (
+    OR NOT EXISTS (
         SELECT 1
         FROM ft_rider_works FRW, mws_contains MC, Shifts S, Orders O
         WHERE D.completion_time <= S.ending_time

@@ -392,6 +392,7 @@ VALUES
     ('6590516632507248',5,2022,25,'Main Card');
 
 
+
 -- INSERT INTO users (user_id,email,password,created_at) VALUES (51,'iaculis.quis@enimcommodohendrerit.org','IKM28KKA3GM','2020-04-13 12:00:00');
 -- INSERT INTO users (user_id,email,password,created_at) VALUES (52,'velit.egestas@arcuAliquam.edu','JCW60NBD7TB','2020-04-13 12:00:00');
 -- INSERT INTO users (user_id,email,password,created_at) VALUES (53,'Aenean.massa.Integer@Inmi.ca','UUF01FEY5YL','2020-04-13 12:00:00');

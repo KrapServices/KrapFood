@@ -50,4 +50,6 @@ INSERT INTO managers (manager_id) VALUES (98);
 INSERT INTO managers (manager_id) VALUES (99);
 INSERT INTO managers (manager_id) VALUES (100);
 
-SELECT setval('users_user_id_seq', (SELECT MAX(user_id) from "users"));
+-- SELECT setval('customers_customer_id_seq', (SELECT MAX(customer_id) from customers)); 
+-- SELECT setval('riders_rider_id_seq', (SELECT MAX(rider_id) from riders)); 
+-- SELECT setval('staff_staff_id_seq', (SELECT MAX(staff_id) from staff)); 

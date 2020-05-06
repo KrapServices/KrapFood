@@ -20,7 +20,7 @@ CREATE TABLE customers
 
 CREATE TABLE cards  
 (
-    card_number TEXT UNIQUE, --do we need regex check here?
+    card_number TEXT UNIQUE,
     expiry_month INTEGER NOT NULL,
     expiry_year INTEGER NOT NULL,
     customer_id INTEGER,

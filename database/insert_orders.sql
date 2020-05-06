@@ -1,3 +1,4 @@
+BEGIN;
 -- restaurant 1 promotion
 INSERT INTO promotions
     (promo_id, discount, promo_name, start_time, end_time)
@@ -136,9 +137,10 @@ INSERT INTO includes
 VALUES
     (2, 11);
 
+COMMIT;
 
-SELECT setval('promotions_promo_id_seq', (SELECT MAX(promo_id) from "promotions")); 
-SELECT setval('promotional_campaigns_campaign_id_seq', (SELECT MAX(campaign_id) from "promotional_campaigns"));
+-- SELECT setval('promotions_promo_id_seq', (SELECT MAX(promo_id) from "promotions")); 
+-- SELECT setval('promotional_campaigns_campaign_id_seq', (SELECT MAX(campaign_id) from "promotional_campaigns"));
 
 -- insert orders
 
@@ -288,7 +290,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (9, 80, 'completed', '9 henderson road', 9, 4, '2020-03-28 15:00:00', '2020-03-28 16:00:00', 5);
+    (9, 80, 'completed', '9 henderson road', 9, 4, '2020-03-29 15:00:00', '2020-03-29 16:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -374,7 +376,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (14, 40, 'completed', '6 avenue road', 14, 4, '2020-03-26 14:00:00', '2020-03-25 15:00:00', 5);
+    (14, 40, 'completed', '6 avenue road', 14, 4, '2020-03-26 14:00:00', '2020-03-26 15:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
