@@ -140,9 +140,7 @@ const getRiderStats = async (request, response) => {
       totalPay: rider.rider_pay,
       totalHours: rider.total_hours,
     }));
-
     response.status(200).json(stats);
-
   } catch (error) {
     console.error(error);
     response.status(500).send('unable to retrieve rider stats');

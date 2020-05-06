@@ -24,10 +24,11 @@ class RiderSummary extends React.Component {
     const primitiveEndDate = new Date(endDate).valueOf();
 
     const url = `${config.localhost}riders/${rider_id}/ridersummary/?startDate=${primitiveStartDate}&endDate=${primitiveEndDate}`;
-    const { response } = (await axios.get(url));
-    const { summary } = response.data;
+    const response = (await axios.get(url));
+    const summary = response.data;
+
     this.setState({
-      riderStats: summary.stats,
+      riderStats: summary[0],
     });
   }
 
@@ -75,15 +76,15 @@ class RiderSummary extends React.Component {
           }}
         >
           <Statistic>
-            <Statistic.Value>{riderStats.total_hours}</Statistic.Value>
+            <Statistic.Value>{riderStats.totalHours}</Statistic.Value>
             <Statistic.Label>Total Work Hours</Statistic.Label>
           </Statistic>
           <Statistic>
-            <Statistic.Value>{riderStats.total_orders}</Statistic.Value>
+            <Statistic.Value>{riderStats.orderCount}</Statistic.Value>
             <Statistic.Label>Total Orders</Statistic.Label>
           </Statistic>
           <Statistic>
-            <Statistic.Value>{riderStats.rider_pay}</Statistic.Value>
+            <Statistic.Value>{riderStats.totalPay}</Statistic.Value>
             <Statistic.Label>Total Pay</Statistic.Label>
           </Statistic>
         </Statistic.Group>
