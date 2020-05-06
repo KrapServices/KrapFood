@@ -1,4 +1,3 @@
-BEGIN;
 INSERT INTO users (user_id,email,password,created_at) VALUES (76,'et@iaculis.com','password','2020-03-15 12:00:00');
 INSERT INTO users (user_id,email,password,created_at) VALUES (77,'id@dolordolortempus.ca','password','2020-03-15 12:00:00');
 INSERT INTO users (user_id,email,password,created_at) VALUES (78,'dolor.elit@Vivamus.org','password','2020-03-15 12:00:00');
@@ -51,4 +50,4 @@ INSERT INTO managers (manager_id) VALUES (98);
 INSERT INTO managers (manager_id) VALUES (99);
 INSERT INTO managers (manager_id) VALUES (100);
 
-COMMIT;
+SELECT setval('users_user_id_seq', (SELECT MAX(user_id) from "users"));

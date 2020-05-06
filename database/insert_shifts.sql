@@ -818,6 +818,9 @@ INSERT INTO shifts (work_date, starting_time, ending_time) VALUES ('2020-05-16',
 INSERT INTO shifts (work_date, starting_time, ending_time) VALUES ('2020-05-16', '200000', '210000');
 INSERT INTO shifts (work_date, starting_time, ending_time) VALUES ('2020-05-16', '210000', '220000');
 
+SELECT setval('shift_id_seq', (SELECT MAX(shift_id) from "shifts"));
+
+
 COMMIT;
 BEGIN;
  
@@ -839,6 +842,8 @@ INSERT INTO weekly_work_schedules (starting_date, ending_date) VALUES ('2020-05-
 INSERT INTO weekly_work_schedules (starting_date, ending_date) VALUES ('2020-05-03', '2020-05-09');
 INSERT INTO weekly_work_schedules (starting_date, ending_date) VALUES ('2020-05-10', '2020-05-16');
 INSERT INTO weekly_work_schedules (starting_date, ending_date) VALUES ('2020-05-10', '2020-05-16');
+
+SELECT setval('wws_seq_id', (SELECT MAX(wws_id) from "weekly_work_schedules"));
 
 INSERT INTO wws_contains VALUES (1, 1);
 INSERT INTO wws_contains VALUES (2, 2);
@@ -1625,6 +1630,8 @@ INSERT INTO monthly_work_schedules (starting_date, ending_date) VALUES ('2020-03
 INSERT INTO monthly_work_schedules (starting_date, ending_date) VALUES ('2020-04-12', '2020-05-09');
 -- INSERT INTO monthly_work_schedules (starting_date, ending_date) VALUES ('2020-03-15', '2020-04-11');
 -- INSERT INTO monthly_work_schedules (starting_date, ending_date) VALUES ('2020-04-12', '2020-05-09');
+
+SELECT setval('mws_seq_id', (SELECT MAX(mws_id) from "monthly_work_schedules"));
 
 INSERT INTO mws_contains VALUES (1, 1);
 INSERT INTO mws_contains VALUES (1, 2);

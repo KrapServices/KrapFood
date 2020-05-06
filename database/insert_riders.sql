@@ -1,4 +1,3 @@
-BEGIN;
 INSERT INTO users (user_id,email,password,created_at) VALUES (51,'malesuada@Aeneangravidanunc.org','password','2020-03-15 12:00:00');
 INSERT INTO users (user_id,email,password,created_at) VALUES (52,'Vivamus@habitantmorbitristique.com','password','2020-03-15 12:00:00');
 INSERT INTO users (user_id,email,password,created_at) VALUES (53,'mauris.sapien@lorem.org','password','2020-03-15 12:00:00');
@@ -77,10 +76,6 @@ INSERT INTO part_time_riders (rider_id) VALUES (72);
 INSERT INTO part_time_riders (rider_id) VALUES (73);
 INSERT INTO part_time_riders (rider_id) VALUES (74);
 INSERT INTO part_time_riders (rider_id) VALUES (75);
-
-COMMIT;
-
-BEGIN;
 
 INSERT INTO ft_rider_works (rider_id, mws_id) VALUES (51, 1);
 INSERT INTO ft_rider_works (rider_id, mws_id) VALUES (51, 2);
@@ -229,4 +224,3 @@ INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (75, 10);
 INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (75, 12);
 INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (75, 14);
 INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (75, 16);
-COMMIT;

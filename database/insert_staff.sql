@@ -1,4 +1,3 @@
-BEGIN TRANSACTION;
 INSERT INTO users (user_id,email,password,created_at) VALUES (26,'nunc.risus.varius@feugiatSed.ca','IQR03DAC6ZB','2020-04-16 12:00:00');
 INSERT INTO users (user_id,email,password,created_at) VALUES (27,'Proin.nisl.sem@dictumcursusNunc.edu','LWS28DRS5RI','2020-04-16 12:00:00');
 INSERT INTO users (user_id,email,password,created_at) VALUES (28,'laoreet.ipsum@mauris.net','YKU07QQP5SF','2020-04-16 12:00:00');
@@ -50,4 +49,3 @@ INSERT INTO staff (staff_id,restaurant_id) VALUES (47,1);
 INSERT INTO staff (staff_id,restaurant_id) VALUES (48,7);
 INSERT INTO staff (staff_id,restaurant_id) VALUES (49,6);
 INSERT INTO staff (staff_id,restaurant_id) VALUES (50,9);
-COMMIT;
