@@ -52,13 +52,8 @@ const managerLogin = async (req, res) => {
       `,
       [email, password],
     )).rows[0];
-
-    return res.status(200).json({
-      user: {
-        ...user,
-        type: 'manager',
-      },
-    });
+    user.type = 'manager';
+    return res.status(200).json({ user });
   } catch (error) {
     console.error(error);
     return res.status(500).send('Manager cannot be found');

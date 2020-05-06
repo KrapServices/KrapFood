@@ -20,6 +20,7 @@ class Manager extends Component {
   }
 
   componentDidMount() {
+    console.log(this.context.user);
     const activeIndex = JSON.parse(window.localStorage.getItem('activeIndex'));
     if (activeIndex) {
       this.setState({ activeIndex });
