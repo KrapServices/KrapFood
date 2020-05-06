@@ -207,52 +207,45 @@ CREATE CONSTRAINT TRIGGER completed_order_assigned_trigger
     FOR EACH ROW
     EXECUTE PROCEDURE completed_order_assigned();
 
--- check if rider is on shift for assigned delivery time
+--check if rider is on shift
 CREATE OR REPLACE FUNCTION rider_is_on_shift() returns TRIGGER
     AS $$
-DECLARE
-    not_on_shift_rider_id INTEGER;
+DECLARE 
     violating_order_id INTEGER;
+    not_on_shift_rider_id INTEGER;
+    current_shift_id INTEGER;
 BEGIN
-    IF NEW.rider_id IN (SELECT rider_id FROM part_time_riders) THEN
-    SELECT D.rider_id, D.order_id INTO not_on_shift_rider_id, violating_order_id
-    FROM Delivers D JOIN Orders O ON D.order_id = O.order_id
-    WHERE D.rider_id = NEW.rider_id
-    AND NOT EXISTS (
-        SELECT 1
-        FROM pt_rider_works P NATURAL JOIN wws_contains C NATURAL JOIN shifts S
-        WHERE P.rider_id = D.rider_id
-        AND D.departure_time >= S.starting_time
-        AND D.completion_time <= S.ending_time
-        AND EXTRACT(YEAR FROM S.work_date) = EXTRACT(YEAR FROM O.created_at)
-        AND EXTRACT(MONTH FROM S.work_date) = EXTRACT(MONTH FROM O.created_at)
-        AND EXTRACT(DAY FROM S.work_date) = EXTRACT(DAY FROM O.created_at)
-    );
+    SELECT distinct s.shift_id INTO current_shift_id 
+    FROM shifts s, orders o
+    WHERE o.order_id = NEW.order_id
+    AND DATE(o.created_at) = s.work_date
+    AND (NEW.departure_time::time >= s.starting_time 
+    AND NEW.departure_time::time < s.ending_time);
+
+    WITH available_riders AS (
+        SELECT distinct ft.rider_id
+        FROM mws_contains ms RIGHT JOIN ft_rider_works ft ON ms.mws_id = ft.mws_id
+        WHERE ms.shift_id = current_shift_id
+        UNION
+        SELECT distinct pt.rider_id
+        FROM wws_contains ws RIGHT JOIN pt_rider_works pt ON ws.wws_id = pt.wws_id
+        WHERE ws.shift_id = current_shift_id
+    )
+    SELECT NEW.order_id, NEW.rider_id INTO violating_order_id, not_on_shift_rider_id
+    WHERE NEW.rider_id NOT IN (SELECT * from available_riders);
+
+    IF violating_order_id IS NOT NULL AND not_on_shift_rider_id IS NOT NULL THEN
+        RAISE exception 'rider % assigned to order % is not on shift %', not_on_shift_rider_id, violating_order_id, current_shift_id;
     END IF;
-    IF NEW.rider_id IN (SELECT rider_id FROM full_time_riders) THEN
-    SELECT D.rider_id, D.order_id INTO not_on_shift_rider_id, violating_order_id
-    FROM Delivers D JOIN Orders O ON D.order_id = O.order_id
-    WHERE D.rider_id = NEW.rider_id
-    AND NOT EXISTS (
-        SELECT 1
-        FROM ft_rider_works F NATURAL JOIN mws_contains C NATURAL JOIN shifts S
-        WHERE F.rider_id = D.rider_id
-        AND D.departure_time >= S.starting_time AND D.completion_time <= S.ending_time
-        AND EXTRACT(YEAR FROM S.work_date) = EXTRACT(YEAR FROM O.created_at)
-        AND EXTRACT(MONTH FROM S.work_date) = EXTRACT(MONTH FROM O.created_at)
-        AND EXTRACT(DAY FROM S.work_date) = EXTRACT(DAY FROM O.created_at)
-    );
-    END IF;
-    IF violating_order_id IS NOT NULL THEN
-    RAISE exception 'rider % assigned to order % is not on duty', not_on_shift_rider_id, violating_order_id;
-    END IF;
+
     RETURN NULL;
+
 END;
 $$ LANGUAGE plpgsql;
 
 DROP TRIGGER IF EXISTS rider_is_on_shift_trigger ON delivers;
 CREATE CONSTRAINT TRIGGER rider_is_on_shift_trigger
-    AFTER INSERT OR UPDATE ON delivers
+    AFTER INSERT ON delivers
     DEFERRABLE INITIALLY DEFERRED
     FOR EACH ROW
     EXECUTE PROCEDURE rider_is_on_shift();
