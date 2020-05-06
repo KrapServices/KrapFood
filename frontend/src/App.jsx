@@ -51,7 +51,36 @@ class App extends React.Component {
         console.log(result.data.user);
         window.localStorage.setItem('user', JSON.stringify(result.data.user));
         this.setState({ user: result.data.user, isLoggedIn: true });
-      } 
+      }
+    };
+
+    this.handleDelete = async () => {
+      const { user } = this.state;
+      console.log(user);
+      let route;
+      switch (user.type) {
+        case 'customer':
+          route = `${config.localhost}customers/${user.customerId}`;
+          break;
+        case 'rider':
+          route = `${config.localhost}riders/${user.rider_id}`;
+          break;
+        case 'staff':
+          route = `${config.localhost}staffs/${user.staff_id}`;
+          break;
+        case 'manager':
+          route = `${config.localhost}managers/${user.manager_id}`;
+          break;
+        default:
+          alert('Unsupported user type');
+          return;
+      }
+      try {
+        await Axios.delete(route);
+        this.logout();
+      } catch (error) {
+        alert('Error occurred.');
+      }
     };
   }
 
@@ -70,6 +99,7 @@ class App extends React.Component {
       user,
       signup: this.signup,
       login: this.login,
+      handleDelete: this.handleDelete,
     };
 
     const { loading } = this.state;

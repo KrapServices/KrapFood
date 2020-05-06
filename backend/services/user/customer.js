@@ -180,6 +180,23 @@ const rateFood = async (request, response) => {
   }
 };
 
+const deleteCustomerById = async (request, response) => {
+  try {
+    const { id } = request.params;
+    await query(
+      `
+        DELETE FROM users
+        WHERE user_id = $1
+      `,
+      [id],
+    );
+    return response.status(204).send('Account successfully deleted');
+  } catch (error) {
+    console.log(error);
+    return response.status(500).send('User cannot be found');
+  }
+};
+
 module.exports = {
   customerLogin,
   customerCreate,
@@ -190,4 +207,5 @@ module.exports = {
   getCustomerById,
   rateOrder,
   rateFood,
+  deleteCustomerById,
 };

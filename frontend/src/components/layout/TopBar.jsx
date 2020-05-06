@@ -12,7 +12,6 @@ import {
 } from 'semantic-ui-react';
 import userContext from '../../userContext';
 
-
 class TopBar extends Component {
   constructor(props) {
     super(props);
@@ -36,7 +35,7 @@ class TopBar extends Component {
   }
 
   render() {
-    const { user, isLoggedIn } = this.context;
+    const { user, isLoggedIn, handleDelete } = this.context;
     const { children, onLogout } = this.props;
     return (
       <div>
@@ -96,7 +95,10 @@ class TopBar extends Component {
                         <Icon name="cancel" color="red" />
                         Log Out
                       </Menu.Item>
-                      <Menu.Item />
+                      <Menu.Item onClick={handleDelete}>
+                        <Icon name="user delete" color="red" />
+                        Close this account
+                      </Menu.Item>
                     </>
                   )}
               </Menu>
