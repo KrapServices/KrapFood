@@ -144,29 +144,25 @@ const createPromotion = async (request, response) => {
       restaurantId, discount, promoName, dateRange,
     } = request.body;
     console.log(dateRange);
-    const promo = (await query(
-      `
+    const result = await transact(async (query) => {
+      const promo = (await query(
+        `
         INSERT INTO promotions (discount, promo_name, start_time, end_time) 
         VALUES ($1, $2, $3, $4)
         RETURNING promo_id, promo_name
         `,
-      [discount, promoName, new Date(dateRange[0]), new Date(dateRange[1])],
-    )).rows[0];
-    const restaurant = (await query(
-      `
+        [discount, promoName, new Date(dateRange[0]), new Date(dateRange[1])],
+      )).rows[0];
+      const restaurant = (await query(
+        `
         INSERT INTO offers (promo_id, restaurant_id)
         VALUES ($1, $2)
         RETURNING restaurant_id
     `,
-      [promo.promo_id, restaurantId],
-    )).rows[0];
-    response.status(200).json({
-      promo: {
-        restaurantId: restaurant.restaurant_id,
-        promoId: promo.promo_id,
-        promoCode: promo.promo_code,
-      },
+        [promo.promo_id, restaurantId],
+      )).rows[0];
     });
+    response.status(200).json(result);
   } catch (error) {
     console.log(error);
     response.status(500).send('An error occured with creating the promotion');
@@ -177,6 +173,7 @@ const getValidPromotionsById = async (request, response) => {
   // return only valid active promotions
   try {
     const { id: restaurantId } = request.params;
+    console.log(restaurantId);
     const promotions = (await query(
       `
       SELECT DISTINCT P.promo_id, P.discount, P.promo_name, P.start_time, P.end_time
@@ -218,14 +215,45 @@ const getMonthsById = async (request, response) => {
       `,
       [restaurantId],
     )).rows;
-    return response.status(200).json(yearMonths);
+    response.status(200).json(yearMonths);
   } catch (error) {
     console.log(error);
-    return response.status(500).send('restaurant could not be found');
+    response.status(500).send('restaurant could not be found');
   }
 };
 
-const getStatsById = async (request, response) => {
+const getPromoStatsById = async (request, response) => {
+  const { id: restaurantId } = request.params;
+  try {
+    const stats = (await query(
+      `WITH promo_count AS (
+        SELECT O.promo_id, count(distinct A.order_id) AS order_count
+        FROM Offers O JOIN Applies A ON O.promo_id = A.promo_id
+        WHERE O.restaurant_id = $1
+        GROUP BY O.promo_id
+        )
+        SELECT P.promo_id, promo_name, discount, start_time, end_time, (order_count/EXTRACT (day FROM (end_time - start_time))) AS avg_order
+        FROM promo_count C JOIN promotions P ON C.promo_id = P.promo_id
+      `,
+      [restaurantId],
+    )).rows.map((promo) => ({
+      promoId: promo.promo_id,
+      discount: promo.discount,
+      promoName: promo.promo_name,
+      startTime: promo.start_time,
+      endTime: promo.end_time,
+      avgOrder: promo.avg_order,
+    }));
+    response.status(200).json({
+      stats,
+    });
+  } catch (error) {
+    console.log(error);
+    response.status(500).send('restaurant could not be found');
+  }
+};
+
+const getMonthlyStatsById = async (request, response) => {
   try {
     const { id: restaurantId } = request.params;
     const { month, year } = request.query;
@@ -264,13 +292,13 @@ const getStatsById = async (request, response) => {
         `,
       [restaurantId, month, year],
     )).rows;
-    return response.status(200).json({
+    response.status(200).json({
       stats,
       topFive,
     });
   } catch (error) {
     console.log(error);
-    return response.status(500).send('restaurant could not be found');
+    response.status(500).send('restaurant could not be found');
   }
 };
 
@@ -280,7 +308,8 @@ module.exports = {
   getRestaurantById,
   getMenuById,
   getMonthsById,
-  getStatsById,
+  getMonthlyStatsById,
+  getPromoStatsById,
   createPromotion,
   getValidPromotionsById,
 };

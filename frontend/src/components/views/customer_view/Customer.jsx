@@ -19,8 +19,10 @@ class Customer extends Component {
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const activeIndex = JSON.parse(window.localStorage.getItem('activeIndex'));
+    const { user, login } = this.context;
+    await login(user.email, user.password, 'customer');
     if (activeIndex) {
       this.setState({ activeIndex });
     }
@@ -30,6 +32,7 @@ class Customer extends Component {
     const { activeIndex } = this.state;
     const { user } = this.context;
     const panes = [
+      { menuItem: 'Customer Info', render: () => <Tab.Pane><CustomerInfo /></Tab.Pane> },
       { menuItem: 'Order Food', render: () => <Tab.Pane><CustomerOrderFood user={user} /></Tab.Pane> },
       { menuItem: 'Your Orders', render: () => <Tab.Pane><CustomerOrderView user={user} /></Tab.Pane> },
       { menuItem: 'Summary', render: () => <Tab.Pane><div /></Tab.Pane> },
@@ -37,11 +40,9 @@ class Customer extends Component {
     ];
     return (
       <>
-        <CustomerInfo />
         <Tab
           onTabChange={this.handleTabChange}
           activeIndex={activeIndex}
-          menu={{ compact: true }}
           panes={panes}
           style={{ marginLeft: '50px', marginRight: '50px' }}
         />

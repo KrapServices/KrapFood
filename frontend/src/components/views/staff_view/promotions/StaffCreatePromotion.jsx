@@ -31,6 +31,7 @@ class StaffCreatePromotion extends Component {
         );
         if (result.status === 200) {
           this.setState({ promotions: result.data });
+          console.log(this.state);
         } else {
           alert('unable to load promotions');
         }

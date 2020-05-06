@@ -11,7 +11,7 @@ CREATE TABLE restaurants (
 CREATE TABLE foods (
   category TEXT,
   food_name TEXT,
-  daily_limit INTEGER NOT NULL DEFAULT 10000000,
+  daily_limit INTEGER NOT NULL DEFAULT 10000000 CHECK (daily_limit >= 0),
   availability boolean NOT NULL DEFAULT TRUE,
   price NUMERIC(10, 2) NOT NULL,
   CONSTRAINT positive_price CHECK (price > 0),

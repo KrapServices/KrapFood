@@ -10,11 +10,27 @@ CREATE TABLE orders
     customer_id INTEGER NOT NULL,
     rating INTEGER,
     CONSTRAINT valid_rating CHECK (rating IN (1, 2, 3, 4, 5)),
-    created_at TIMESTAMP NOT NULL DEFAULT current_timestamp,
+    created_at TIMESTAMP NOT NULL DEFAULT current_timestamp, 
     modified_at TIMESTAMP NOT NULL DEFAULT current_timestamp,
+    CONSTRAINT check_time_validity CHECK (EXTRACT(HOUR from created_at) >= 10 AND EXTRACT(HOUR from created_at) <= 22),
     PRIMARY KEY (order_id),
     FOREIGN KEY (customer_id) REFERENCES customers (customer_id) ON DELETE CASCADE
 );
+
+CREATE TABLE delivers
+(
+    delivery_id SERIAL,
+    rider_id INTEGER NOT NULL,
+    order_id INTEGER NOT NULL UNIQUE,
+    departure_time TIME,
+    arrival_time TIME,
+    completion_time TIME,
+    collection_time TIME,
+    PRIMARY KEY (delivery_id),
+    FOREIGN KEY (rider_id) REFERENCES riders (rider_id),
+    FOREIGN KEY (order_id) REFERENCES orders (order_id)
+);
+
 
 --payment 
 CREATE TABLE cash_payments 
@@ -39,10 +55,11 @@ CREATE TABLE promotions
 (
     promo_id SERIAL,
     discount INTEGER NOT NULL,
+    CONSTRAINT check_discount CHECK (discount > 0 AND discount < 100),
     promo_name TEXT NOT NULL UNIQUE,
     start_time TIMESTAMP NOT NULL,
     end_time TIMESTAMP NOT NULL,
-    CONSTRAINT check_time_validity CHECK (EXTRACT(EPOCH FROM end_time) > EXTRACT(EPOCH FROM start_time) AND EXTRACT(EPOCH FROM start_time) >= EXTRACT(EPOCH FROM current_timestamp)),
+    CONSTRAINT check_time_validity CHECK (EXTRACT(EPOCH FROM end_time) > EXTRACT(EPOCH FROM start_time)),
     PRIMARY KEY (promo_id)
 );
 
@@ -80,7 +97,7 @@ CREATE TABLE contain
 CREATE TABLE promotional_campaigns 
 (
     campaign_id SERIAL,
-    campaign_name TEXT NOT NULL,
+    campaign_name TEXT NOT NULL UNIQUE,
     PRIMARY KEY (campaign_id)
 );
 
@@ -91,21 +108,4 @@ CREATE TABLE includes
     PRIMARY KEY (campaign_id, promo_id),
     FOREIGN KEY (campaign_id) REFERENCES promotional_campaigns,
     FOREIGN KEY (promo_id) REFERENCES promotions(promo_id)
-);
-
-
-
-CREATE TABLE delivers
-(
-    delivery_id SERIAL,
-    rider_id INTEGER NOT NULL,
-    order_id INTEGER NOT NULL UNIQUE,
-    delivery_fee NUMERIC(10, 2) NOT NULL,
-    departure_time TIME,
-    arrival_time TIME,
-    completion_time TIME,
-    collection_time TIME,
-    PRIMARY KEY (delivery_id),
-    FOREIGN KEY (rider_id) REFERENCES riders (rider_id),
-    FOREIGN KEY (order_id) REFERENCES orders (order_id)
 );

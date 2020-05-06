@@ -13,9 +13,15 @@
     "user_triggers.sql"
   ],
   "instantiations": [
+    "user_triggers.sql",
+    "order_triggers.sql",
     "insert_restaurants.sql",
     "insert_food.sql",
-    "user_triggers.sql",
-    "order_triggers.sql"
+    "insert_customers.sql",
+    "insert_staff.sql",
+    "insert_schedules.sql",
+    "insert_riders.sql",
+    "insert_managers.sql",
+    "insert_orders.sql"
   ]
 }

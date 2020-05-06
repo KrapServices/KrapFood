@@ -10,7 +10,7 @@ CREATE TABLE users
 
 CREATE TABLE customers
 (
-    customer_id SERIAL,
+    customer_id INTEGER,
     name TEXT,
     order_count INTEGER NOT NULL DEFAULT 0,
     points INTEGER NOT NULL DEFAULT 0,
@@ -21,9 +21,13 @@ CREATE TABLE customers
 CREATE TABLE cards  
 (
     card_number TEXT UNIQUE,
-    expiry TEXT,
+    expiry_month INTEGER NOT NULL,
+    expiry_year INTEGER NOT NULL,
     customer_id INTEGER,
     name_card Text,
+    CONSTRAINT valid_card CHECK (card_number ~* '\d{16}'),
+    CONSTRAINT valid_month CHECK (expiry_month <= 12 AND expiry_month >= 1),
+    CONSTRAINT valid_year CHECK (expiry_year >= 2020),
     PRIMARY KEY (customer_id, card_number),
     FOREIGN KEY (customer_id) REFERENCES customers (customer_id) ON DELETE CASCADE
 );
@@ -58,15 +62,6 @@ CREATE TABLE full_time_riders
     base_salary INTEGER NOT NULL DEFAULT 2000,
     PRIMARY KEY (rider_id),
     FOREIGN KEY (rider_id) REFERENCES riders (rider_id) ON DELETE CASCADE
-);
-
-CREATE TABLE manages
-(
-    manager_id INTEGER,
-    rider_id INTEGER,
-    PRIMARY KEY (manager_id, rider_id),
-    FOREIGN KEY (manager_id) REFERENCES managers (manager_id),
-    FOREIGN KEY (rider_id) REFERENCES riders (rider_id)
 );
 
 CREATE TABLE staff

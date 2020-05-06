@@ -99,10 +99,8 @@ const getRiders = async (req, res) => {
     const partTimeRiders = (await query(
       `
         SELECT rider_id
-        FROM managers NATURAL JOIN manages NATURAL JOIN riders NATURAL JOIN part_time_riders
-        WHERE manager_id = $1
+        FROM part_time_riders
       `,
-      [managerId],
     )).rows.map((rider) => ({
       id: rider.rider_id,
       status: 'part-time',
@@ -111,10 +109,8 @@ const getRiders = async (req, res) => {
     const fullTimeRiders = (await query(
       `
         SELECT rider_id
-        FROM managers NATURAL JOIN manages NATURAL JOIN riders NATURAL JOIN full_time_riders
-        WHERE manager_id = $1
+        FROM full_time_riders
       `,
-      [managerId],
     )).rows.map((rider) => ({
       id: rider.rider_id,
       status: 'full-time',

@@ -1,75 +1,224 @@
-CREATE TABLE weekly_work_schedules
-(
-  wws_id SERIAL,
-  starting_date DATE NOT NULL,
-  ending_date DATE NOT NULL,
-  CONSTRAINT seven_consecutive_days CHECK (ending_date - starting_date = 6),
-  PRIMARY KEY (wws_id)
-);
+-- BEGIN;
+-- INSERT INTO users
+--     (user_id, email, password)
+-- VALUES
+--     (1, 'c0', 'p0');
 
-CREATE TABLE monthly_work_schedules
-(
-  mws_id SERIAL,
-  starting_date DATE NOT NULL,
-  ending_date DATE NOT NULL,
-  CONSTRAINT twenty_eight_consecutive_days CHECK (ending_date - starting_date = 27),
-  PRIMARY KEY (mws_id)
-);
+-- INSERT INTO customers
+--     (customer_id, name)
+-- VALUES
+--     (1, 'Bob');
 
-CREATE TABLE shifts
-(
-  shift_id SERIAL,
-  work_date DATE NOT NULL,
-  starting_time TIME NOT NULL,
-  ending_time TIME NOT NULL,
-  CONSTRAINT start_at_1000 CHECK (starting_time - '100000' >= '0'),
-  CONSTRAINT end_at_2200 CHECK (ending_time - '220000' <= '0'),
-  CONSTRAINT start_end_on_hour CHECK (
-    EXTRACT (minute FROM starting_time) = '00' AND EXTRACT (second FROM starting_time) = '00'
-    AND EXTRACT (minute FROM ending_time) = '00' AND EXTRACT (second FROM ending_time) = '00'
-  ),
-  CONSTRAINT one_hour_shift CHECK (ending_time - starting_time = INTERVAL '1 hour'),
-  PRIMARY KEY (shift_id)
-);
+-- INSERT INTO cards
+--     (card_number, expiry, customer_id, name_card)
+-- VALUES
+--     ('1234 5678 1234 5678', '5/22', 1, 'Main card');
 
-CREATE TABLE wws_contains
-(
-  wws_id INTEGER,
-  shift_id INTEGER,
-  PRIMARY KEY (wws_id, shift_id),
-  FOREIGN KEY (wws_id) REFERENCES weekly_work_schedules (wws_id),
-  FOREIGN KEY (shift_id) REFERENCES shifts (shift_id)
-);
+-- INSERT INTO users
+--     (user_id, email, password)
+-- VALUES
+--     (2, 'c1', 'p1');
 
-CREATE TABLE mws_contains
-(
-  mws_id INTEGER,
-  shift_id INTEGER,
-  PRIMARY KEY (mws_id, shift_id),
-  FOREIGN KEY (mws_id) REFERENCES monthly_work_schedules (mws_id),
-  FOREIGN KEY (shift_id) REFERENCES shifts (shift_id)
-);
+-- INSERT INTO customers
+--     (customer_id, name)
+-- VALUES
+--     (2, 'Alice');
 
-CREATE TABLE pt_rider_works
-(
-  rider_id INTEGER,
-  wws_id INTEGER,
-  PRIMARY KEY (rider_id, wws_id),
-  FOREIGN KEY (rider_id) REFERENCES part_time_riders (rider_id),
-  FOREIGN KEY (wws_id) REFERENCES weekly_work_schedules (wws_id)
-);
+-- INSERT INTO cards
+--     (card_number, expiry, customer_id, name_card)
+-- VALUES
+--     ('1234 5678 1234 5679', '5/22', 2, 'Main card');
 
-CREATE TABLE ft_rider_works
-(
-  rider_id INTEGER,
-  mws_id INTEGER,
-  PRIMARY KEY (rider_id, mws_id),
-  FOREIGN KEY (rider_id) REFERENCES full_time_riders (rider_id),
-  FOREIGN KEY (mws_id) REFERENCES monthly_work_schedules (mws_id)
-);
+-- INSERT INTO users
+--     (user_id, email, password)
+-- VALUES
+--     (3, 'c2', 'p2');
 
--- Examples --
+-- INSERT INTO customers
+--     (customer_id, name)
+-- VALUES
+--     (3, 'Charlie');
 
+-- INSERT INTO cards
+--     (card_number, expiry, customer_id, name_card)
+-- VALUES
+--     ('1234 5678 1234 5670', '5/22', 3, 'Main card');
+
+-- INSERT INTO users
+--     (user_id, email, password)
+-- VALUES
+--     (4, 'r0', 'p0');
+-- INSERT INTO riders
+--     (rider_id)
+-- VALUES
+--     (4);
+-- INSERT INTO part_time_riders
+--     (rider_id)
+-- VALUES
+--     (4);
+
+-- INSERT INTO users
+--     (user_id, email, password)
+-- VALUES
+--     (5, 'r1', 'p1');
+-- INSERT INTO riders
+--     (rider_id)
+-- VALUES
+--     (5);
+-- INSERT INTO full_time_riders
+--     (rider_id)
+-- VALUES
+--     (5);
+
+-- INSERT INTO users
+--     (user_id, email, password)
+-- VALUES
+--     (6, 's0', 'p0');
+-- INSERT INTO staff
+--     (staff_id, restaurant_id)
+-- VALUES
+--     (6, 1);
+
+-- --SELECT setval('user_id_seq', max(user_id)) FROM users;
+   
+-- --SELECT setval('customer_id_seq', max(customer_id))  FROM customers;
+
+-- COMMIT;
+
+-- BEGIN;
+
+-- INSERT INTO promotions
+--     (promo_id, discount, promo_name, start_time, end_time)
+-- VALUES
+--     (1, 20, 'CB20', '2020-05-15 12:00:00', '2020-06-01 13:00:00');
+
+-- INSERT INTO offers
+--     (promo_id, restaurant_id)
+-- VALUES
+--     (1, 1);
+
+-- INSERT INTO promotions
+--     (promo_id, discount, promo_name, start_time, end_time)
+-- VALUES
+--     (2, 30, 'MARCH10', '2020-03-01 10:00:00', '2020-03-31 22:00:00');
+
+-- INSERT INTO promotional_campaigns
+--     (campaign_id, campaign_name)
+-- VALUES
+--     (1, 'MARCH2020');
+
+-- INSERT INTO includes
+--     (campaign_id, promo_id)
+-- VALUES
+--     (1, 2);
+-- COMMIT;
+
+-- -- order 1
+-- BEGIN TRANSACTION;
+-- INSERT INTO orders
+--     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
+-- VALUES
+--     (1, 51, 'completed', '5 chicken road', 1, 5, '2020-04-12 13:00:00', '2020-04-12 15:00:00', 5);
+-- INSERT INTO delivers
+--     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
+-- VALUES
+--     (1, 5, 1, '13:01:00', '13:15:00', '13:20:00', '13:30:00');
+-- INSERT INTO contain 
+--     (order_id, restaurant_id, food_name, quantity)
+-- VALUES
+--     (1, 1, '1 test 1', 1);
+-- INSERT INTO applies
+--     (promo_id, order_id)
+-- VALUES
+--     (1, 1);
+-- -- insert into orders (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
+-- -- values (2, 51, 'completed', '5 chicken road', 1, 5, '2020-04-12 13:00:00', '2020-04-12 14:00:00', 5);
+
+-- -- insert into delivers (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
+-- -- values (2, 5, 2, '13:00:00', '13:01:00', '13:20:00', '13:25:00');
+-- COMMIT;
+
+-- -- order 2
+-- BEGIN;
+-- INSERT INTO orders
+--     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
+-- VALUES
+--     (2, 51, 'completed', '5 chicken road', 1, 5, '2020-04-12 13:00:00', '2020-04-12 15:00:00', 5);
+-- INSERT INTO contain 
+--     (order_id, restaurant_id, food_name, quantity)
+-- VALUES
+--     (2, 1, '1 test 1', 1);
+-- INSERT INTO delivers
+--     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
+-- VALUES
+--     (2, 5, 2, '13:01:00', '13:15:00', '13:20:00', '13:30:00');
+-- COMMIT; 
+
+-- -- order 3
+-- BEGIN; 
+-- INSERT INTO orders
+--     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
+-- VALUES
+--     (3, 51, 'completed', '6 chicken road', 1, 5, '2020-03-12 13:00:00', '2020-03-13 15:00:00', 5);
+-- INSERT INTO contain 
+--     (order_id, restaurant_id, food_name, quantity)
+-- VALUES
+--     (3, 1, '1 test 2', 1);
+-- INSERT INTO delivers
+--     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
+-- VALUES
+--     (3, 5, 3, '13:01:00', '13:15:00', '13:20:00', '13:30:00');
+-- COMMIT;
+
+-- -- order 4
+-- BEGIN;
+-- INSERT INTO orders
+--     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
+-- VALUES
+--     (4, 51, 'completed', '7 chicken road', 1, 5, '2020-03-12 13:00:00', '2020-03-13 15:00:00', 5);
+-- INSERT INTO contain 
+--     (order_id, restaurant_id, food_name, quantity)
+-- VALUES
+--     (4, 1, '1 test 2', 1);
+-- INSERT INTO delivers
+--     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
+-- VALUES
+--     (4, 5, 4, '13:01:00', '13:15:00', '13:20:00', '13:30:00');
+-- COMMIT;
+
+-- -- order 5
+-- BEGIN;
+-- INSERT INTO orders
+--     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
+-- VALUES
+--     (5, 51, 'completed', '8 chicken road', 1, 5, '2020-03-12 13:00:00', '2020-03-13 15:00:00', 6);
+-- INSERT INTO contain 
+--     (order_id, restaurant_id, food_name, quantity)
+-- VALUES
+--     (5, 1, '1 test 3', 1);
+-- INSERT INTO delivers
+--     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
+-- VALUES
+--     (5, 5, 5, '13:01:00', '13:15:00', '13:20:00', '13:30:00');
+-- COMMIT;
+
+-- --order 6
+-- BEGIN;
+-- INSERT INTO orders
+--     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
+-- VALUES
+--     (6, 51, 'completed', '9 chicken road', 1, 5, '2020-03-12 14:00:00', '2020-03-13 15:00:00', 6);
+-- INSERT INTO contain 
+--     (order_id, restaurant_id, food_name, quantity)
+-- VALUES
+--     (6, 1, '1 test 4', 1);
+-- INSERT INTO delivers
+--     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
+-- VALUES
+--     (6, 5, 6, '13:01:00', '13:15:00', '13:20:00', '13:30:00');
+-- COMMIT;
+
+-- BEGIN; 
 -- INSERT INTO users (user_id, email, password) VALUES (7, 'abc@test.com', '123');
 -- INSERT INTO riders (rider_id) VALUES (7);
 -- INSERT INTO part_time_riders (rider_id, salary_per_hour) VALUES (7, 1.00);
@@ -78,7 +227,7 @@ CREATE TABLE ft_rider_works
 -- INSERT INTO riders (rider_id) VALUES (8);
 -- INSERT INTO full_time_riders (rider_id, base_salary) VALUES (8, 1000.00);
 
--- INSERT INTO weekly_work_schedules (starting_date, ending_date) VALUES ('2020-04-01', '2020-04-07');
+-- INSERT INTO weekly_work_schedules (wws_id, starting_date, ending_date) VALUES (1, '2020-04-01', '2020-04-07');
 -- INSERT INTO shifts (work_date, starting_time, ending_time) VALUES ('2020-04-02', '100000', '110000');
 -- INSERT INTO shifts (work_date, starting_time, ending_time) VALUES ('2020-04-02', '110000', '120000');
 -- INSERT INTO shifts (work_date, starting_time, ending_time) VALUES ('2020-04-02', '120000', '130000');
@@ -89,18 +238,6 @@ CREATE TABLE ft_rider_works
 -- INSERT INTO shifts (work_date, starting_time, ending_time) VALUES ('2020-04-02', '180000', '190000');
 -- INSERT INTO shifts (work_date, starting_time, ending_time) VALUES ('2020-04-03', '100000', '110000');
 -- INSERT INTO shifts (work_date, starting_time, ending_time) VALUES ('2020-04-03', '110000', '120000');
--- INSERT INTO wws_contains (wws_id, shift_id) VALUES (1, 1);
--- INSERT INTO wws_contains (wws_id, shift_id) VALUES (1, 2);
--- INSERT INTO wws_contains (wws_id, shift_id) VALUES (1, 3);
--- INSERT INTO wws_contains (wws_id, shift_id) VALUES (1, 4);
--- INSERT INTO wws_contains (wws_id, shift_id) VALUES (1, 5);
--- INSERT INTO wws_contains (wws_id, shift_id) VALUES (1, 6);
--- INSERT INTO wws_contains (wws_id, shift_id) VALUES (1, 7);
--- INSERT INTO wws_contains (wws_id, shift_id) VALUES (1, 8);
--- INSERT INTO wws_contains (wws_id, shift_id) VALUES (1, 9);
--- INSERT INTO wws_contains (wws_id, shift_id) VALUES (1, 10);
-
--- INSERT INTO weekly_work_schedules (starting_date, ending_date) VALUES ('2020-04-05', '2020-04-11');
 -- INSERT INTO shifts (work_date, starting_time, ending_time) VALUES ('2020-04-06', '100000', '110000');
 -- INSERT INTO shifts (work_date, starting_time, ending_time) VALUES ('2020-04-06', '110000', '120000');
 -- INSERT INTO shifts (work_date, starting_time, ending_time) VALUES ('2020-04-06', '120000', '130000');
@@ -111,19 +248,33 @@ CREATE TABLE ft_rider_works
 -- INSERT INTO shifts (work_date, starting_time, ending_time) VALUES ('2020-04-06', '180000', '190000');
 -- INSERT INTO shifts (work_date, starting_time, ending_time) VALUES ('2020-04-07', '100000', '110000');
 -- INSERT INTO shifts (work_date, starting_time, ending_time) VALUES ('2020-04-07', '110000', '120000');
--- INSERT INTO wws_contains (wws_id, shift_id) VALUES (2, 11);
--- INSERT INTO wws_contains (wws_id, shift_id) VALUES (2, 12);
--- INSERT INTO wws_contains (wws_id, shift_id) VALUES (2, 13);
--- INSERT INTO wws_contains (wws_id, shift_id) VALUES (2, 14);
--- INSERT INTO wws_contains (wws_id, shift_id) VALUES (2, 15);
--- INSERT INTO wws_contains (wws_id, shift_id) VALUES (2, 16);
--- INSERT INTO wws_contains (wws_id, shift_id) VALUES (2, 17);
--- INSERT INTO wws_contains (wws_id, shift_id) VALUES (2, 18);
--- INSERT INTO wws_contains (wws_id, shift_id) VALUES (2, 19);
--- INSERT INTO wws_contains (wws_id, shift_id) VALUES (2, 20);
+
+-- INSERT INTO wws_contains (wws_id, shift_id) VALUES (1, 1);
+-- INSERT INTO wws_contains (wws_id, shift_id) VALUES (1, 2);
+-- INSERT INTO wws_contains (wws_id, shift_id) VALUES (1, 3);
+-- INSERT INTO wws_contains (wws_id, shift_id) VALUES (1, 4);
+-- INSERT INTO wws_contains (wws_id, shift_id) VALUES (1, 5);
+-- INSERT INTO wws_contains (wws_id, shift_id) VALUES (1, 6);
+-- INSERT INTO wws_contains (wws_id, shift_id) VALUES (1, 7);
+-- INSERT INTO wws_contains (wws_id, shift_id) VALUES (1, 8);
+-- INSERT INTO wws_contains (wws_id, shift_id) VALUES (1, 9);
+-- INSERT INTO wws_contains (wws_id, shift_id) VALUES (1, 10);
+-- INSERT INTO wws_contains (wws_id, shift_id) VALUES (1, 11);
+-- INSERT INTO wws_contains (wws_id, shift_id) VALUES (1, 12);
+-- INSERT INTO wws_contains (wws_id, shift_id) VALUES (1, 13);
+-- INSERT INTO wws_contains (wws_id, shift_id) VALUES (1, 14);
+-- INSERT INTO wws_contains (wws_id, shift_id) VALUES (1, 15);
+-- INSERT INTO wws_contains (wws_id, shift_id) VALUES (1, 16);
+-- INSERT INTO wws_contains (wws_id, shift_id) VALUES (1, 17);
+-- INSERT INTO wws_contains (wws_id, shift_id) VALUES (1, 18);
+-- INSERT INTO wws_contains (wws_id, shift_id) VALUES (1, 19);
+-- INSERT INTO wws_contains (wws_id, shift_id) VALUES (1, 20);
+
 
 -- INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (7, 1);
--- INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (7, 2);
+-- COMMIT;
+
+-- BEGIN;
 
 -- INSERT INTO monthly_work_schedules (starting_date, ending_date) VALUES ('2020-04-01', '2020-04-28');
 
@@ -456,3 +607,11 @@ CREATE TABLE ft_rider_works
 -- INSERT INTO mws_contains (mws_id, shift_id) VALUES (1, 180);
 
 -- INSERT INTO ft_rider_works (rider_id, mws_id) VALUES (8, 1);
+-- SELECT setval('users_user_id_seq', (SELECT MAX(user_id) from "users"));
+-- --SELECT setval('customers_customer_id_seq', (SELECT MAX(customer_id) from "customers")); 
+-- --SELECT setval('riders_rider_id_seq', (SELECT MAX(rider_id) from "riders")); 
+-- --SELECT setval('staff_staff_id_seq', (SELECT MAX(staff_id) from "stuff")); 
+-- SELECT setval('promotions_promo_id_seq', (SELECT MAX(promo_id) from "promotions")); 
+-- SELECT setval('promotional_campaigns_campaign_id_seq', (SELECT MAX(campaign_id) from "promotional_campaigns"));
+-- -- it adds one automatically to the max value
+-- COMMIT;

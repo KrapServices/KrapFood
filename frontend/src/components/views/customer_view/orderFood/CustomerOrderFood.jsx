@@ -243,6 +243,7 @@ class CustomerOrderFood extends Component {
                       value={searchValue}
                       resultRenderer={this.resultRenderer}
                     />
+                    <p>Search for restaurant by name</p>
                     <Divider />
                   </>
                 )

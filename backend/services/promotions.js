@@ -1,4 +1,4 @@
-const { query } = require('../database');
+const { query, transact } = require('../database');
 
 const createPromotion = async (request, response) => {
   try {
@@ -37,35 +37,32 @@ const createCampaign = async (request, response) => {
     const {
       discount, promoName, dateRange, campaignName,
     } = request.body;
-    const campaign = (await query(
-      `
-      INSERT INTO promotional_campaigns (campaign_name)
-      VALUES ($1)
-      RETURNING campaign_id
-      `,
-      [campaignName],
-    )).rows[0];
-    const promo = (await query(
-      `
-      INSERT INTO promotions (discount, promo_name, start_time, end_time) 
-      VALUES ($1, $2, $3, $4)
-      RETURNING promo_id, promo_name
-      `,
-      [discount, promoName, new Date(dateRange[0]), new Date(dateRange[1])],
-    )).rows[0];
-    const includes = (await query(
-      `
-      INSERT INTO includes (campaign_id, promo_id)
-      VALUES ($1, $2)
-      `,
-      [campaign.campaign_id, promo.promo_id],
-    )).rows[0];
-    response.status(200).json({
-      promo: {
-        promoId: promo.promo_id,
-        campaignId: campaign.campaign_id,
-      },
+    const result = await transact(async (query) => {
+      const campaign = (await query(
+        `
+        INSERT INTO promotional_campaigns (campaign_name)
+        VALUES ($1)
+        RETURNING campaign_id
+        `,
+        [campaignName],
+      )).rows[0];
+      const promo = (await query(
+        `
+        INSERT INTO promotions (discount, promo_name, start_time, end_time) 
+        VALUES ($1, $2, $3, $4)
+        RETURNING promo_id, promo_name
+        `,
+        [discount, promoName, new Date(dateRange[0]), new Date(dateRange[1])],
+      )).rows[0];
+      (await query(
+        `
+        INSERT INTO includes (campaign_id, promo_id)
+        VALUES ($1, $2)
+        `,
+        [campaign.campaign_id, promo.promo_id],
+      ));
     });
+    response.status(200).json(result);
   } catch (error) {
     console.log(error);
     response.status(500).send('An error occured with creating the promotion');
@@ -98,8 +95,11 @@ const getCampaigns = async (request, response) => {
   try {
     const campaigns = (await query(
       `
-        SELECT DISTINCT C.campaign_id, C.campaign_name
-        FROM  Promotional_Campaigns C
+          SELECT C.campaign_id, C.campaign_name
+          FROM Promotions P JOIN Includes I ON P.promo_id = I.promo_id 
+          JOIN promotional_campaigns C ON C.campaign_id = I.campaign_id
+          GROUP BY C.campaign_id
+          ORDER BY max(start_time) desc
         `,
     )).rows.map((campaign) => ({
       campaignId: campaign.campaign_id,
@@ -118,6 +118,7 @@ const getPromosByCampaign = async (campaign) => {
     SELECT P.promo_id as promo_id, discount, promo_name, start_time, end_time
     FROM Includes I JOIN Promotions P ON I.promo_id = P.promo_id
     WHERE campaign_id = $1
+    ORDER BY P.start_time desc
     `,
     [campaign.campaignId],
   )).rows.map((promo) => ({
@@ -137,8 +138,11 @@ const getPromosWithCampaigns = async (request, response) => {
   try {
     const campaigns = (await query(
       `
-      SELECT campaign_id, campaign_name
-      FROM promotional_campaigns
+      SELECT C.campaign_id, C.campaign_name
+      FROM Promotions P JOIN Includes I ON P.promo_id = I.promo_id 
+      JOIN promotional_campaigns C ON C.campaign_id = I.campaign_id
+      GROUP BY C.campaign_id
+      ORDER BY max(start_time) desc
     `,
     )).rows.map((campaign) => ({
       campaignId: campaign.campaign_id,
