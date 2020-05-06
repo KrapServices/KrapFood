@@ -1126,54 +1126,80 @@ INSERT INTO applies
 VALUES
     (1, 56);
 
--- -- order 57
--- INSERT INTO orders
---     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
--- VALUES
---     (57, 16, 'completed', '5 chin road', 22, 5, '2020-05-04 16:00:00', '2020-04-26 17:00:00', 5);
--- INSERT INTO delivers
---     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
--- VALUES
---     (57, 72, 57, '16:01:00', '16:15:00', '16:20:00', '16:30:00');
--- INSERT INTO contain 
---     (order_id, restaurant_id, food_name, quantity)
--- VALUES
---     (57, 2, '2 test 3', 1);
--- INSERT INTO applies
---     (promo_id, order_id)
--- VALUES
---     (10, 57);
+-- order 57
+INSERT INTO orders
+    (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
+VALUES
+    (57, 16, 'completed', '5 chin road', 22, 5, '2020-05-04 16:00:00', '2020-05-04 17:00:00', 5);
+INSERT INTO delivers
+    (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
+VALUES
+    (57, 72, 57, '16:01:00', '16:15:00', '16:20:00', '16:30:00');
+INSERT INTO contain 
+    (order_id, restaurant_id, food_name, quantity)
+VALUES
+    (57, 2, '2 test 3', 1);
+INSERT INTO applies
+    (promo_id, order_id)
+VALUES
+    (10, 57);
 
--- -- order 58
--- INSERT INTO orders
---     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
--- VALUES
---     (58, 90, 'completed', '6 test road', 23, 4, '2020-04-27 11:00:00', '2020-04-27 12:00:00', 5);
--- INSERT INTO delivers
---     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
--- VALUES
---     (58, 73, 58, '11:01:00', '11:15:00', '11:20:00', '11:30:00');
--- INSERT INTO contain 
---     (order_id, restaurant_id, food_name, quantity)
--- VALUES
---     (58, 3, '3 test 4', 1);
--- INSERT INTO contain 
---     (order_id, restaurant_id, food_name, quantity)
--- VALUES
---     (58, 3, '3 test 5', 2);
+-- order 58
+INSERT INTO orders
+    (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
+VALUES
+    (58, 72, 'completed', '6 test road', 23, 4, '2020-05-04 11:00:00', '2020-05-04 12:00:00', 5);
+INSERT INTO delivers
+    (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
+VALUES
+    (58, 73, 58, '11:01:00', '11:15:00', '11:20:00', '11:30:00');
+INSERT INTO contain 
+    (order_id, restaurant_id, food_name, quantity)
+VALUES
+    (58, 3, '3 test 4', 1);
+INSERT INTO contain 
+    (order_id, restaurant_id, food_name, quantity)
+VALUES
+    (58, 3, '3 test 5', 2);
+INSERT INTO applies
+    (promo_id, order_id)
+VALUES
+    (10, 58);
 
--- -- order 59
--- INSERT INTO orders
---     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
--- VALUES
---     (59, 40, 'completed', '6 avenue road', 24, 4, '2020-04-28 20:00:00', '2020-04-28 21:00:00', 5);
--- INSERT INTO delivers
---     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
--- VALUES
---     (59, 74, 59, '20:01:00', '20:15:00', '20:20:00', '20:30:00');
--- INSERT INTO contain 
---     (order_id, restaurant_id, food_name, quantity)
--- VALUES
---     (59, 4, '4 test 3', 1);
+-- order 59
+INSERT INTO orders
+    (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
+VALUES
+    (59, 36, 'completed', '6 avenue road', 24, 4, '2020-05-05 20:00:00', '2020-05-05 21:00:00', 5);
+INSERT INTO delivers
+    (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
+VALUES
+    (59, 74, 59, '20:01:00', '20:15:00', '20:20:00', '20:30:00');
+INSERT INTO contain 
+    (order_id, restaurant_id, food_name, quantity)
+VALUES
+    (59, 4, '4 test 3', 1);
+INSERT INTO applies
+    (promo_id, order_id)
+VALUES
+    (4, 59);
+
+-- order 60
+INSERT INTO orders
+    (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
+VALUES
+    (60, 45, 'completed', '6 chin road', 25, 3, '2020-05-05 19:00:00', '2020-05-05 22:00:00', 5);
+INSERT INTO delivers
+    (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
+VALUES
+    (60, 75, 60, '19:01:00', '19:15:00', '19:20:00', '19:30:00');
+INSERT INTO contain 
+    (order_id, restaurant_id, food_name, quantity)
+VALUES
+    (60, 5, '5 test 2', 1);
+INSERT INTO applies
+    (promo_id, order_id)
+VALUES
+    (5, 60);
 
 COMMIT;
