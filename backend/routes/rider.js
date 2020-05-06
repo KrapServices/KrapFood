@@ -1,13 +1,20 @@
 const express = require('express');
 const services = require('../services/riderServices');
+const { query } = require('../database');
 
 const router = express.Router();
 
 // Route to create new weekly work schedule
 router.post('/:id/schedules', services.createNewWeeklyWorkSchedule);
 
+// Route to create new monthly work schedule
+router.post('/:id/monthly-schedules', services.createNewMonthlyWorkSchedule);
+
 // Route to retrieve weekly work schedules
 router.get('/:id/schedules', services.retrieveWeeklyWorkSchedules);
+
+// Route to retrieve monthly work schedules
+router.get('/:id/monthly-schedules', services.retrieveMonthlyWorkSchedules);
 
 router.get('/:id/ridersummary', services.getRiderStats);
 
