@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import {
-  Header, Table
+  Header, Table,
 } from 'semantic-ui-react';
 import customerOrderContext from './customerOrderContext';
 import RatingModal from './RatingModal';
+import CompletedOrderModal from './CompletedOrderModal';
 
 class CustomerCurrentOrders extends Component {
   constructor(props) {
@@ -77,6 +78,7 @@ class CustomerCurrentOrders extends Component {
               <Table.HeaderCell>Total Cost</Table.HeaderCell>
               <Table.HeaderCell>Rating</Table.HeaderCell>
               <Table.HeaderCell width={2} />
+              <Table.HeaderCell width={2} />
             </Table.Row>
           </Table.Header>
 
@@ -91,8 +93,9 @@ class CustomerCurrentOrders extends Component {
                 <Table.Cell>
                   {' '}
                   <RatingModal order={order} />
-
-
+                </Table.Cell>
+                <Table.Cell>
+                  <CompletedOrderModal order={order} />
                 </Table.Cell>
               </Table.Row>
             ))}
