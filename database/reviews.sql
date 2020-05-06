@@ -10,5 +10,5 @@ CREATE TABLE food_reviews (
   modified_at TIMESTAMP NOT NULL DEFAULT current_timestamp,
   PRIMARY KEY (customer_id, restaurant_id, food_name),
   FOREIGN KEY (restaurant_id, food_name) REFERENCES foods (restaurant_id, food_name) ON DELETE CASCADE ON UPDATE CASCADE,
-  FOREIGN KEY (customer_id) REFERENCES Customers (customer_id)
+  FOREIGN KEY (customer_id) REFERENCES Customers (customer_id) ON DELETE CASCADE
 );

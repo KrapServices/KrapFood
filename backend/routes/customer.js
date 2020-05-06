@@ -19,4 +19,8 @@ router.post('/food/ratings', customerService.rateFood);
 
 router.get('/:id', customerService.getCustomerById);
 
+router.delete('/:id', customerService.deleteCustomerById);
+
+router.patch('/', customerService.updateCustomerPassword);
+
 module.exports = router;

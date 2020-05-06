@@ -4,6 +4,7 @@ import userContext from '../../../userContext';
 import CustomerOrderFood from './orderFood/CustomerOrderFood';
 import CustomerOrderView from './orderView/CustomerOrderView';
 import CustomerInfo from './customerInfo/CustomerInfo';
+import PasswordUpdate from './updatePassword/PasswordUpdate';
 
 class Customer extends Component {
   constructor(props) {
@@ -32,6 +33,7 @@ class Customer extends Component {
       { menuItem: 'Order Food', render: () => <Tab.Pane><CustomerOrderFood user={user} /></Tab.Pane> },
       { menuItem: 'Your Orders', render: () => <Tab.Pane><CustomerOrderView user={user} /></Tab.Pane> },
       { menuItem: 'Summary', render: () => <Tab.Pane><div /></Tab.Pane> },
+      { menuItem: 'Update Password', render: () => <Tab.Pane><PasswordUpdate /></Tab.Pane> },
     ];
     return (
       <>

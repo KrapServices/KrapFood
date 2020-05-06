@@ -180,6 +180,50 @@ const rateFood = async (request, response) => {
   }
 };
 
+const deleteCustomerById = async (request, response) => {
+  try {
+    const { id } = request.params;
+    await query(
+      `
+        DELETE FROM users
+        WHERE user_id = $1
+      `,
+      [id],
+    );
+    return response.status(204).send('Account successfully deleted');
+  } catch (error) {
+    console.log(error);
+    return response.status(500).send('User cannot be found');
+  }
+};
+
+const updateCustomerPassword = async (req, res) => {
+  const { customerId, password } = req.body;
+
+  if (customerId === undefined || password === undefined) {
+    res.status(400).send('Invalid details');
+    return;
+  }
+
+  try {
+    await query(
+      `
+        UPDATE users
+        SET
+          password = $2,
+          modified_at = DEFAULT
+        WHERE user_id = $1
+      `,
+      [customerId, password],
+    );
+
+    res.status(200).send('Password updated.');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Password update failed.');
+  }
+};
+
 module.exports = {
   customerLogin,
   customerCreate,
@@ -190,4 +234,6 @@ module.exports = {
   getCustomerById,
   rateOrder,
   rateFood,
+  deleteCustomerById,
+  updateCustomerPassword,
 };
