@@ -144,29 +144,25 @@ const createPromotion = async (request, response) => {
       restaurantId, discount, promoName, dateRange,
     } = request.body;
     console.log(dateRange);
-    const promo = (await query(
-      `
+    const result = await transact(async (query) => {
+      const promo = (await query(
+        `
         INSERT INTO promotions (discount, promo_name, start_time, end_time) 
         VALUES ($1, $2, $3, $4)
         RETURNING promo_id, promo_name
         `,
-      [discount, promoName, new Date(dateRange[0]), new Date(dateRange[1])],
-    )).rows[0];
-    const restaurant = (await query(
-      `
+        [discount, promoName, new Date(dateRange[0]), new Date(dateRange[1])],
+      )).rows[0];
+      const restaurant = (await query(
+        `
         INSERT INTO offers (promo_id, restaurant_id)
         VALUES ($1, $2)
         RETURNING restaurant_id
     `,
-      [promo.promo_id, restaurantId],
-    )).rows[0];
-    response.status(200).json({
-      promo: {
-        restaurantId: restaurant.restaurant_id,
-        promoId: promo.promo_id,
-        promoCode: promo.promo_code,
-      },
+        [promo.promo_id, restaurantId],
+      )).rows[0];
     });
+    response.status(200).json(result);
   } catch (error) {
     console.log(error);
     response.status(500).send('An error occured with creating the promotion');
