@@ -4,6 +4,7 @@ import { Tab } from 'semantic-ui-react';
 import userContext from '../../../userContext';
 import PartTimeRiderWorkSchedule from './PartTimeRiderWorkSchedule';
 import RiderViewOrder from './orderView/RiderOrderView';
+import PasswordUpdate from './updatePassword/PasswordUpdate';
 
 class Rider extends Component {
   constructor(props) {
@@ -33,9 +34,11 @@ class Rider extends Component {
       { menuItem: 'Schedule', render: () => <Tab.Pane><PartTimeRiderWorkSchedule /></Tab.Pane> },
       { menuItem: 'Assigned Orders', render: () => <Tab.Pane><RiderViewOrder /></Tab.Pane> },
       { menuItem: 'Summary', render: () => <Tab.Pane><div /></Tab.Pane> },
+      { menuItem: 'Update Password', render: () => <Tab.Pane><PasswordUpdate /></Tab.Pane> },
     ] : [
       { menuItem: 'Assigned Orders', render: () => <Tab.Pane><RiderViewOrder /></Tab.Pane> },
       { menuItem: 'Summary', render: () => <Tab.Pane><div /></Tab.Pane> },
+      { menuItem: 'Update Password', render: () => <Tab.Pane><PasswordUpdate /></Tab.Pane> },
     ];
     return (
       <>

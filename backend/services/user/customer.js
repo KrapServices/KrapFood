@@ -197,6 +197,33 @@ const deleteCustomerById = async (request, response) => {
   }
 };
 
+const updateCustomerPassword = async (req, res) => {
+  const { customerId, password } = req.body;
+
+  if (customerId === undefined || password === undefined) {
+    res.status(400).send('Invalid details');
+    return;
+  }
+
+  try {
+    await query(
+      `
+        UPDATE users
+        SET
+          password = $2,
+          modified_at = DEFAULT
+        WHERE user_id = $1
+      `,
+      [customerId, password],
+    );
+
+    res.status(200).send('Password updated.');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Password update failed.');
+  }
+};
+
 module.exports = {
   customerLogin,
   customerCreate,
@@ -208,4 +235,5 @@ module.exports = {
   rateOrder,
   rateFood,
   deleteCustomerById,
+  updateCustomerPassword,
 };

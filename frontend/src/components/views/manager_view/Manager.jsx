@@ -35,7 +35,6 @@ class Manager extends Component {
       { menuItem: 'View Summary', render: () => <Tab.Pane><Summary /></Tab.Pane> },
       { menuItem: 'View Rider Shifts', render: () => <Tab.Pane><RiderViewer /></Tab.Pane> },
       { menuItem: 'Update Password', render: () => <Tab.Pane><PasswordUpdate /></Tab.Pane> },
-
     ];
     return (
       <>

@@ -103,4 +103,31 @@ router.delete('/:id', async (request, response) => {
   }
 });
 
+router.patch('/', async (req, res) => {
+  const { riderId, password } = req.body;
+
+  if (riderId === undefined || password === undefined) {
+    res.status(400).send('Invalid details');
+    return;
+  }
+
+  try {
+    await query(
+      `
+        UPDATE users
+        SET
+          password = $2,
+          modified_at = DEFAULT
+        WHERE user_id = $1
+      `,
+      [riderId, password],
+    );
+
+    res.status(200).send('Password updated.');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Password update failed.');
+  }
+});
+
 module.exports = router;

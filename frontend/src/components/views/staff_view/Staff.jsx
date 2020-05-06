@@ -6,6 +6,7 @@ import StaffUpdateFood from './updateFood/StaffUpdateFood';
 import StaffSummary from './summary/StaffSummary';
 import StaffCreatePromotion from './promotions/StaffCreatePromotion';
 import StaffOrderView from './orderView/StaffOrderView';
+import PasswordUpdate from './updatePassword/PasswordUpdate';
 
 class Staff extends Component {
   constructor() {
@@ -37,6 +38,7 @@ class Staff extends Component {
       { menuItem: 'Update Orders', render: () => <Tab.Pane><StaffOrderView user={user} /></Tab.Pane> },
       { menuItem: 'Create Promotion', render: () => <Tab.Pane><StaffCreatePromotion /></Tab.Pane> },
       { menuItem: 'Summary Information', render: () => <Tab.Pane><StaffSummary /></Tab.Pane> },
+      { menuItem: 'Update Password', render: () => <Tab.Pane><PasswordUpdate /></Tab.Pane> },
     ];
     return (
       <>

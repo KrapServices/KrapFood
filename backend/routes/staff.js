@@ -5,4 +5,6 @@ const router = express.Router();
 
 router.delete('/:id', staffService.staffDelete);
 
+router.patch('/', staffService.updateStaffPassword);
+
 module.exports = router;
