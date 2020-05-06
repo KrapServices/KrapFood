@@ -35,11 +35,8 @@ class Customer extends Component {
       { menuItem: 'Customer Info', render: () => <Tab.Pane><CustomerInfo /></Tab.Pane> },
       { menuItem: 'Order Food', render: () => <Tab.Pane><CustomerOrderFood user={user} /></Tab.Pane> },
       { menuItem: 'Your Orders', render: () => <Tab.Pane><CustomerOrderView user={user} /></Tab.Pane> },
-<<<<<<< HEAD
-=======
       { menuItem: 'Summary', render: () => <Tab.Pane><div /></Tab.Pane> },
       { menuItem: 'Update Password', render: () => <Tab.Pane><PasswordUpdate /></Tab.Pane> },
->>>>>>> 31b9fc18f6f42a0539c08b904dbce6f21610c153
     ];
     return (
       <>
