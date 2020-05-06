@@ -64,15 +64,6 @@ CREATE TABLE full_time_riders
     FOREIGN KEY (rider_id) REFERENCES riders (rider_id) ON DELETE CASCADE
 );
 
-CREATE TABLE manages
-(
-    manager_id INTEGER,
-    rider_id INTEGER,
-    PRIMARY KEY (manager_id, rider_id),
-    FOREIGN KEY (manager_id) REFERENCES managers (manager_id),
-    FOREIGN KEY (rider_id) REFERENCES riders (rider_id)
-);
-
 CREATE TABLE staff
 (
     staff_id INTEGER,
