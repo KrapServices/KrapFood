@@ -38,7 +38,8 @@ class Checkout extends Component {
     // -------------------------------------------------------------------------
     // Delivery Fee
     // -------------------------------------------------------------------------
-    this.determineFee = (value) => (value[0] === 'A' ? 5 : 6);
+    // eslint-disable-next-line no-constant-condition
+    this.determineFee = (value) => (value[0] === 'A' || 'B' || 'C' ? 5 : 6);
 
     this.calculateDeliveryFee = (e, { value }) => {
       console.log(value);
@@ -113,6 +114,7 @@ class Checkout extends Component {
         );
         console.log(result);
         clearCart();
+        window.location.reload();
         alert('order created!');
       } catch (error) {
         //  console.log(error);
