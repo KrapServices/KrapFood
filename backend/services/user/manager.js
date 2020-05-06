@@ -52,13 +52,8 @@ const managerLogin = async (req, res) => {
       `,
       [email, password],
     )).rows[0];
-
-    return res.status(200).json({
-      user: {
-        ...user,
-        type: 'manager',
-      },
-    });
+    user.type = 'manager';
+    return res.status(200).json({ user });
   } catch (error) {
     console.error(error);
     return res.status(500).send('Manager cannot be found');
@@ -161,10 +156,28 @@ const checkSchedule = async (req, res) => {
   }
 };
 
+const deleteManager = async (request, response) => {
+  try {
+    const { id } = request.params;
+    await query(
+      `
+        DELETE FROM users
+        WHERE user_id = $1
+      `,
+      [id],
+    );
+    return response.status(204).send('Account successfully deleted');
+  } catch (error) {
+    console.log(error);
+    return response.status(500).send('User cannot be found');
+  }
+};
+
 module.exports = {
   managerLogin,
   managerCreate,
   updateManagerPassword,
   getRiders,
   checkSchedule,
+  deleteManager,
 };

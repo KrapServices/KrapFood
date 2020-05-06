@@ -69,6 +69,6 @@ CREATE TABLE staff
     staff_id INTEGER,
     restaurant_id INTEGER,
     PRIMARY KEY (restaurant_id, staff_id),
-    FOREIGN KEY (staff_id) REFERENCES users (user_id),
+    FOREIGN KEY (staff_id) REFERENCES users (user_id) ON DELETE CASCADE,
     FOREIGN KEY (restaurant_id) REFERENCES restaurants (restaurant_id) ON DELETE CASCADE
 );

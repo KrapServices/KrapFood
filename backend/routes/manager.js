@@ -10,4 +10,6 @@ router.get('/:id/riders', managerService.getRiders);
 // Check Schedule
 router.post('/schedule', managerService.checkSchedule);
 
+router.delete('/:id', managerService.deleteManager);
+
 module.exports = router;

@@ -20,6 +20,7 @@ class Manager extends Component {
   }
 
   componentDidMount() {
+    console.log(this.context.user);
     const activeIndex = JSON.parse(window.localStorage.getItem('activeIndex'));
     if (activeIndex) {
       this.setState({ activeIndex });
@@ -35,7 +36,6 @@ class Manager extends Component {
       { menuItem: 'View Summary', render: () => <Tab.Pane><Summary /></Tab.Pane> },
       { menuItem: 'View Riders', render: () => <Tab.Pane><RiderViewer /></Tab.Pane> },
       { menuItem: 'Update Password', render: () => <Tab.Pane><PasswordUpdate /></Tab.Pane> },
-
     ];
     return (
       <>
