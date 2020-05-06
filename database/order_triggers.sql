@@ -207,6 +207,7 @@ CREATE CONSTRAINT TRIGGER completed_order_assigned_trigger
     FOR EACH ROW
     EXECUTE PROCEDURE completed_order_assigned();
 
+<<<<<<< HEAD
 -- check if rider is on shift for assigned delivery time
 -- CREATE OR REPLACE FUNCTION rider_is_on_shift() returns TRIGGER
 --     AS $$
@@ -256,6 +257,50 @@ CREATE CONSTRAINT TRIGGER completed_order_assigned_trigger
 --     DEFERRABLE INITIALLY DEFERRED
 --     FOR EACH ROW
 --     EXECUTE PROCEDURE rider_is_on_shift();
+=======
+--check if rider is on shift
+CREATE OR REPLACE FUNCTION rider_is_on_shift() returns TRIGGER
+    AS $$
+DECLARE 
+    violating_order_id INTEGER;
+    not_on_shift_rider_id INTEGER;
+    current_shift_id INTEGER;
+BEGIN
+    SELECT distinct s.shift_id INTO current_shift_id 
+    FROM shifts s, orders o
+    WHERE o.order_id = NEW.order_id
+    AND DATE(o.created_at) = s.work_date
+    AND (NEW.departure_time::time >= s.starting_time 
+    AND NEW.departure_time::time < s.ending_time);
+
+    WITH available_riders AS (
+        SELECT distinct ft.rider_id
+        FROM mws_contains ms RIGHT JOIN ft_rider_works ft ON ms.mws_id = ft.mws_id
+        WHERE ms.shift_id = current_shift_id
+        UNION
+        SELECT distinct pt.rider_id
+        FROM wws_contains ws RIGHT JOIN pt_rider_works pt ON ws.wws_id = pt.wws_id
+        WHERE ws.shift_id = current_shift_id
+    )
+    SELECT NEW.order_id, NEW.rider_id INTO violating_order_id, not_on_shift_rider_id
+    WHERE NEW.rider_id NOT IN (SELECT * from available_riders);
+
+    IF violating_order_id IS NOT NULL AND not_on_shift_rider_id IS NOT NULL THEN
+        RAISE exception 'rider % assigned to order % is not on shift %', not_on_shift_rider_id, violating_order_id, current_shift_id;
+    END IF;
+
+    RETURN NULL;
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS rider_is_on_shift_trigger ON delivers;
+CREATE CONSTRAINT TRIGGER rider_is_on_shift_trigger
+    AFTER INSERT ON delivers
+    DEFERRABLE INITIALLY DEFERRED
+    FOR EACH ROW
+    EXECUTE PROCEDURE rider_is_on_shift();
+>>>>>>> efaec28e6626a4b522a77a17ac1101addda429f9
 
 -- check total participation of promotions in includes or offers instance (i.e. if promotion is either FDS-wide or offered by restaurant)
 CREATE OR REPLACE FUNCTION check_promo_total_participation() RETURNS TRIGGER
