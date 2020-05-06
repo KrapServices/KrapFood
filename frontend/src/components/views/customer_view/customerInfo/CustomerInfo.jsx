@@ -104,10 +104,31 @@ class CustomerInfo extends Component {
     const {
       customerCreditCards, modalOpen, promotions, locations,
     } = this.state;
+    const { user } = this.context;
+    console.log(user);
     return (
       <>
+        <Grid style={{ marginLeft: '30%', marginRight: '30%', marginBottom: '2%' }}>
+          <Grid.Row>
+            <Grid.Column>
+              <Segment>
+                <Header as="h2">
+                  Welcome,
+                  {`${user.name}`}
+                </Header>
+                <Header as="h3">
+                  This is your personal info dashboard
+                </Header>
+                <Header as="h3">
+                  Current Krapfood reward points:
+                  {' '}
+                  {`${user.points}`}
+                </Header>
+              </Segment>
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
         <Grid columns="3" style={{ marginLeft: '10%', marginRight: '10%', marginBottom: '2%' }}>
-
           <Grid.Row>
             <Grid.Column>
 
