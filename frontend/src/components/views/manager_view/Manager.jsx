@@ -4,6 +4,7 @@ import userContext from '../../../userContext';
 import PasswordUpdate from './updatePassword/PasswordUpdate';
 import AppPromotion from './promotions/AppPromotion';
 import Summary from './summary/Summary';
+import RiderViewer from './viewRiders/RiderViewer';
 
 class Manager extends Component {
   constructor() {
@@ -32,6 +33,7 @@ class Manager extends Component {
     const panes = [
       { menuItem: 'Create Promotions', render: () => <Tab.Pane><AppPromotion user={user} /></Tab.Pane> },
       { menuItem: 'View Summary', render: () => <Tab.Pane><Summary /></Tab.Pane> },
+      { menuItem: 'View Riders', render: () => <Tab.Pane><RiderViewer /></Tab.Pane> },
       { menuItem: 'Update Password', render: () => <Tab.Pane><PasswordUpdate /></Tab.Pane> },
 
     ];
