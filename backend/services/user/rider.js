@@ -1,4 +1,4 @@
-  const { query, transact } = require('../../database');
+const { query, transact } = require('../../database');
 // =============================================================================
 // RIDERS
 // =============================================================================
@@ -63,6 +63,7 @@ const riderLogin = async (request, response) => {
     response.status(500).send('user cannot be found');
   }
 };
+
 
 module.exports = {
   riderCreate,

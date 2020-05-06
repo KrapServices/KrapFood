@@ -56,8 +56,6 @@ export default class GenerateData extends Component {
         //   headers: { 'Access-Control-Allow-Origin': true },
         // });
         // console.log(resultRider);
-
-        
       }
       this.setState({ isloading: false });
     };
