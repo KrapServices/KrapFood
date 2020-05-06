@@ -138,8 +138,11 @@ const getPromosWithCampaigns = async (request, response) => {
   try {
     const campaigns = (await query(
       `
-      SELECT campaign_id, campaign_name
-      FROM promotional_campaigns
+      SELECT C.campaign_id, C.campaign_name
+      FROM Promotions P JOIN Includes I ON P.promo_id = I.promo_id 
+      JOIN promotional_campaigns C ON C.campaign_id = I.campaign_id
+      GROUP BY C.campaign_id
+      ORDER BY max(start_time) desc
     `,
     )).rows.map((campaign) => ({
       campaignId: campaign.campaign_id,
