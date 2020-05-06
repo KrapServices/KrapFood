@@ -128,6 +128,7 @@ class RiderCurrentOrders extends Component {
                     <Table.HeaderCell>Delivery Location</Table.HeaderCell>
                     <Table.HeaderCell>Total Cost</Table.HeaderCell>
                     <Table.HeaderCell width={4} />
+                    <Table.HeaderCell width={4} />
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
@@ -157,6 +158,7 @@ class RiderCurrentOrders extends Component {
                     <Table.HeaderCell>Delivery Location</Table.HeaderCell>
                     <Table.HeaderCell>Total Cost</Table.HeaderCell>
                     <Table.HeaderCell width={4} />
+                    <Table.HeaderCell width={4} />
                   </Table.Row>
                 </Table.Header>
 
@@ -185,6 +187,7 @@ class RiderCurrentOrders extends Component {
                 <Table.HeaderCell>Delivery Location</Table.HeaderCell>
                 <Table.HeaderCell>Total Cost</Table.HeaderCell>
                 <Table.HeaderCell width={2} />
+                <Table.HeaderCell width={4} />
               </Table.Row>
             </Table.Header>
 
