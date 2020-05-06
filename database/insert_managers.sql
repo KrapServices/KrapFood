@@ -24,6 +24,8 @@ INSERT INTO users (user_id,email,password,created_at) VALUES (98,'dui.lectus.rut
 INSERT INTO users (user_id,email,password,created_at) VALUES (99,'tincidunt.dui.augue@hendreritconsectetuer.ca','password','2020-03-15 12:00:00');
 INSERT INTO users (user_id,email,password,created_at) VALUES (100,'tellus.id.nunc@non.org','password','2020-03-15 12:00:00');
 
+SELECT setval('users_user_id_seq', (SELECT MAX(user_id) from "users"));
+
 INSERT INTO managers (manager_id) VALUES (76);
 INSERT INTO managers (manager_id) VALUES (77);
 INSERT INTO managers (manager_id) VALUES (78);
@@ -49,7 +51,3 @@ INSERT INTO managers (manager_id) VALUES (97);
 INSERT INTO managers (manager_id) VALUES (98);
 INSERT INTO managers (manager_id) VALUES (99);
 INSERT INTO managers (manager_id) VALUES (100);
-
--- SELECT setval('customers_customer_id_seq', (SELECT MAX(customer_id) from customers)); 
--- SELECT setval('riders_rider_id_seq', (SELECT MAX(rider_id) from riders)); 
--- SELECT setval('staff_staff_id_seq', (SELECT MAX(staff_id) from staff)); 

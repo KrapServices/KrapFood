@@ -139,8 +139,8 @@ VALUES
 
 COMMIT;
 
--- SELECT setval('promotions_promo_id_seq', (SELECT MAX(promo_id) from "promotions")); 
--- SELECT setval('promotional_campaigns_campaign_id_seq', (SELECT MAX(campaign_id) from "promotional_campaigns"));
+SELECT setval('promotions_promo_id_seq', (SELECT MAX(promo_id) from "promotions")); 
+SELECT setval('promotional_campaigns_campaign_id_seq', (SELECT MAX(campaign_id) from "promotional_campaigns"));
 
 -- insert orders
 
@@ -1203,5 +1203,7 @@ INSERT INTO applies
     (promo_id, order_id)
 VALUES
     (5, 60);
+
+SELECT setval('orders_order_id_seq', (SELECT MAX(order_id) from "orders")); 
 
 COMMIT;

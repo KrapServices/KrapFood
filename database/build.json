@@ -21,6 +21,7 @@
     "insert_staff.sql",
     "insert_schedules.sql",
     "insert_riders.sql",
-    "insert_managers.sql"
+    "insert_managers.sql",
+    "insert_orders.sql"
   ]
 }

@@ -1,4 +1,4 @@
-
+--assign delivery orders to riders
 CREATE OR REPLACE FUNCTION assign_delivery_order() RETURNS TRIGGER
     AS $$
 DECLARE
