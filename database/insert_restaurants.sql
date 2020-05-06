@@ -1,44 +1,65 @@
+-- restaurant 1
 INSERT INTO restaurants
     (price_threshold, restaurant_name, restaurant_location)
 VALUES
     (5, 'Macdonner' , 'test location 0');
+
+-- restaurant 2
 INSERT INTO restaurants
     (price_threshold, restaurant_name, restaurant_location)
 VALUES
     (6, 'Burger prince' , 'test location 1');
+
+-- restaurant 3
 INSERT INTO restaurants
     (price_threshold, restaurant_name, restaurant_location)
 VALUES
     (7, 'Long John Xddd' , 'test location 2');
+
+-- restaurant 4
 INSERT INTO restaurants
     (price_threshold, restaurant_name, restaurant_location)
 VALUES
     (8, 'fine f00d' , 'test location 3');
+
+-- restaurant 5
 INSERT INTO restaurants
     (price_threshold, restaurant_name, restaurant_location)
 VALUES
-    (9, 'sushi' , 'test location 4');
+    (9, 'sushi zpress' , 'test location 4');
+
+-- restaurant 6
 INSERT INTO restaurants
     (price_threshold, restaurant_name, restaurant_location)
 VALUES
-    (10, 'pizza' , 'test location 5');
-    /*
+    (10, 'pizza hart' , 'test location 5');
+
+-- restaurant 7
 INSERT INTO restaurants
     (price_threshold, restaurant_name, restaurant_location)
 VALUES
-    (11, 'test name 6' , 'test location 6' , 6);
+    (11, 'copydiam' , 'test location 6');
+
+-- restaurant 8
 INSERT INTO restaurants
     (price_threshold, restaurant_name, restaurant_location)
 VALUES
-    (12, 'test name 7' , 'test location 7' , 7);
+    (12, 'barstucks' , 'test location 7');
+
+-- restaurant 9
 INSERT INTO restaurants
     (price_threshold, restaurant_name, restaurant_location)
 VALUES
-    (13, 'test name 8' , 'test location 8' , 8);
+    (13, 'Liho Cha' , 'test location 8');
+
+-- restaurant 10
 INSERT INTO restaurants
     (price_threshold, restaurant_name, restaurant_location)
 VALUES
-    (14, 'test name 9' , 'test location 9' , 9);
+    (14, 'Koimade' , 'test location 9');
+
+
+/*
 INSERT INTO restaurants
     (price_threshold, restaurant_name, restaurant_location)
 VALUES
