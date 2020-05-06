@@ -1,5 +1,4 @@
 -- customer 1
-BEGIN;
 INSERT INTO users
     (user_id, email, password, created_at)
 VALUES
@@ -14,10 +13,8 @@ INSERT INTO cards
     (card_number, expiry_month, expiry_year, customer_id, name_card)
 VALUES
     ('1234567812345678', 5, 2022, 1, 'Main card');
-COMMIT;
 
 -- customer 2
-BEGIN;
 INSERT INTO users
     (user_id, email, password, created_at)
 VALUES
@@ -32,10 +29,8 @@ INSERT INTO cards
     (card_number, expiry_month, expiry_year, customer_id, name_card)
 VALUES
     ('1234567812345679', 5, 2022, 2, 'Main card');
-COMMIT;
 
 --customer 3
-BEGIN;
 INSERT INTO users
     (user_id, email, password, created_at)
 VALUES
@@ -50,10 +45,8 @@ INSERT INTO cards
     (card_number, expiry_month, expiry_year, customer_id, name_card)
 VALUES
     ('1234567812345670', 5, 2022, 3, 'Main card');
-COMMIT;
 
 --customer 4
-BEGIN;
 INSERT INTO users
     (user_id, email, password, created_at)
 VALUES
@@ -68,10 +61,8 @@ INSERT INTO cards
     (card_number, expiry_month, expiry_year, customer_id, name_card)
 VALUES
     ('1234567812345671', 5, 2022, 4, 'Main card');
-COMMIT;
 
 --customer 5
-BEGIN;
 INSERT INTO users
     (user_id, email, password, created_at)
 VALUES
@@ -86,10 +77,8 @@ INSERT INTO cards
     (card_number, expiry_month, expiry_year, customer_id, name_card)
 VALUES
     ('1234567812345672', 5, 2022, 5, 'Main card');
-COMMIT;
 
 --customer 6
-BEGIN;
 INSERT INTO users
     (user_id, email, password, created_at)
 VALUES
@@ -104,11 +93,8 @@ INSERT INTO cards
     (card_number, expiry_month, expiry_year, customer_id, name_card)
 VALUES
     ('1234567812345673', 5, 2022, 6, 'Main card');
-COMMIT;
-
 
 --customer 7
-BEGIN;
 INSERT INTO users
     (user_id, email, password, created_at)
 VALUES
@@ -123,10 +109,8 @@ INSERT INTO cards
     (card_number, expiry_month, expiry_year, customer_id, name_card)
 VALUES
     ('1234567812345674', 5, 2022, 7, 'Main card');
-COMMIT;
 
 --customer 8
-BEGIN;
 INSERT INTO users
     (user_id, email, password, created_at)
 VALUES
@@ -141,10 +125,8 @@ INSERT INTO cards
     (card_number, expiry_month, expiry_year, customer_id, name_card)
 VALUES
     ('1234567812345675', 5, 2022, 8, 'Main card');
-COMMIT;
 
 --customer 9
-BEGIN;
 INSERT INTO users
     (user_id, email, password, created_at)
 VALUES
@@ -159,11 +141,8 @@ INSERT INTO cards
     (card_number, expiry_month, expiry_year, customer_id, name_card)
 VALUES
     ('1234567812345676', 5, 2022, 9, 'Main card');
-COMMIT;
-
 
 --customer 10
-BEGIN;
 INSERT INTO users
     (user_id, email, password, created_at)
 VALUES
@@ -178,10 +157,8 @@ INSERT INTO cards
     (card_number, expiry_month, expiry_year, customer_id, name_card)
 VALUES
     ('1234567812345677', 5, 2022, 10, 'Main card');
-COMMIT;
 
 --customer 11
-BEGIN;
 INSERT INTO users
     (user_id, email, password, created_at)
 VALUES
@@ -196,12 +173,8 @@ INSERT INTO cards
     (card_number, expiry_month, expiry_year, customer_id, name_card)
 VALUES
     ('2234567812345677', 5, 2022, 11, 'Main card');
-COMMIT;
-
-
 
 --customer 12
-BEGIN;
 INSERT INTO users
     (user_id, email, password, created_at)
 VALUES
@@ -216,10 +189,8 @@ INSERT INTO cards
     (card_number, expiry_month, expiry_year, customer_id, name_card)
 VALUES
     ('2234567812345678', 5, 2022, 12, 'Main card');
-COMMIT;
 
 --customer 13
-BEGIN;
 INSERT INTO users
     (user_id, email, password, created_at)
 VALUES
@@ -234,11 +205,8 @@ INSERT INTO cards
     (card_number, expiry_month, expiry_year, customer_id, name_card)
 VALUES
     ('2234567812345679', 5, 2022, 13, 'Main card');
-COMMIT;
-
 
 --customer 14
-BEGIN;
 INSERT INTO users
     (user_id, email, password, created_at)
 VALUES
@@ -253,10 +221,8 @@ INSERT INTO cards
     (card_number, expiry_month, expiry_year, customer_id, name_card)
 VALUES
     ('2234567812345670', 5, 2022, 14, 'Main card');
-COMMIT;
 
 --customer 15
-BEGIN;
 INSERT INTO users
     (user_id, email, password, created_at)
 VALUES
@@ -271,10 +237,8 @@ INSERT INTO cards
     (card_number, expiry_month, expiry_year, customer_id, name_card)
 VALUES
     ('2234567812345671', 5, 2022, 15, 'Main card');
-COMMIT;
 
 --customer 16
-BEGIN;
 INSERT INTO users
     (user_id, email, password, created_at)
 VALUES
@@ -289,10 +253,8 @@ INSERT INTO cards
     (card_number, expiry_month, expiry_year, customer_id, name_card)
 VALUES
     ('2234567812345672', 5, 2022, 16, 'Main card');
-COMMIT;
 
 --customer 17
-BEGIN;
 INSERT INTO users
     (user_id, email, password, created_at)
 VALUES
@@ -307,10 +269,8 @@ INSERT INTO cards
     (card_number, expiry_month, expiry_year, customer_id, name_card)
 VALUES
     ('2234567812345673', 5, 2022, 17, 'Main card');
-COMMIT;
 
 --customer 18
-BEGIN;
 INSERT INTO users
     (user_id, email, password, created_at)
 VALUES
@@ -325,10 +285,8 @@ INSERT INTO cards
     (card_number, expiry_month, expiry_year, customer_id, name_card)
 VALUES
     ('2234567812345674', 5, 2022, 18, 'Main card');
-COMMIT;
 
 --customer 19
-BEGIN;
 INSERT INTO users
     (user_id, email, password, created_at)
 VALUES
@@ -343,10 +301,8 @@ INSERT INTO cards
     (card_number, expiry_month, expiry_year, customer_id, name_card)
 VALUES
     ('2234567812345675', 5, 2022, 19, 'Main card');
-COMMIT;
 
 --customer 20
-BEGIN;
 INSERT INTO users
     (user_id, email, password, created_at)
 VALUES
@@ -361,10 +317,8 @@ INSERT INTO cards
     (card_number, expiry_month, expiry_year, customer_id, name_card)
 VALUES
     ('2234567812345676', 5, 2022, 20, 'Main card');
-COMMIT;
 
 -- customer 21
-BEGIN;
 INSERT INTO users
     (user_id,email,password,created_at) 
 VALUES 
@@ -379,11 +333,8 @@ INSERT INTO cards
     (card_number,expiry_month,expiry_year,customer_id,name_card) 
 VALUES 
     ('6477062937271105', 7, 2022, 21, 'Main Card');
-COMMIT;
-
 
 -- customer 22
-BEGIN;
 INSERT INTO users 
     (user_id,email,password,created_at) 
 VALUES 
@@ -396,10 +347,8 @@ INSERT INTO cards
     (card_number,expiry_month,expiry_year,customer_id,name_card) 
 VALUES 
     ('6470973098594233',8,2022,22,'Main Card');
-COMMIT;
 
 -- customer 23
-BEGIN;
 INSERT INTO users 
     (user_id,email,password,created_at) 
 VALUES 
@@ -413,10 +362,8 @@ INSERT INTO cards
     (card_number,expiry_month,expiry_year,customer_id,name_card) 
 VALUES 
     ('6472196653156358',12,2022,23,'Main Card');
-COMMIT;
 
 -- customer 24
-BEGIN;
 INSERT INTO users 
     (user_id,email,password,created_at) 
 VALUES 
@@ -429,7 +376,6 @@ INSERT INTO cards
     (card_number,expiry_month,expiry_year,customer_id,name_card) 
 VALUES 
     ('6583729940627991',8,2022,24,'Main Card');
-COMMIT;
 
 -- customer 25
 INSERT INTO users 

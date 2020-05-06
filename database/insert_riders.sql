@@ -1,4 +1,3 @@
-BEGIN;
 INSERT INTO users (user_id,email,password,created_at) VALUES (51,'malesuada@Aeneangravidanunc.org','password','2020-03-15 12:00:00');
 INSERT INTO users (user_id,email,password,created_at) VALUES (52,'Vivamus@habitantmorbitristique.com','password','2020-03-15 12:00:00');
 INSERT INTO users (user_id,email,password,created_at) VALUES (53,'mauris.sapien@lorem.org','password','2020-03-15 12:00:00');
@@ -78,9 +77,6 @@ INSERT INTO part_time_riders (rider_id) VALUES (73);
 INSERT INTO part_time_riders (rider_id) VALUES (74);
 INSERT INTO part_time_riders (rider_id) VALUES (75);
 
-COMMIT;
-
-BEGIN;
 INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (64, 1);
 INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (64, 3);
 INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (64, 5);
@@ -143,7 +139,7 @@ INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (65, 10);
 INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (65, 12);
 INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (65, 14);
 INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (65, 16);
-INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (65, 18);
+-- INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (65, 18);
 
 INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (67, 2);
 INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (67, 4);
@@ -153,7 +149,7 @@ INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (67, 10);
 INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (67, 12);
 INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (67, 14);
 INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (67, 16);
-INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (67, 18);
+-- INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (67, 18);
 
 INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (69, 2);
 INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (69, 4);
@@ -163,7 +159,7 @@ INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (69, 10);
 INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (69, 12);
 INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (69, 14);
 INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (69, 16);
-INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (69, 18);
+-- INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (69, 18);
 
 INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (71, 2);
 INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (71, 4);
@@ -173,7 +169,7 @@ INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (71, 10);
 INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (71, 12);
 INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (71, 14);
 INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (71, 16);
-INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (71, 18);
+-- INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (71, 18);
 
 INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (73, 2);
 INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (73, 4);
@@ -183,7 +179,7 @@ INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (73, 10);
 INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (73, 12);
 INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (73, 14);
 INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (73, 16);
-INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (73, 18);
+-- INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (73, 18);
 
 INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (75, 2);
 INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (75, 4);
@@ -193,8 +189,4 @@ INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (75, 10);
 INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (75, 12);
 INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (75, 14);
 INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (75, 16);
-INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (75, 18);
-
-
-
-COMMIT;
+-- INSERT INTO pt_rider_works (rider_id, wws_id) VALUES (75, 18);

@@ -1,5 +1,3 @@
-BEGIN;
-
 INSERT INTO shifts (work_date, starting_time, ending_time) VALUES ('2020-03-22', '100000', '110000');
 INSERT INTO shifts (work_date, starting_time, ending_time) VALUES ('2020-03-22', '110000', '120000');
 INSERT INTO shifts (work_date, starting_time, ending_time) VALUES ('2020-03-22', '120000', '130000');
@@ -792,9 +790,6 @@ INSERT INTO shifts (work_date, starting_time, ending_time) VALUES ('2020-05-21',
 INSERT INTO shifts (work_date, starting_time, ending_time) VALUES ('2020-05-21', '190000', '200000');
 INSERT INTO shifts (work_date, starting_time, ending_time) VALUES ('2020-05-21', '200000', '210000');
 INSERT INTO shifts (work_date, starting_time, ending_time) VALUES ('2020-05-21', '210000', '220000');
-
-COMMIT;
-BEGIN;
  
 INSERT INTO weekly_work_schedules (starting_date, ending_date) VALUES ('2020-03-22', '2020-03-28');
 INSERT INTO weekly_work_schedules (starting_date, ending_date) VALUES ('2020-03-22', '2020-03-28');
@@ -1499,10 +1494,6 @@ INSERT INTO wws_contains VALUES (15, 669);
 INSERT INTO wws_contains VALUES (16, 670);
 INSERT INTO wws_contains VALUES (15, 671);
 INSERT INTO wws_contains VALUES (16, 672);
-
-COMMIT;
-
-BEGIN;
 
 INSERT INTO monthly_work_schedules (starting_date, ending_date) VALUES ('2020-03-22', '2020-04-18');
 INSERT INTO monthly_work_schedules (starting_date, ending_date) VALUES ('2020-04-19', '2020-05-16');
@@ -4104,5 +4095,3 @@ INSERT INTO mws_contains VALUES (16, 705);
 INSERT INTO mws_contains VALUES (16, 706);
 INSERT INTO mws_contains VALUES (16, 707);
 INSERT INTO mws_contains VALUES (16, 708);
-
-COMMIT;

@@ -79,38 +79,43 @@ DECLARE
   work_date DATE;
   time_of_five_hour_shift TIME;
 BEGIN
-  SELECT S1.work_date, S1.starting_time INTO work_date, time_of_five_hour_shift
-  FROM wws_contains C1 NATURAL JOIN shifts S1
-  WHERE EXISTS (
+  WITH wws_contains_shifts AS (
+    SELECT *
+    FROM wws_contains NATURAL JOIN shifts
+  )
+  SELECT W1.work_date, W1.starting_time INTO work_date, time_of_five_hour_shift
+  FROM wws_contains_shifts W1
+  WHERE W1.wws_id = NEW.wws_id
+  AND EXISTS (
     SELECT 1
-    FROM wws_contains C2 NATURAL JOIN shifts S2
-    WHERE S2.ending_time = S1.starting_time + INTERVAL '1 hour'
-    AND S2.work_date = S1.work_date
-    AND C1.wws_id = C2.wws_id
+    FROM wws_contains_shifts W2
+    WHERE W1.ending_time = W2.starting_time + INTERVAL '1 hour'
+    AND W1.work_date = W2.work_date
+    AND W1.wws_id = W2.wws_id
   ) AND EXISTS (
     SELECT 1
-    FROM wws_contains C2 NATURAL JOIN shifts S2
-    WHERE S2.ending_time = S1.starting_time + INTERVAL '2 hour'
-    AND S2.work_date = S1.work_date
-    AND C1.wws_id = C2.wws_id
+    FROM wws_contains_shifts W2
+    WHERE W1.ending_time = W2.starting_time + INTERVAL '2 hour'
+    AND W1.work_date = W2.work_date
+    AND W1.wws_id = W2.wws_id
   ) AND EXISTS (
     SELECT 1
-    FROM wws_contains C2 NATURAL JOIN shifts S2
-    WHERE S2.ending_time = S1.starting_time + INTERVAL '3 hour'
-    AND S2.work_date = S1.work_date
-    AND C1.wws_id = C2.wws_id
+    FROM wws_contains_shifts W2
+    WHERE W1.ending_time = W2.starting_time + INTERVAL '3 hour'
+    AND W1.work_date = W2.work_date
+    AND W1.wws_id = W2.wws_id
   ) AND EXISTS (
     SELECT 1
-    FROM wws_contains C2 NATURAL JOIN shifts S2
-    WHERE S2.ending_time = S1.starting_time + INTERVAL '4 hour'
-    AND S2.work_date = S1.work_date
-    AND C1.wws_id = C2.wws_id
+    FROM wws_contains_shifts W2
+    WHERE W1.ending_time = W2.starting_time + INTERVAL '4 hour'
+    AND W1.work_date = W2.work_date
+    AND W1.wws_id = W2.wws_id
   ) AND EXISTS (
     SELECT 1
-    FROM wws_contains C2 NATURAL JOIN shifts S2
-    WHERE S2.ending_time = S1.starting_time + INTERVAL '5 hour'
-    AND S2.work_date = S1.work_date
-    AND C1.wws_id = C2.wws_id
+    FROM wws_contains_shifts W2
+    WHERE W1.ending_time = W2.starting_time + INTERVAL '5 hour'
+    AND W1.work_date = W2.work_date
+    AND W1.wws_id = W2.wws_id
   );
   IF work_date IS NOT NULL AND time_of_five_hour_shift IS NOT NULL THEN
     RAISE exception '% has a five hour shift at %', work_date, time_of_five_hour_shift;
@@ -122,7 +127,6 @@ $$ LANGUAGE plpgsql;
 DROP TRIGGER IF EXISTS wws_five_hour_shift ON wws_contains CASCADE;
 CREATE CONSTRAINT TRIGGER wws_five_hour_shift
   AFTER INSERT ON wws_contains
-  DEFERRABLE INITIALLY DEFERRED
   FOR EACH ROW
   EXECUTE PROCEDURE check_wws_five_hour_shift();
 
@@ -336,38 +340,43 @@ DECLARE
   work_date DATE;
   time_of_five_hour_shift TIME;
 BEGIN
-  SELECT S1.work_date, S1.starting_time INTO work_date, time_of_five_hour_shift
-  FROM mws_contains C1 NATURAL JOIN shifts S1
-  WHERE EXISTS (
+  WITH mws_contains_shifts AS (
+    SELECT *
+    FROM mws_contains NATURAL JOIN shifts
+  )
+  SELECT M1.work_date, M1.starting_time INTO work_date, time_of_five_hour_shift
+  FROM mws_contains_shifts M1
+  WHERE M1.mws_id = NEW.mws_id
+  AND EXISTS (
     SELECT 1
-    FROM mws_contains C2 NATURAL JOIN shifts S2
-    WHERE S2.ending_time = S1.starting_time + INTERVAL '1 hour'
-    AND S2.work_date = S1.work_date
-    AND C2.mws_id = C1.mws_id
+    FROM mws_contains_shifts M2
+    WHERE M1.ending_time = M2.starting_time + INTERVAL '1 hour'
+    AND M1.work_date = M2.work_date
+    AND M1.mws_id = M2.mws_id
   ) AND EXISTS (
     SELECT 1
-    FROM mws_contains C2 NATURAL JOIN shifts S2
-    WHERE S2.ending_time = S1.starting_time + INTERVAL '2 hour'
-    AND S2.work_date = S1.work_date
-    AND C2.mws_id = C1.mws_id
+    FROM mws_contains_shifts M2
+    WHERE M1.ending_time = M2.starting_time + INTERVAL '2 hour'
+    AND M1.work_date = M2.work_date
+    AND M1.mws_id = M2.mws_id
   ) AND EXISTS (
     SELECT 1
-    FROM mws_contains C2 NATURAL JOIN shifts S2
-    WHERE S2.ending_time = S1.starting_time + INTERVAL '3 hour'
-    AND S2.work_date = S1.work_date
-    AND C2.mws_id = C1.mws_id
+    FROM mws_contains_shifts M2
+    WHERE M1.ending_time = M2.starting_time + INTERVAL '3 hour'
+    AND M1.work_date = M2.work_date
+    AND M1.mws_id = M2.mws_id
   ) AND EXISTS (
     SELECT 1
-    FROM mws_contains C2 NATURAL JOIN shifts S2
-    WHERE S2.ending_time = S1.starting_time + INTERVAL '4 hour'
-    AND S2.work_date = S1.work_date
-    AND C2.mws_id = C1.mws_id
+    FROM mws_contains_shifts M2
+    WHERE M1.ending_time = M2.starting_time + INTERVAL '4 hour'
+    AND M1.work_date = M2.work_date
+    AND M1.mws_id = M2.mws_id
   ) AND EXISTS (
     SELECT 1
-    FROM mws_contains C2 NATURAL JOIN shifts S2
-    WHERE S2.ending_time = S1.starting_time + INTERVAL '5 hour'
-    AND S2.work_date = S1.work_date
-    AND C2.mws_id = C1.mws_id
+    FROM mws_contains_shifts M2
+    WHERE M1.ending_time = M2.starting_time + INTERVAL '5 hour'
+    AND M1.work_date = M2.work_date
+    AND M1.mws_id = M2.mws_id
   );
   IF work_date IS NOT NULL AND time_of_five_hour_shift IS NOT NULL THEN
     RAISE exception '% has a five hour shift at %', work_date, time_of_five_hour_shift;
@@ -379,7 +388,6 @@ $$ LANGUAGE plpgsql;
 DROP TRIGGER IF EXISTS mws_five_hour_shift ON mws_contains CASCADE;
 CREATE CONSTRAINT TRIGGER mws_five_hour_shift
   AFTER INSERT ON mws_contains
-  DEFERRABLE INITIALLY DEFERRED
   FOR EACH ROW
   EXECUTE PROCEDURE check_mws_five_hour_shift();
 
