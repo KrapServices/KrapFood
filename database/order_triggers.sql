@@ -283,3 +283,40 @@ CREATE CONSTRAINT TRIGGER rider_is_on_shift_trigger
     DEFERRABLE INITIALLY DEFERRED
     FOR EACH ROW
     EXECUTE PROCEDURE rider_is_on_shift();
+
+-- check total participation of promotions in includes or offers instance (i.e. if promotion is either FDS-wide or offered by restaurant)
+CREATE OR REPLACE FUNCTION check_promo_total_participation() RETURNS TRIGGER
+    AS $$
+DECLARE 
+    violating_promo_id INTEGER;
+BEGIN
+    SELECT promo_id into violating_promo_id
+    FROM promotions P
+    WHERE NOT EXISTS (
+        SELECT 1
+        FROM offers O
+        WHERE P.promo_id = O.promo_id
+    )
+    AND
+    NOT EXISTS (
+        SELECT 1
+        FROM includes I
+        WHERE P.promo_id = I.promo_id
+    );
+
+    IF violating_promo_id IS NOT NULL THEN 
+        RAISE exception 'promo % must participate in an instance of includes or offers', violating_promo_id;
+    END IF;
+
+    RETURN NULL;
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+DROP TRIGGER IF EXISTS promo_participation_trigger ON promotions;
+CREATE CONSTRAINT TRIGGER promo_participation_trigger
+    AFTER INSERT ON promotions
+    DEFERRABLE INITIALLY DEFERRED
+    FOR EACH ROW
+    EXECUTE PROCEDURE check_promo_total_participation();
