@@ -107,8 +107,13 @@ const getCustomerPromotions = async (request, response) => {
   try {
     const promotions = (await query(
       `
+      SELECT p.promo_id, p.discount, p.promo_name, p.start_time, p.end_time
+      FROM promotions p
+      where p.start_time <= current_timestamp
+      and p.end_time > current_timestamp
+      EXCEPT 
       SELECT p.promo_id, p.discount, p.promo_name, p.start_time, p.end_time 
-      FROM promotions p Left Outer join Offers o on p.promo_id = o.promo_id 
+      FROM promotions p join Offers o on p.promo_id = o.promo_id 
       where p.start_time <= current_timestamp
       and p.end_time > current_timestamp
       `,
