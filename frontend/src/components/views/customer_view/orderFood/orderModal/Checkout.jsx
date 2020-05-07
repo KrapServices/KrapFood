@@ -230,7 +230,7 @@ class Checkout extends Component {
       if (Array.from(customerPromotionsApplied).length !== 0) {
         const totalCustomerPromoDiscount = Array.from(customerPromotionsApplied)
           .map((x) => x.discount).reduce((prev, curr) => Number(prev) + Number(curr), 0);
-        result *= (totalCustomerPromoDiscount / 100);
+        result = result - (result *= (totalCustomerPromoDiscount / 100));
       }
       const final = result + deliveryFee - pointsToRedeem;
       return final;
