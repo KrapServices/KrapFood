@@ -17,9 +17,9 @@ INSERT INTO foods
 VALUES
     ('1 test 4', 10, 1, 'chinese');
 INSERT INTO foods
-    (food_name,price, restaurant_id, category)
+    (food_name,price, daily_limit, restaurant_id, category)
 VALUES
-    ('1 test 5', 10, 1, 'western');
+    ('1 test 5', 10, 3, 1, 'western');
 
 
 -- restaurant 2

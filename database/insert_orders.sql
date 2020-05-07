@@ -149,7 +149,7 @@ BEGIN;
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (1, 9, 'delivering', '5 chicken road', 1, 5, '2020-03-22 10:00:00', '2020-03-22 11:00:00', 5);
+    (1, 9, 'completed', '5 chicken road', 1, 5, '2020-03-22 10:00:00', '2020-03-22 11:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -167,7 +167,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (2, 20, 'delivering', '6 chin road', 2, 5, '2020-03-25 11:00:00', '2020-03-25 15:00:00', 5);
+    (2, 20, 'completed', '6 chin road', 2, 5, '2020-03-25 11:00:00', '2020-03-25 15:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -182,7 +182,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (3, 90, 'delivering', '6 test road', 3, 4, '2020-03-25 18:00:00', '2020-03-25 22:00:00', 5);
+    (3, 90, 'completed', '6 test road', 3, 4, '2020-03-25 18:00:00', '2020-03-25 22:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -200,7 +200,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (4, 40, 'delivering', '6 avenue road', 4, 4, '2020-03-26 14:00:00', '2020-03-26 15:00:00', 5);
+    (4, 40, 'completed', '6 avenue road', 4, 4, '2020-03-26 14:00:00', '2020-03-26 15:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -214,7 +214,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (5, 50, 'delivering', '6 chin road', 5, 3, '2020-03-27 18:00:00', '2020-03-27 22:00:00', 5);
+    (5, 50, 'completed', '6 chin road', 5, 3, '2020-03-27 18:00:00', '2020-03-27 22:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -228,7 +228,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (6, 18, 'delivering', '8 chicken road', 6, 5, '2020-03-28 11:00:00', '2020-03-28 12:00:00', 5);
+    (6, 18, 'completed', '8 chicken road', 6, 5, '2020-03-28 11:00:00', '2020-03-28 12:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -250,7 +250,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (7, 40, 'delivering', '8 henderson road', 7, 5, '2020-03-28 12:00:00', '2020-03-28 13:00:00', 5);
+    (7, 40, 'completed', '8 henderson road', 7, 5, '2020-03-28 12:00:00', '2020-03-28 13:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -268,7 +268,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (8, 54, 'delivering', '8 henderson road', 8, 5, '2020-03-28 13:00:00', '2020-03-28 14:00:00', 5);
+    (8, 54, 'completed', '8 henderson road', 8, 5, '2020-03-28 13:00:00', '2020-03-28 14:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -290,7 +290,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (9, 80, 'delivering', '9 henderson road', 9, 4, '2020-03-29 15:00:00', '2020-03-29 16:00:00', 5);
+    (9, 80, 'completed', '9 henderson road', 9, 4, '2020-03-29 15:00:00', '2020-03-29 16:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -308,7 +308,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (10, 12, 'delivering', '10 henderson road', 10, 4, '2020-03-29 11:00:00', '2020-03-28 12:00:00', 5);
+    (10, 12, 'completed', '10 henderson road', 10, 4, '2020-03-29 11:00:00', '2020-03-28 12:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -326,7 +326,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (11, 9, 'delivering', '5 chicken road', 11, 5, '2020-03-22 14:00:00', '2020-03-22 15:00:00', 5);
+    (11, 9, 'completed', '5 chicken road', 11, 5, '2020-03-22 14:00:00', '2020-03-22 15:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -344,7 +344,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (12, 20, 'delivering', '5 chin road', 12, 5, '2020-03-25 16:00:00', '2020-03-25 17:00:00', 5);
+    (12, 20, 'completed', '5 chin road', 12, 5, '2020-03-25 16:00:00', '2020-03-25 17:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -358,7 +358,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (13, 90, 'delivering', '6 test road', 13, 4, '2020-03-28 15:00:00', '2020-03-28 16:00:00', 5);
+    (13, 90, 'completed', '6 test road', 13, 4, '2020-03-28 15:00:00', '2020-03-28 16:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -376,7 +376,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (14, 40, 'delivering', '6 avenue road', 14, 4, '2020-03-26 14:00:00', '2020-03-26 15:00:00', 5);
+    (14, 40, 'completed', '6 avenue road', 14, 4, '2020-03-26 14:00:00', '2020-03-26 15:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -390,7 +390,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (15, 50, 'delivering', '6 chin road', 15, 3, '2020-03-27 19:00:00', '2020-03-27 22:00:00', 5);
+    (15, 50, 'completed', '6 chin road', 15, 3, '2020-03-27 19:00:00', '2020-03-27 22:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -404,7 +404,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (16, 18, 'delivering', '8 chicken road', 16, 5, '2020-03-28 12:00:00', '2020-03-28 13:00:00', 5);
+    (16, 18, 'completed', '8 chicken road', 16, 5, '2020-03-28 12:00:00', '2020-03-28 13:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -426,7 +426,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (17, 40, 'delivering', '8 henderson road', 17, 5, '2020-03-28 11:00:00', '2020-03-28 12:00:00', 5);
+    (17, 40, 'completed', '8 henderson road', 17, 5, '2020-03-28 11:00:00', '2020-03-28 12:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -444,7 +444,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (18, 54, 'delivering', '8 henderson road', 18, 5, '2020-03-28 10:00:00', '2020-03-28 11:00:00', 5);
+    (18, 54, 'completed', '8 henderson road', 18, 5, '2020-03-28 10:00:00', '2020-03-28 11:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -466,7 +466,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (19, 80, 'delivering', '9 henderson road', 19, 4, '2020-03-28 15:00:00', '2020-03-28 16:00:00', 5);
+    (19, 80, 'completed', '9 henderson road', 19, 4, '2020-03-28 15:00:00', '2020-03-28 16:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -484,7 +484,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (20, 12, 'delivering', '10 henderson road', 20, 4, '2020-03-30 16:00:00', '2020-03-30 17:00:00', 5);
+    (20, 12, 'completed', '10 henderson road', 20, 4, '2020-03-30 16:00:00', '2020-03-30 17:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -502,7 +502,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (21, 9, 'delivering', '5 chicken road', 21, 5, '2020-03-30 17:00:00', '2020-03-30 18:00:00', 5);
+    (21, 9, 'completed', '5 chicken road', 21, 5, '2020-03-30 17:00:00', '2020-03-30 18:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -520,7 +520,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (22, 20, 'delivering', '5 chin road', 22, 5, '2020-03-31 16:00:00', '2020-03-31 17:00:00', 5);
+    (22, 20, 'completed', '5 chin road', 22, 5, '2020-03-31 16:00:00', '2020-03-31 17:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -534,7 +534,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (23, 90, 'delivering', '6 test road', 23, 4, '2020-03-31 11:00:00', '2020-03-31 12:00:00', 5);
+    (23, 90, 'completed', '6 test road', 23, 4, '2020-03-31 11:00:00', '2020-03-31 12:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -552,7 +552,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (24, 40, 'delivering', '6 avenue road', 24, 4, '2020-03-31 20:00:00', '2020-03-31 21:00:00', 5);
+    (24, 40, 'completed', '6 avenue road', 24, 4, '2020-03-31 20:00:00', '2020-03-31 21:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -566,7 +566,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (25, 50, 'delivering', '6 chin road', 25, 3, '2020-03-31 19:00:00', '2020-03-31 22:00:00', 5);
+    (25, 50, 'completed', '6 chin road', 25, 3, '2020-03-31 19:00:00', '2020-03-31 22:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -581,7 +581,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (26, 9, 'delivering', '5 chicken road', 1, 5, '2020-04-01 10:00:00', '2020-04-01 15:00:00', 5);
+    (26, 9, 'completed', '5 chicken road', 1, 5, '2020-04-01 10:00:00', '2020-04-01 15:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -599,7 +599,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (27, 20, 'delivering', '6 chin road', 2, 5, '2020-04-02 11:00:00', '2020-04-02 15:00:00', 5);
+    (27, 20, 'completed', '6 chin road', 2, 5, '2020-04-02 11:00:00', '2020-04-02 15:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -614,7 +614,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (28, 90, 'delivering', '6 test road', 3, 4, '2020-04-05 18:00:00', '2020-04-05 22:00:00', 5);
+    (28, 90, 'completed', '6 test road', 3, 4, '2020-04-05 18:00:00', '2020-04-05 22:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -632,7 +632,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (29, 40, 'delivering', '6 avenue road', 4, 4, '2020-04-06 14:00:00', '2020-04-06 15:00:00', 5);
+    (29, 40, 'completed', '6 avenue road', 4, 4, '2020-04-06 14:00:00', '2020-04-06 15:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -646,7 +646,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (30, 50, 'delivering', '6 chin road', 5, 3, '2020-04-07 18:00:00', '2020-04-07 22:00:00', 5);
+    (30, 50, 'completed', '6 chin road', 5, 3, '2020-04-07 18:00:00', '2020-04-07 22:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -660,7 +660,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (31, 18, 'delivering', '8 chicken road', 6, 5, '2020-04-10 11:00:00', '2020-04-10 12:00:00', 5);
+    (31, 18, 'completed', '8 chicken road', 6, 5, '2020-04-10 11:00:00', '2020-04-10 12:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -682,7 +682,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (32, 40, 'delivering', '8 henderson road', 7, 5, '2020-04-11 12:00:00', '2020-04-11 13:00:00', 5);
+    (32, 40, 'completed', '8 henderson road', 7, 5, '2020-04-11 12:00:00', '2020-04-11 13:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -700,7 +700,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (33, 54, 'delivering', '8 henderson road', 8, 5, '2020-04-12 13:00:00', '2020-04-12 14:00:00', 5);
+    (33, 54, 'completed', '8 henderson road', 8, 5, '2020-04-12 13:00:00', '2020-04-12 14:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -722,7 +722,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (34, 80, 'delivering', '9 henderson road', 9, 4, '2020-04-12 15:00:00', '2020-04-12 16:00:00', 5);
+    (34, 80, 'completed', '9 henderson road', 9, 4, '2020-04-12 15:00:00', '2020-04-12 16:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -740,7 +740,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (35, 12, 'delivering', '10 henderson road', 10, 4, '2020-04-13 11:00:00', '2020-04-13 12:00:00', 5);
+    (35, 12, 'completed', '10 henderson road', 10, 4, '2020-04-13 11:00:00', '2020-04-13 12:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -758,7 +758,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (36, 9, 'delivering', '5 chicken road', 11, 5, '2020-04-14 14:00:00', '2020-04-14 15:00:00', 5);
+    (36, 9, 'completed', '5 chicken road', 11, 5, '2020-04-14 14:00:00', '2020-04-14 15:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -776,7 +776,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (37, 20, 'delivering', '5 chin road', 12, 5, '2020-04-15 16:00:00', '2020-04-15 17:00:00', 5);
+    (37, 20, 'completed', '5 chin road', 12, 5, '2020-04-15 16:00:00', '2020-04-15 17:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -790,7 +790,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (38, 90, 'delivering', '6 test road', 13, 4, '2020-04-17 15:00:00', '2020-04-17 16:00:00', 5);
+    (38, 90, 'completed', '6 test road', 13, 4, '2020-04-17 15:00:00', '2020-04-17 16:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -808,7 +808,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (39, 40, 'delivering', '6 avenue road', 14, 4, '2020-04-16 14:00:00', '2020-04-16 15:00:00', 5);
+    (39, 40, 'completed', '6 avenue road', 14, 4, '2020-04-16 14:00:00', '2020-04-16 15:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -822,7 +822,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (40, 50, 'delivering', '6 chin road', 15, 3, '2020-04-17 19:00:00', '2020-04-17 22:00:00', 5);
+    (40, 50, 'completed', '6 chin road', 15, 3, '2020-04-17 19:00:00', '2020-04-17 22:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -836,7 +836,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (41, 20, 'delivering', '8 chicken road', 16, 5, '2020-04-20 14:00:00', '2020-04-20 15:00:00', 5);
+    (41, 20, 'completed', '8 chicken road', 16, 5, '2020-04-20 14:00:00', '2020-04-20 15:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -854,7 +854,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (42, 40, 'delivering', '8 henderson road', 17, 5, '2020-04-21 11:00:00', '2020-04-21 12:00:00', 5);
+    (42, 40, 'completed', '8 henderson road', 17, 5, '2020-04-21 11:00:00', '2020-04-21 12:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -872,7 +872,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (43, 54, 'delivering', '8 henderson road', 18, 5, '2020-04-22 10:00:00', '2020-04-22 11:00:00', 5);
+    (43, 54, 'completed', '8 henderson road', 18, 5, '2020-04-22 10:00:00', '2020-04-22 11:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -894,7 +894,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (44, 80, 'delivering', '9 henderson road', 19, 4, '2020-04-23 15:00:00', '2020-04-23 16:00:00', 5);
+    (44, 80, 'completed', '9 henderson road', 19, 4, '2020-04-23 15:00:00', '2020-04-23 16:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -912,7 +912,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (45, 12, 'delivering', '10 henderson road', 20, 4, '2020-04-24 16:00:00', '2020-04-24 17:00:00', 5);
+    (45, 12, 'completed', '10 henderson road', 20, 4, '2020-04-24 16:00:00', '2020-04-24 17:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -930,7 +930,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (46, 9, 'delivering', '5 chicken road', 21, 5, '2020-04-25 17:00:00', '2020-04-25 18:00:00', 5);
+    (46, 9, 'completed', '5 chicken road', 21, 5, '2020-04-25 17:00:00', '2020-04-25 18:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -948,7 +948,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (47, 20, 'delivering', '5 chin road', 22, 5, '2020-04-26 16:00:00', '2020-04-26 17:00:00', 5);
+    (47, 20, 'completed', '5 chin road', 22, 5, '2020-04-26 16:00:00', '2020-04-26 17:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -962,7 +962,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (48, 90, 'delivering', '6 test road', 23, 4, '2020-04-27 11:00:00', '2020-04-27 12:00:00', 5);
+    (48, 90, 'completed', '6 test road', 23, 4, '2020-04-27 11:00:00', '2020-04-27 12:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -980,7 +980,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (49, 40, 'delivering', '6 avenue road', 24, 4, '2020-04-28 20:00:00', '2020-04-28 21:00:00', 5);
+    (49, 40, 'completed', '6 avenue road', 24, 4, '2020-04-28 20:00:00', '2020-04-28 21:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -994,7 +994,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (50, 50, 'delivering', '6 chin road', 25, 3, '2020-04-29 19:00:00', '2020-04-29 22:00:00', 5);
+    (50, 50, 'completed', '6 chin road', 25, 3, '2020-04-29 19:00:00', '2020-04-29 22:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -1008,7 +1008,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (51, 18, 'delivering', '8 chicken road', 16, 5, '2020-05-01 14:00:00', '2020-05-01 15:00:00', 5);
+    (51, 18, 'completed', '8 chicken road', 16, 5, '2020-05-01 14:00:00', '2020-05-01 15:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -1030,7 +1030,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (52, 40, 'delivering', '8 henderson road', 17, 5, '2020-05-01 11:00:00', '2020-05-01 12:00:00', 5);
+    (52, 40, 'completed', '8 henderson road', 17, 5, '2020-05-01 11:00:00', '2020-05-01 12:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -1048,7 +1048,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (53, 54, 'delivering', '8 henderson road', 18, 5, '2020-05-02 10:00:00', '2020-05-02 11:00:00', 5);
+    (53, 54, 'completed', '8 henderson road', 18, 5, '2020-05-02 10:00:00', '2020-05-02 11:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -1070,7 +1070,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (54, 64, 'delivering', '9 henderson road', 19, 4, '2020-05-02 15:00:00', '2020-05-02 16:00:00', 5);
+    (54, 64, 'completed', '9 henderson road', 19, 4, '2020-05-02 15:00:00', '2020-05-02 16:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -1092,7 +1092,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (55, 9.60, 'delivering', '10 henderson road', 20, 4, '2020-05-03 16:00:00', '2020-05-03 17:00:00', 5);
+    (55, 9.60, 'completed', '10 henderson road', 20, 4, '2020-05-03 16:00:00', '2020-05-03 17:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -1114,7 +1114,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (56, 9, 'delivering', '5 chicken road', 21, 5, '2020-05-03 17:00:00', '2020-05-03 18:00:00', 5);
+    (56, 9, 'completed', '5 chicken road', 21, 5, '2020-05-03 17:00:00', '2020-05-03 18:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -1132,7 +1132,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (57, 16, 'delivering', '5 chin road', 22, 5, '2020-05-04 16:00:00', '2020-05-04 17:00:00', 5);
+    (57, 16, 'completed', '5 chin road', 22, 5, '2020-05-04 16:00:00', '2020-05-04 17:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -1150,7 +1150,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (58, 72, 'delivering', '6 test road', 23, 4, '2020-05-04 11:00:00', '2020-05-04 12:00:00', 5);
+    (58, 72, 'completed', '6 test road', 23, 4, '2020-05-04 11:00:00', '2020-05-04 12:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -1172,7 +1172,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (59, 36, 'delivering', '6 avenue road', 24, 4, '2020-05-05 20:00:00', '2020-05-05 21:00:00', 5);
+    (59, 36, 'completed', '6 avenue road', 24, 4, '2020-05-05 20:00:00', '2020-05-05 21:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -1190,7 +1190,7 @@ VALUES
 INSERT INTO orders
     (order_id, total_cost, status, delivery_location, customer_id, rating, created_at, modified_at, delivery_fee)
 VALUES
-    (60, 45, 'delivering', '6 chin road', 25, 3, '2020-05-05 19:00:00', '2020-05-05 22:00:00', 5);
+    (60, 45, 'completed', '6 chin road', 25, 3, '2020-05-05 19:00:00', '2020-05-05 22:00:00', 5);
 INSERT INTO delivers
     (delivery_id, rider_id, order_id, departure_time, arrival_time, collection_time, completion_time)
 VALUES
@@ -1203,10 +1203,6 @@ INSERT INTO applies
     (promo_id, order_id)
 VALUES
     (5, 60);
-
-UPDATE Orders
-SET status = 'completed'
-WHERE status = 'delivering'; 
 
 SELECT setval('orders_order_id_seq', (SELECT MAX(order_id) from "orders")); 
 SELECT setval('delivers_delivery_id_seq', (SELECT MAX(delivery_id) from "delivers")); 

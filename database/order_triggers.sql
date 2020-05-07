@@ -60,7 +60,7 @@ $$ LANGUAGE plpgsql;
 
 DROP TRIGGER IF EXISTS complete_delivery_order_customer_trigger ON orders CASCADE;
 CREATE TRIGGER complete_delivery_order_customer_trigger 
-    AFTER UPDATE OF status
+    AFTER UPDATE OF status OR INSERT
     ON orders
     FOR EACH ROW
     WHEN (NEW.status = 'completed')
