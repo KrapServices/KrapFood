@@ -28,7 +28,7 @@ const getRestaurantWithFood = async (restaurant) => {
   await Promise.all(foods.map(async (food) => {
     const reviews = (await query(
       `
-      SELECT review_id, customer_id, review 
+      SELECT customer_id, review 
       FROM food_reviews 
       where restaurant_id = $1 
       and food_name = $2

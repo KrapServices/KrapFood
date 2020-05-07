@@ -4,8 +4,7 @@
     "create_restaurants.sql",
     "create_user.sql",
     "create_orders.sql",
-    "create_schedules.sql",
-    "reviews.sql"
+    "create_schedules.sql"
   ],
   "triggers": [
     "order_triggers.sql",
