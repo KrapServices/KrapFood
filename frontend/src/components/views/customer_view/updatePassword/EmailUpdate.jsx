@@ -63,7 +63,7 @@ class EmailUpdate extends Component {
             paddingRight: '35vw',
           }}
         >
-          <Header size="huge">Update name</Header>
+          <Header size="huge">Update Email</Header>
           <Form
             loading={loading}
             success={success}
