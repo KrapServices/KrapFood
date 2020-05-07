@@ -179,7 +179,7 @@ const getRiderStats = async (request, response) => {
         FROM delivers d JOIN orders o on d.order_id = o.order_id and o.status = 'completed'
         WHERE o.created_at >= $2 AND o.created_at <= $3
         GROUP BY d.rider_id
-      ), 
+    ),
       rider_hours AS (
         SELECT rider_id,
         CASE 
@@ -201,24 +201,35 @@ const getRiderStats = async (request, response) => {
         WHERE o.order_id = d.order_id
         AND o.created_at >= $2 AND o.created_at <= $3
         GROUP BY d.rider_id
+      ),   
+      rider_pay AS ( 
+        SELECT distinct r.rider_id,  
+        CASE 
+        WHEN r.rider_id in (select rider_id from full_time_riders) THEN 
+            (SELECT ft.base_salary * ((EXTRACT(YEAR FROM $3) - EXTRACT(YEAR FROM $2)) * 12 + (EXTRACT(MONTH FROM $3) - EXTRACT(MONTH FROM $2)))
+            FROM full_time_riders ft
+            WHERE ft.rider_id = r.rider_id)
+        WHEN r.rider_id in (select rider_id from part_time_riders) THEN 
+            (SELECT pt.salary_per_hour * rh.hours 
+            FROM part_time_riders pt, rider_hours rh
+            WHERE rh.rider_id = r.rider_id AND rh.rider_id = pt.rider_id
+            )
+        END AS pay
+        FROM riders r, rider_commission rc
       )
-      SELECT d.rider_id, rh.hours AS total_hours, oc.total_orders AS total_orders, rc.commission + 
-      CASE 
-        WHEN d.rider_id IN (SELECT rider_id FROM part_time_riders) THEN
-          (SELECT PT.salary_per_hour * rh.hours
-           FROM part_time_riders PT, rider_hours rh)
-        WHEN d.rider_id IN (SELECT rider_id FROM full_time_riders) THEN
-        (SELECT ft.base_salary
-        FROM full_time_riders ft)
-      END AS rider_pay
-      FROM ((delivers d JOIN rider_hours rh ON d.rider_id = rh.rider_id) JOIN order_count oc ON oc.rider_id = rh.rider_id) JOIN rider_commission rc ON rc.rider_id = rh.rider_id
-      WHERE d.rider_id = $1
+      SELECT COALESCE(rp.pay, 0) AS rider_pay, COALESCE(rh.hours, 0) AS rider_hours, COALESCE(oc.total_orders, 0) AS total_orders
+      FROM rider_pay rp, rider_hours rh, order_count oc
+      WHERE rp.rider_id =rh.rider_id AND rp.rider_id = oc.rider_id AND rp.rider_id = $1;
       `, [riderId, new Date(parseInt(startDate, 10)), new Date(parseInt(endDate, 10))],
     )).rows.map((rider) => ({
       orderCount: rider.total_orders,
       totalPay: rider.rider_pay,
-      totalHours: rider.total_hours,
+      totalHours: rider.rider_hours,
     }));
+
+    if (stats.length === 0) {
+      stats.push({ orderCount: '0', totalPay: '0', totalHours: '0' });
+    }
     response.status(200).json(stats);
   } catch (error) {
     console.error(error);
