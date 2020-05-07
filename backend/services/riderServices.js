@@ -217,7 +217,7 @@ const getRiderStats = async (request, response) => {
         END AS pay
         FROM riders r, rider_commission rc
       )
-      SELECT rp.pay AS rider_pay, rh.hours AS rider_hours, oc.total_orders AS total_orders
+      SELECT COALESCE(rp.pay, 0) AS rider_pay, COALESCE(rh.hours, 0) AS rider_hours, COALESCE(oc.total_orders, 0) AS total_orders
       FROM rider_pay rp, rider_hours rh, order_count oc
       WHERE rp.rider_id =rh.rider_id AND rp.rider_id = oc.rider_id AND rp.rider_id = $1;
       `, [riderId, new Date(parseInt(startDate, 10)), new Date(parseInt(endDate, 10))],
@@ -226,8 +226,11 @@ const getRiderStats = async (request, response) => {
       totalPay: rider.rider_pay,
       totalHours: rider.rider_hours,
     }));
+
+    if (stats.length === 0) {
+      stats.push({ orderCount: '0', totalPay: '0', totalHours: '0' });
+    }
     response.status(200).json(stats);
-    console.log(stats);
   } catch (error) {
     console.error(error);
     response.status(500).send('unable to retrieve rider stats');
