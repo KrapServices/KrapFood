@@ -50,3 +50,31 @@ We will build the database and start the backend server
 4. Type `npm start` to start the backend application on **localhost:5000**
 
 *The application should be running in your browser now*
+
+#### Testing
+Testing for customer:
+- Login with email address **c0** and password **p0**
+
+Testing for staff:
+- Login with email address **nunc.risus.varius@feugiatSed.ca** and password **IQR03DAC6ZB**
+
+Testing for rider:
+- Login with email address **malesuada@Aeneangravidanunc.org** and password **password**
+
+Testing for manager:
+- Login with email address **et@iaculis.com** and password **password**
+
+Testing for orders:
+1. Login with the given email address and password for the customer above. 
+2. Click on the tab **Order Food** and select restaurant **Macdonner**. Place an order from them.
+3. Log out of customer and log in to staff with the given email address and password for the staff above.
+4. Click on the tab **Update Orders** and click on **Ready to deliver**. The order is identified by the **order_id** at the left side of the entry.
+5. Perform a query on the database to retrieve the rider email and password for login as follows, with the placeholder `$1` replaced by the **order_id**:
+`SELECT email, password
+FROM Users U JOIN Riders R ON U.user_id = R.rider_id
+JOIN Delivers D ON R.rider_id = D.rider_id
+WHERE D.order_id = $1`
+6. Login to riders with the email and password retrieved from the query.
+7. Click on the **Assigned Orders** tab.
+8. Click on **depart to collect**, **I have arrived**, **depart from restaurant** and **Complete Delivery** sequentially. The buttons will appear in order.
+9. The order is now completed and will be reflected under the completed orders section for both the rider and customer.
