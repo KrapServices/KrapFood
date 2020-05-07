@@ -13,7 +13,7 @@ class StaffAddFood extends Component {
     this.state = {
       category: '',
       foodName: '',
-      dailyLimit: 10,
+      dailyLimit: null,
       availability: true,
       price: '',
       restaurantId: '',
@@ -63,7 +63,7 @@ class StaffAddFood extends Component {
       this.setState({
         category: '',
         foodName: '',
-        dailyLimit: 10,
+        dailyLimit: null,
         availability: true,
         price: '',
         restaurantId: '',
