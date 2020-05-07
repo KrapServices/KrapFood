@@ -22,11 +22,13 @@ class RiderSummary extends React.Component {
 
     const primitiveStartDate = new Date(startDate).valueOf();
     const primitiveEndDate = new Date(endDate).valueOf();
+    console.log(primitiveStartDate);
 
     const url = `${config.localhost}riders/${rider_id}/ridersummary/?startDate=${primitiveStartDate}&endDate=${primitiveEndDate}`;
     const response = (await axios.get(url));
     const summary = response.data;
-
+    console.log(summary[0]);
+    console.log('test');
     this.setState({
       riderStats: summary[0],
     });
