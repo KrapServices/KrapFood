@@ -60,7 +60,7 @@ $$ LANGUAGE plpgsql;
 
 DROP TRIGGER IF EXISTS complete_delivery_order_customer_trigger ON orders CASCADE;
 CREATE TRIGGER complete_delivery_order_customer_trigger 
-    AFTER UPDATE OF status
+    AFTER UPDATE OF status OR INSERT
     ON orders
     FOR EACH ROW
     WHEN (NEW.status = 'completed')
@@ -166,6 +166,11 @@ BEGIN
     IF (NEW.daily_limit = 0) THEN
         UPDATE foods
         SET availability = false
+        WHERE restaurant_id = NEW.restaurant_id AND food_name = NEW.food_name;
+    END IF;
+    IF (NEW.daily_limit > 0) THEN
+        UPDATE foods
+        SET availability = TRUE
         WHERE restaurant_id = NEW.restaurant_id AND food_name = NEW.food_name;
     END IF;
     RETURN NULL;
