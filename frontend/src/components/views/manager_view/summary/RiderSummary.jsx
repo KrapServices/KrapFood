@@ -20,6 +20,11 @@ monthString[9] = 'October';
 monthString[10] = 'November';
 monthString[11] = 'December';
 
+function formatDeliveryTime(seconds) {
+  const minuteString = Math.floor(seconds / 60).toString();
+  return `${minuteString} minutes`;
+}
+
 class RiderSummary extends Component {
   constructor() {
     super();
@@ -125,7 +130,7 @@ class RiderSummary extends Component {
                       <Table.Cell>{hours}</Table.Cell>
                       <Table.Cell>{orderCount}</Table.Cell>
                       <Table.Cell>{pay}</Table.Cell>
-                      <Table.Cell>{(deliveryTime === null) ? '-' : deliveryTime}</Table.Cell>
+                      <Table.Cell>{(deliveryTime === null) ? '-' : formatDeliveryTime(deliveryTime)}</Table.Cell>
                       <Table.Cell>{(noRating === null) ? '-' : noRating}</Table.Cell>
                       <Table.Cell>{(avgRating === null) ? '-' : Number(avgRating).toFixed(2)}</Table.Cell>
                     </Table.Row>
