@@ -179,7 +179,7 @@ class CustomerOrderFood extends Component {
             </Segment>
             <Segment attached="bottom" color="grey">
               <Button.Group>
-                <Button icon="delete" content="clear" onClick={() => this.clearCart()} />
+                <Button icon="delete" content="Clear" onClick={() => this.clearCart()} />
                 <Button.Or />
                 <Button content="Confirm Order" color="green" onClick={() => this.openPayment()} disabled={this.minimum()} />
               </Button.Group>

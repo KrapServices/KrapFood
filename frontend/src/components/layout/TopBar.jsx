@@ -109,7 +109,7 @@ class TopBar extends Component {
                     <>
                       <Menu.Item as={Link} to="/login">
                         <Icon name="sign in" color="green" />
-                        Log in
+                        Login
                       </Menu.Item>
                       <Menu.Item as={Link} to="/sign-up">
                         <Icon name="signup" color="blue" />

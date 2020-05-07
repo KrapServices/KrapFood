@@ -13,7 +13,9 @@ import { Link, withRouter } from 'react-router-dom';
 import Axios from 'axios';
 import userContext from '../../../userContext';
 import config from '../../../config.json';
+
 const src1 = require('./milk.png');
+
 class ManagerSignup extends Component {
   constructor(props) {
     super(props);
@@ -83,11 +85,11 @@ class ManagerSignup extends Component {
         >
           <Grid.Column>
             <Header as="h1" to="/">
-            <Image src={src1}></Image>
+              <Image src={src1} />
               KrapFood
             </Header>
             <Header as="h2" color="teal" textAlign="center">
-              Sign-Up
+              Sign Up
             </Header>
 
             <Form size="large">
@@ -117,7 +119,7 @@ class ManagerSignup extends Component {
                   compact
                   onClick={this.handleSubmitMg}
                 >
-                  <Button.Content visible>Sign-up!</Button.Content>
+                  <Button.Content visible>Sign up!</Button.Content>
                 </Button>
               </Segment>
             </Form>

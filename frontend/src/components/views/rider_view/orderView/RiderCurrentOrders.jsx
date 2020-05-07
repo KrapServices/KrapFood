@@ -96,7 +96,7 @@ class RiderCurrentOrders extends Component {
               <Table padded>
                 <Table.Header>
                   <Table.Row>
-                    <Table.HeaderCell>Order Id</Table.HeaderCell>
+                    <Table.HeaderCell>Order ID</Table.HeaderCell>
                     <Table.HeaderCell>Status</Table.HeaderCell>
                     <Table.HeaderCell>Delivery Location</Table.HeaderCell>
                     <Table.HeaderCell>Total Cost</Table.HeaderCell>
@@ -110,7 +110,10 @@ class RiderCurrentOrders extends Component {
                       <Table.Cell>{order.order_id}</Table.Cell>
                       <Table.Cell>{order.status}</Table.Cell>
                       <Table.Cell>{order.delivery_location}</Table.Cell>
-                      <Table.Cell>{order.total_cost}</Table.Cell>
+                      <Table.Cell>
+                        $
+                        {order.total_cost}
+                      </Table.Cell>
                       <Table.Cell><Button color="orange" onClick={() => this.departToRestaurant(order)}>Depart To Collect</Button></Table.Cell>
                     </Table.Row>
                   ))}
@@ -123,7 +126,7 @@ class RiderCurrentOrders extends Component {
               <Table padded>
                 <Table.Header>
                   <Table.Row>
-                    <Table.HeaderCell>Order Id</Table.HeaderCell>
+                    <Table.HeaderCell>Order ID</Table.HeaderCell>
                     <Table.HeaderCell>Status</Table.HeaderCell>
                     <Table.HeaderCell>Delivery Location</Table.HeaderCell>
                     <Table.HeaderCell>Total Cost</Table.HeaderCell>
@@ -137,7 +140,10 @@ class RiderCurrentOrders extends Component {
                       <Table.Cell>{order.order_id}</Table.Cell>
                       <Table.Cell>{order.status}</Table.Cell>
                       <Table.Cell>{order.delivery_location}</Table.Cell>
-                      <Table.Cell>{order.total_cost}</Table.Cell>
+                      <Table.Cell>
+                        $
+                        {order.total_cost}
+                      </Table.Cell>
                       <Table.Cell />
                       <Table.Cell><Button color="blue" onClick={() => this.arrive(order)}>I have arrived</Button></Table.Cell>
                     </Table.Row>
@@ -153,7 +159,7 @@ class RiderCurrentOrders extends Component {
               <Table padded>
                 <Table.Header>
                   <Table.Row>
-                    <Table.HeaderCell>Order Id</Table.HeaderCell>
+                    <Table.HeaderCell>Order ID</Table.HeaderCell>
                     <Table.HeaderCell>Status</Table.HeaderCell>
                     <Table.HeaderCell>Delivery Location</Table.HeaderCell>
                     <Table.HeaderCell>Total Cost</Table.HeaderCell>
@@ -168,7 +174,10 @@ class RiderCurrentOrders extends Component {
                       <Table.Cell>{order.order_id}</Table.Cell>
                       <Table.Cell>{order.status}</Table.Cell>
                       <Table.Cell>{order.delivery_location}</Table.Cell>
-                      <Table.Cell>{order.total_cost}</Table.Cell>
+                      <Table.Cell>
+                        $
+                        {order.total_cost}
+                      </Table.Cell>
                       <Table.Cell />
                       <Table.Cell><Button color="blue" onClick={() => this.departFromRestaurant(order)}>Depart From Restaurant</Button></Table.Cell>
                     </Table.Row>
@@ -182,7 +191,7 @@ class RiderCurrentOrders extends Component {
           <Table padded>
             <Table.Header>
               <Table.Row>
-                <Table.HeaderCell>Order Id</Table.HeaderCell>
+                <Table.HeaderCell>Order ID</Table.HeaderCell>
                 <Table.HeaderCell>Status</Table.HeaderCell>
                 <Table.HeaderCell>Delivery Location</Table.HeaderCell>
                 <Table.HeaderCell>Total Cost</Table.HeaderCell>
@@ -197,7 +206,10 @@ class RiderCurrentOrders extends Component {
                   <Table.Cell>{order.order_id}</Table.Cell>
                   <Table.Cell>{order.status}</Table.Cell>
                   <Table.Cell>{order.delivery_location}</Table.Cell>
-                  <Table.Cell>{order.total_cost}</Table.Cell>
+                  <Table.Cell>
+                    $
+                    {order.total_cost}
+                  </Table.Cell>
                   <Table.Cell />
                   <Table.Cell><Button color="green" onClick={() => this.changeOrderStatusCompleted(order)}>Complete Delivery</Button></Table.Cell>
                 </Table.Row>
@@ -209,7 +221,7 @@ class RiderCurrentOrders extends Component {
           <Table padded>
             <Table.Header>
               <Table.Row>
-                <Table.HeaderCell>Order Id</Table.HeaderCell>
+                <Table.HeaderCell>Order ID</Table.HeaderCell>
                 <Table.HeaderCell>Status</Table.HeaderCell>
                 <Table.HeaderCell>Delivery Location</Table.HeaderCell>
                 <Table.HeaderCell>Total Cost</Table.HeaderCell>
@@ -222,7 +234,10 @@ class RiderCurrentOrders extends Component {
                   <Table.Cell>{order.order_id}</Table.Cell>
                   <Table.Cell>{order.status}</Table.Cell>
                   <Table.Cell>{order.delivery_location}</Table.Cell>
-                  <Table.Cell>{order.total_cost}</Table.Cell>
+                  <Table.Cell>
+                    $
+                    {order.total_cost}
+                  </Table.Cell>
                 </Table.Row>
               ))}
             </Table.Body>

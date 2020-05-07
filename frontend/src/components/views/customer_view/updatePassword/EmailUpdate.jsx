@@ -76,7 +76,7 @@ class EmailUpdate extends Component {
                 value={newEmail}
                 label="Enter New Email"
                 type="text"
-                placeholder="Enter new Email"
+                placeholder="Enter new email"
                 required
                 onChange={(event, data) => this.handleChange(event, data)}
               />

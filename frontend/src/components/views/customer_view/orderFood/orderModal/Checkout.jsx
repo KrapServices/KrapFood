@@ -200,7 +200,7 @@ class Checkout extends Component {
                       Discount:
                       {' '}
                       {appliedPromo.discount}
-                      <Button floated="right" color="red" onClick={() => this.removeCustomerPromotion(appliedPromo)}>remove</Button>
+                      <Button floated="right" color="red" onClick={() => this.removeCustomerPromotion(appliedPromo)}>Remove</Button>
                     </Segment>
                   ))}
                 </Segment>
@@ -230,7 +230,7 @@ class Checkout extends Component {
       if (Array.from(customerPromotionsApplied).length !== 0) {
         const totalCustomerPromoDiscount = Array.from(customerPromotionsApplied)
           .map((x) => x.discount).reduce((prev, curr) => Number(prev) + Number(curr), 0);
-        result = result - (result *= (totalCustomerPromoDiscount / 100));
+        result -= (result *= (totalCustomerPromoDiscount / 100));
       }
       const final = result + deliveryFee - pointsToRedeem;
       return final;

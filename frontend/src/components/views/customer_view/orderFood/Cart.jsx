@@ -31,7 +31,7 @@ class Cart extends Component {
                   </strong>
                 </Card.Description>
                 <Card.Content>
-                  <Button color="red" onClick={() => removeFromCart(index)}>remove</Button>
+                  <Button color="red" onClick={() => removeFromCart(index)}>Remove</Button>
                 </Card.Content>
               </Card>
             </List.Item>

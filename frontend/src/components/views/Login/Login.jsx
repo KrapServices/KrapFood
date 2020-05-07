@@ -11,6 +11,7 @@ import {
 import { Link, withRouter } from 'react-router-dom';
 import ReactRouterPropTypes from 'react-router-prop-types';
 import userContext from '../../../userContext';
+
 const src1 = require('./milk.png');
 
 class Login extends Component {
@@ -101,7 +102,7 @@ class Login extends Component {
         >
           <Grid.Column style={{ maxWidth: 450 }}>
             <Header as="h1" to="/">
-              <Image src={src1}></Image>
+              <Image src={src1} />
               KrapFood
             </Header>
             <Header as="h2" color="teal" textAlign="center">
@@ -178,7 +179,7 @@ class Login extends Component {
               <Message.Content>
                 <br />
                 <Button as={Link} color="red" to="/">
-                  Back to Home
+                  Back to home
                 </Button>
                 <Button primary size="small" as={Link} to="/sign-up">
                   Sign up!

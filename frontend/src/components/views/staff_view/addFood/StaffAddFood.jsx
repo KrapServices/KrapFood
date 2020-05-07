@@ -13,7 +13,7 @@ class StaffAddFood extends Component {
     this.state = {
       category: '',
       foodName: '',
-      dailyLimit: 10000000,
+      dailyLimit: 10,
       availability: true,
       price: '',
       restaurantId: '',
@@ -63,7 +63,7 @@ class StaffAddFood extends Component {
       this.setState({
         category: '',
         foodName: '',
-        dailyLimit: 10000000,
+        dailyLimit: 10,
         availability: true,
         price: '',
         restaurantId: '',
@@ -85,7 +85,9 @@ class StaffAddFood extends Component {
   }
 
   render() {
-    const { menu, price, foodName, dailyLimit, category } = this.state;
+    const {
+      menu, price, foodName, dailyLimit, category,
+    } = this.state;
     return (
       <Grid columns={2} stackable>
         <Grid.Column>
@@ -101,9 +103,9 @@ class StaffAddFood extends Component {
               />
             </Form.Field>
             <Form.Field>
-              <Header>Daily Quantity</Header>
+              <Header>Daily Limit</Header>
               <input
-                placeholder="Daily Quantity"
+                placeholder="Daily Limit"
                 name="dailyLimit"
                 value={dailyLimit}
                 onChange={this.handleChange}
@@ -138,33 +140,34 @@ class StaffAddFood extends Component {
         <Grid.Column>
           <Header as="h1">Menu Items</Header>
           <Item.Group divided style={{ textAlign: 'left' }}>
-          {menu.map((food) => (
-            <Item key={{
+            {menu.map((food) => (
+              <Item key={{
                 restaurantId: food.restaurantId,
-                foodName: food.foodName
-              }}>
-              <Item.Image src="https://react.semantic-ui.com/images/wireframe/image.png" />
-              <Item.Content>
-                <Item.Header as="h1">{food.foodName}</Item.Header>
-                <Item.Description floated="left">
-                  Price:
-                  <b>{` ${food.price}`}</b>
-                  {' '}
-                  <br />
-                  Daily Limit:
-                  {' '}
-                  <b>{` ${food.dailyLimit}`}</b>
-                  {' '}
-                  <br />
-                  Category:
-                  {' '}
-                  <b>{` ${food.category}`}</b>
-                  {' '}
-                  <br />
-                  Available:
-                  <b>{food.availability ? <Icon name="checkmark" color="green" /> : <Icon name="cancel" color="red" />}</b>
-                  {' '}
-                  <br />
+                foodName: food.foodName,
+              }}
+              >
+                <Item.Image src="https://react.semantic-ui.com/images/wireframe/image.png" />
+                <Item.Content>
+                  <Item.Header as="h1">{food.foodName}</Item.Header>
+                  <Item.Description floated="left">
+                    Price:
+                    <b>{` ${food.price}`}</b>
+                    {' '}
+                    <br />
+                    Daily Limit:
+                    {' '}
+                    <b>{` ${food.dailyLimit}`}</b>
+                    {' '}
+                    <br />
+                    Category:
+                    {' '}
+                    <b>{` ${food.category}`}</b>
+                    {' '}
+                    <br />
+                    Available:
+                    <b>{food.availability ? <Icon name="checkmark" color="green" /> : <Icon name="cancel" color="red" />}</b>
+                    {' '}
+                    <br />
                   </Item.Description>
                 </Item.Content>
               </Item>

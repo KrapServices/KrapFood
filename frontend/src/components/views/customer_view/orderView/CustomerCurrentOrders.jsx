@@ -20,11 +20,11 @@ class CustomerCurrentOrders extends Component {
 
     return (
       <>
-        <Header as="h2">Current Orders being Prepared</Header>
+        <Header as="h2">Current Orders being prepared</Header>
         <Table padded>
           <Table.Header>
             <Table.Row>
-              <Table.HeaderCell>Order Id</Table.HeaderCell>
+              <Table.HeaderCell>Order ID</Table.HeaderCell>
               <Table.HeaderCell>Status</Table.HeaderCell>
               <Table.HeaderCell>Delivery Location</Table.HeaderCell>
               <Table.HeaderCell>Total Cost</Table.HeaderCell>
@@ -37,18 +37,21 @@ class CustomerCurrentOrders extends Component {
                 <Table.Cell>{order.order_id}</Table.Cell>
                 <Table.Cell>{order.status}</Table.Cell>
                 <Table.Cell>{order.delivery_location}</Table.Cell>
-                <Table.Cell>{order.total_cost}</Table.Cell>
+                <Table.Cell>
+                  $
+                  {order.total_cost}
+                </Table.Cell>
 
               </Table.Row>
             ))}
           </Table.Body>
         </Table>
         <br />
-        <Header as="h2">Current Orders being Delivered</Header>
+        <Header as="h2">Current Orders being delivered</Header>
         <Table padded>
           <Table.Header>
             <Table.Row>
-              <Table.HeaderCell>Order Id</Table.HeaderCell>
+              <Table.HeaderCell>Order ID</Table.HeaderCell>
               <Table.HeaderCell>Status</Table.HeaderCell>
               <Table.HeaderCell>Delivery Location</Table.HeaderCell>
               <Table.HeaderCell>Total Cost</Table.HeaderCell>
@@ -61,7 +64,10 @@ class CustomerCurrentOrders extends Component {
                 <Table.Cell>{order.order_id}</Table.Cell>
                 <Table.Cell>{order.status}</Table.Cell>
                 <Table.Cell>{order.delivery_location}</Table.Cell>
-                <Table.Cell>{order.total_cost}</Table.Cell>
+                <Table.Cell>
+                  $
+                  {order.total_cost}
+                </Table.Cell>
 
               </Table.Row>
             ))}
@@ -72,7 +78,7 @@ class CustomerCurrentOrders extends Component {
         <Table padded>
           <Table.Header>
             <Table.Row>
-              <Table.HeaderCell>Order Id</Table.HeaderCell>
+              <Table.HeaderCell>Order ID</Table.HeaderCell>
               <Table.HeaderCell>Status</Table.HeaderCell>
               <Table.HeaderCell>Delivery Location</Table.HeaderCell>
               <Table.HeaderCell>Total Cost</Table.HeaderCell>
@@ -88,7 +94,10 @@ class CustomerCurrentOrders extends Component {
                 <Table.Cell>{order.order_id}</Table.Cell>
                 <Table.Cell>{order.status}</Table.Cell>
                 <Table.Cell>{order.delivery_location}</Table.Cell>
-                <Table.Cell>{order.total_cost}</Table.Cell>
+                <Table.Cell>
+                  $
+                  {order.total_cost}
+                </Table.Cell>
                 <Table.Cell>{order.rating}</Table.Cell>
                 <Table.Cell>
                   {' '}

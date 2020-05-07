@@ -46,18 +46,19 @@ class CompletedOrderModal extends Component {
           <Header content="Completed Order" />
           <Modal.Content>
             <p>
-              Order Id:
+              Order ID:
               {' '}
               {order.order_id}
             </p>
             <p>
-              Order Delivery Location:
+              Delivery Location:
               {' '}
               {order.delivery_location}
             </p>
             <p>
-              Order Total cost:
+              Total Cost:
               {' '}
+              $
               {order.total_cost}
             </p>
             <p>

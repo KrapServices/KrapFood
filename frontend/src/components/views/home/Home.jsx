@@ -28,7 +28,7 @@ class Home extends Component {
         case 'manager':
           return <Manager />;
         default:
-          return <Message>Please log in to use our application</Message>;
+          return <Message>Please login to use our application</Message>;
       }
     };
 

@@ -137,10 +137,10 @@ class StaffUpdateFood extends Component {
                               />
                             </Form.Field>
                             <Form.Field>
-                              <Header>Daily Quantity</Header>
+                              <Header>Daily Limit</Header>
                               <input
                                 fluid
-                                placeholder="Daily Quantity"
+                                placeholder="Daily Limit"
                                 name="dailyLimit"
                                 value={dailyLimit}
                                 onChange={this.handleChange}

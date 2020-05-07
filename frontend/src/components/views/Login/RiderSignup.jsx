@@ -28,6 +28,7 @@ const shiftOptions = [
   },
 ];
 const src1 = require('./milk.png');
+
 class RiderSignup extends Component {
   onSelectChange(e) {
     console.log(e.target.value);
@@ -106,11 +107,11 @@ class RiderSignup extends Component {
         >
           <Grid.Column>
             <Header as="h1" to="/">
-            <Image src={src1}></Image>
+              <Image src={src1} />
               KrapFood
             </Header>
             <Header as="h2" color="teal" textAlign="center">
-              Sign-Up
+              Sign Up
             </Header>
 
             <Form size="large">
@@ -150,7 +151,7 @@ class RiderSignup extends Component {
                   compact
                   onClick={this.handleSubmitRd}
                 >
-                  <Button.Content visible>Sign-up!</Button.Content>
+                  <Button.Content visible>Sign up!</Button.Content>
                 </Button>
               </Segment>
             </Form>

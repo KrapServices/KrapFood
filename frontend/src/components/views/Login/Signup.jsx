@@ -142,11 +142,11 @@ class Signup extends Component {
         >
           <Grid.Column>
             <Header as="h1" to="/">
-              <Image src={src1}></Image>
+              <Image src={src1} />
               KrapFood
             </Header>
             <Header as="h2" color="teal" textAlign="center">
-              Sign-Up
+              Sign Up
             </Header>
 
             <Form size="large">
@@ -161,7 +161,7 @@ class Signup extends Component {
                     to="/customer-signup"
                   >
                     <Button.Content visible>Customer</Button.Content>
-                    <Button.Content hidden>Sign-up!</Button.Content>
+                    <Button.Content hidden>sign up!</Button.Content>
                   </Button>
                   <Button
                     color="green"
@@ -171,7 +171,7 @@ class Signup extends Component {
                     to="/rider-signup"
                   >
                     <Button.Content visible>Rider</Button.Content>
-                    <Button.Content hidden>Sign-up!</Button.Content>
+                    <Button.Content hidden>sign up!</Button.Content>
                   </Button>
                   <Button
                     color="yellow"
@@ -181,7 +181,7 @@ class Signup extends Component {
                     to="/staff-signup"
                   >
                     <Button.Content visible>Staff</Button.Content>
-                    <Button.Content hidden>Sign-up!</Button.Content>
+                    <Button.Content hidden>sign up!</Button.Content>
                   </Button>
                   <Button
                     color="teal"
@@ -191,7 +191,7 @@ class Signup extends Component {
                     to="/manager-signup"
                   >
                     <Button.Content visible>Manager</Button.Content>
-                    <Button.Content hidden>Sign-up!</Button.Content>
+                    <Button.Content hidden>sign up!</Button.Content>
                   </Button>
                 </Button.Group>
               </Segment>
@@ -202,10 +202,10 @@ class Signup extends Component {
                 <Message.Content>
                   <br />
                   <Button as={Link} color="red" to="/">
-                    Back to Home
+                    Back to home
                   </Button>
                   <Button primary size="small" as={Link} to="/login">
-                    Log in
+                    Login
                   </Button>
                 </Message.Content>
               </Message>

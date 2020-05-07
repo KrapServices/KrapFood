@@ -68,7 +68,7 @@ class DeliveryForm extends React.Component {
         <Header as="h2"> Delivery Location</Header>
         <Button style={{ marginTop: '25px', marginBottom: '25px' }} color="instagram" onClick={() => this.setState({ enterLocation: !enterLocation })} size="medium">
           {
-      enterLocation ? 'choose previous Locations' : 'enter new'
+      enterLocation ? 'Choose previous locations' : 'Enter new location'
     }
         </Button>
         { enterLocation

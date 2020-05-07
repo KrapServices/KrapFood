@@ -11,7 +11,7 @@ function ViewReviews(reviews) {
     return <p>No reviews yet!</p>;
   }
   return (
-    <Modal trigger={<Button>Browse Reviews!</Button>}>
+    <Modal trigger={<Button style={{ display: 'block' }}>Browse Reviews!</Button>}>
       <Modal.Header>Reviews by our customers</Modal.Header>
       <Modal.Content>
 
@@ -21,7 +21,7 @@ function ViewReviews(reviews) {
               const key = review + index;
               return (
                 <Segment key={key}>
-                  {`Review ${index}:  ${review.review}`}
+                  {`Review ${index + 1}:  ${review.review}`}
                 </Segment>
               );
             })}
@@ -78,7 +78,7 @@ function RestaurantCard(props) {
                       Add to cart
                       <Icon name="right chevron" />
                     </Button>
-                  ) : <p>daily limit reached</p>}
+                  ) : <p>Daily limit reached</p>}
               </Item.Content>
             </Item>
           );

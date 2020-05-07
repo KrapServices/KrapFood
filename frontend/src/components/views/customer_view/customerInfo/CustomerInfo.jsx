@@ -113,14 +113,13 @@ class CustomerInfo extends Component {
             <Grid.Column>
               <Segment>
                 <Header as="h2">
-                  Welcome,
-                  {`${user.name}`}
+                  {`Welcome, ${user.name}`}
                 </Header>
                 <Header as="h3">
                   This is your personal info dashboard
                 </Header>
                 <Header as="h3">
-                  Current Krapfood reward points:
+                  Current KrapFood reward points:
                   {' '}
                   {`${user.points}`}
                 </Header>
@@ -173,7 +172,7 @@ class CustomerInfo extends Component {
                     <Button color="red" onClick={this.handleClose} inverted>
                       <Icon name="backward" />
                       {' '}
-                      go back
+                      Go back
                     </Button>
                   </Modal.Actions>
                 </Modal>
@@ -192,9 +191,9 @@ class CustomerInfo extends Component {
                              {
                   promotions.map((promo) => (
                     <Segment key={promo.promoId}>
-                      <Header as="h3">{`Discount: ${promo.discount}`}</Header>
-                      <Header as="h3">{`start Time: ${new Date(promo.startTime).toDateString()}`}</Header>
-                      <Header as="h3">{`end Time: ${new Date(promo.endTime).toDateString()}`}</Header>
+                      <Header as="h3">{`Discount: ${promo.discount}%`}</Header>
+                      <Header as="h3">{`Start time: ${new Date(promo.startTime).toDateString()}`}</Header>
+                      <Header as="h3">{`End time: ${new Date(promo.endTime).toDateString()}`}</Header>
                     </Segment>
                   ))
                   }
