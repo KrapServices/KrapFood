@@ -224,8 +224,9 @@ BEGIN
     FROM shifts s, orders o
     WHERE o.order_id = NEW.order_id
     AND DATE(o.created_at) = s.work_date
-    AND (NEW.departure_time::time >= s.starting_time 
-    AND NEW.departure_time::time < s.ending_time);
+    AND (o.created_at::time >= s.starting_time 
+    AND o.created_at::time < s.ending_time)
+    AND o.order_id = NEW.order_id;
 
     WITH available_riders AS (
         SELECT distinct ft.rider_id
