@@ -177,29 +177,31 @@ const getRiderStats = async (request, response) => {
       `WITH rider_commission AS (
         SELECT d.rider_id, sum(o.delivery_fee) AS commission
         FROM delivers d JOIN orders o on d.order_id = o.order_id and o.status = 'completed'
-        WHERE o.created_at >= $2 AND o.created_at <= $3
+        WHERE DATE(o.created_at) >= $2 AND DATE(o.created_at) <= $3
         GROUP BY d.rider_id
     ),
       rider_hours AS (
-        SELECT rider_id,
+        SELECT r.rider_id,
         CASE 
-          WHEN rider_id IN (SELECT rider_id FROM part_time_riders PT) THEN 
+          WHEN r.rider_id IN (SELECT rider_id FROM part_time_riders PT) THEN 
             (SELECT SUM(EXTRACT(HOUR from ending_time - starting_time))
             FROM PT_rider_works p JOIN (wws_contains c JOIN shifts s on c.shift_id = s.shift_id) ON c.wws_id = p.wws_id
-            WHERE s.work_date >= $2 AND s.work_date <= $3)
-          WHEN rider_id in (SELECT rider_id FROM full_time_riders FT) THEN
+            WHERE s.work_date >= $2 AND s.work_date <= $3
+            AND r.rider_id = p.rider_id)
+          WHEN r.rider_id in (SELECT rider_id FROM full_time_riders FT) THEN
             (SELECT SUM(EXTRACT(HOUR from ending_time - starting_time))
             FROM FT_rider_works f JOIN (mws_contains c JOIN shifts s on c.shift_id = s.shift_id) ON c.mws_id = f.mws_id
-            WHERE s.work_date >= $2 AND s.work_date <= $3)
+            WHERE s.work_date >= $2 AND s.work_date <= $3
+            AND r.rider_id = f.rider_id)
           ELSE 0
         END AS hours 
-        FROM riders
+        FROM riders r
       ),
       order_count AS (
         SELECT d.rider_id, COUNT(d.order_id) AS total_orders
         FROM delivers d, orders o
         WHERE o.order_id = d.order_id
-        AND o.created_at >= $2 AND o.created_at <= $3
+        AND DATE(o.created_at) >= $2 AND DATE(o.created_at) <= $3
         GROUP BY d.rider_id
       ),   
       rider_pay AS ( 
@@ -215,20 +217,23 @@ const getRiderStats = async (request, response) => {
             WHERE rh.rider_id = r.rider_id AND rh.rider_id = pt.rider_id
             )
         END AS pay
-        FROM riders r, rider_commission rc
+        FROM riders r
       )
-      SELECT COALESCE(rp.pay, 0) AS rider_pay, COALESCE(rh.hours, 0) AS rider_hours, COALESCE(oc.total_orders, 0) AS total_orders
-      FROM rider_pay rp, rider_hours rh, order_count oc
-      WHERE rp.rider_id =rh.rider_id AND rp.rider_id = oc.rider_id AND rp.rider_id = $1;
+      SELECT COALESCE(rp.pay, 0) AS rider_pay, COALESCE(rh.hours, 0) AS rider_hours, COALESCE(oc.total_orders, 0) AS total_orders, COALESCE(rc.commission, 0) AS total_commission 
+      FROM rider_pay rp, rider_hours rh, order_count oc, rider_commission rc
+      WHERE rp.rider_id = rh.rider_id AND rp.rider_id = oc.rider_id AND rc.rider_id = rp.rider_id AND rp.rider_id = $1;
       `, [riderId, new Date(parseInt(startDate, 10)), new Date(parseInt(endDate, 10))],
     )).rows.map((rider) => ({
       orderCount: rider.total_orders,
       totalPay: rider.rider_pay,
       totalHours: rider.rider_hours,
+      totalCommission: rider.total_commission,
     }));
 
     if (stats.length === 0) {
-      stats.push({ orderCount: '0', totalPay: '0', totalHours: '0' });
+      stats.push({
+        orderCount: '0', totalPay: '0', totalHours: '0', totalCommission: '0',
+      });
     }
     response.status(200).json(stats);
   } catch (error) {
