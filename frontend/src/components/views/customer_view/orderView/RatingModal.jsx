@@ -34,7 +34,7 @@ class RatingModal extends Component {
         });
 
         if (ratedFood.status === 200) {
-          alert('rated Food!');
+          alert('Rated food!');
         }
       } catch (error) {
         console.log(error);
@@ -54,7 +54,7 @@ class RatingModal extends Component {
         if (ratedOrder.status === 200) {
           const { loadOrders } = this.context;
           loadOrders();
-          alert('rated delivery service!');
+          alert('Rated delivery service!');
         }
       } catch (error) {
         console.log(error);
