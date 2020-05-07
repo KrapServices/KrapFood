@@ -41,6 +41,7 @@ class NameUpdate extends Component {
         success: true,
         error: false,
       });
+      window.location.reload();
     } catch (error) {
       this.setState({
         loading: false,
