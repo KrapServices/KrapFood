@@ -8,7 +8,7 @@ const { query, transact } = require('../../database');
 // create single user for customer
 const customerCreate = async (request, response) => {
   try {
-    const { email, password } = request.body;
+    const { email, password, name } = request.body;
     await transact(async (query) => {
       const user = (await query(
         'INSERT INTO users (email , password) VALUES ($1,$2) RETURNING user_id',
@@ -16,7 +16,7 @@ const customerCreate = async (request, response) => {
       )).rows[0];
       (await query(
         'INSERT INTO customers (customer_id, name) VALUES ($1, $2) RETURNING customer_id',
-        [user.user_id, 'john doe'],
+        [user.user_id, name],
       ));
       return user;
     });
@@ -236,6 +236,95 @@ const updateCustomerPassword = async (req, res) => {
   }
 };
 
+const updateCustomerEmail = async (req, res) => {
+  const { customerId, email } = req.body;
+
+  if (customerId === undefined || email === undefined) {
+    res.status(400).send('Invalid details');
+    return;
+  }
+
+  try {
+    await query(
+      `
+        UPDATE users
+        SET
+          email = $2,
+          modified_at = DEFAULT
+        WHERE user_id = $1
+      `,
+      [customerId, email],
+    );
+
+    res.status(200).send('Email updated.');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Email update failed.');
+  }
+};
+
+const updateCustomerName = async (req, res) => {
+  const { customerId, name } = req.body;
+
+  if (customerId === undefined || name === undefined) {
+    res.status(400).send('Invalid details');
+    return;
+  }
+
+  try {
+    await query(
+      `
+        UPDATE customers
+        SET
+          name = $2
+        WHERE customer_id = $1
+      `,
+      [customerId, name],
+    );
+    await query(
+      `
+        UPDATE users
+        SET
+          modified_at = DEFAULT
+        WHERE user_id = $1
+      `,
+      [customerId],
+    );
+
+    res.status(200).send('Name updated.');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Name update failed.');
+  }
+};
+
+const getUser = async (request, response) => {
+  const { id } = request.params;
+ console.log(id);
+  try {
+    await transact(async (query) => {
+      let user = (await query(
+        'Select customer_id, order_count, points, name from customers where customer_id = $1',
+        [id],
+      )).rows[0];
+      // append info to user object
+      user = {
+        customerId: user.customer_id,
+        order_count: user.order_count,
+        points: user.points,
+        name: user.name,
+      };
+      user.type = 'customer';
+      console.log(user);
+      return response.status(200).json({ user });
+    });
+  } catch (error) {
+    console.log(error);
+    return response.status(500).send('error occured');
+  }
+};
+
+
 module.exports = {
   customerLogin,
   customerCreate,
@@ -248,4 +337,7 @@ module.exports = {
   rateFood,
   deleteCustomerById,
   updateCustomerPassword,
+  updateCustomerName,
+  updateCustomerEmail,
+  getUser,
 };

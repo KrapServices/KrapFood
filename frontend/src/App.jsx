@@ -34,6 +34,10 @@ class App extends React.Component {
       this.setState({ user: {}, isLoggedIn: false });
       window.localStorage.clear();
     };
+    this.update = (newUser) => {
+      this.setState({ user: newUser, isLoggedIn: true });
+      window.localStorage.setItem('user', JSON.stringify(newUser));
+    }
 
     this.login = async (email, password, type) => {
       const result = await Axios.post(
@@ -100,6 +104,7 @@ class App extends React.Component {
       signup: this.signup,
       login: this.login,
       handleDelete: this.handleDelete,
+      update: this.update,
     };
 
     const { loading } = this.state;

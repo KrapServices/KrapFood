@@ -9,8 +9,12 @@ import {
   Responsive,
   Segment,
   Visibility,
+  Image,
 } from 'semantic-ui-react';
 import userContext from '../../userContext';
+
+const src1 = require('./wheat.png');
+const src2 = require('./fish.png');
 
 class TopBar extends Component {
   constructor(props) {
@@ -21,13 +25,37 @@ class TopBar extends Component {
     this.welcomeUser = (userType) => {
       switch (userType) {
         case 'customer':
-          return <Header size="huge" as="h1" inverted>Welcome, Customer</Header>;
+          return (
+            <Header size="huge" as="h1" inverted>
+              {' '}
+              <Image src={src1} />
+              Welcome, Customer
+            </Header>
+          );
         case 'rider':
-          return <Header size="huge" as="h1" inverted>Welcome, Rider</Header>;
+          return (
+            <Header size="huge" as="h1" inverted>
+              {' '}
+              <Image src={src1} />
+              Welcome, Rider
+            </Header>
+          );
         case 'staff':
-          return <Header size="huge" as="h1" inverted>Welcome, Staff</Header>;
+          return (
+            <Header size="huge" as="h1" inverted>
+              {' '}
+              <Image src={src1} />
+              Welcome, Staff
+            </Header>
+          );
         case 'manager':
-          return <Header size="huge" as="h1" inverted>Welcome, Manager</Header>;
+          return (
+            <Header size="huge" as="h1" inverted>
+              {' '}
+              <Image src={src1} />
+              Welcome, Manager
+            </Header>
+          );
         default:
           return <Header inverted>Super User</Header>;
       }
@@ -49,7 +77,7 @@ class TopBar extends Component {
             >
               <Menu
                 fluid
-                widths={6}
+                widths={5}
                 inverted
                 size="small"
                 icon="labeled"
@@ -63,7 +91,7 @@ class TopBar extends Component {
                       <Menu.Item />
                       <Menu.Item>
                         <Header as="h1" inverted>
-                          <Icon name="road" />
+                          <Image src={src1} />
                           KRAPFOOD
                         </Header>
                       </Menu.Item>

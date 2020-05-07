@@ -6,7 +6,7 @@ import {
   Header,
   Button,
   Message,
-  Icon,
+  Image,
 } from 'semantic-ui-react';
 import { Link, withRouter } from 'react-router-dom';
 import ReactRouterPropTypes from 'react-router-prop-types';
@@ -14,6 +14,7 @@ import Axios from 'axios';
 import userContext from '../../../userContext';
 import config from '../../../config.json';
 
+const src1 = require('./bean.png');
 
 class Signup extends Component {
   constructor(props) {
@@ -141,7 +142,7 @@ class Signup extends Component {
         >
           <Grid.Column>
             <Header as="h1" to="/">
-              <Icon name="road" size="large" />
+              <Image src={src1}></Image>
               KrapFood
             </Header>
             <Header as="h2" color="teal" textAlign="center">

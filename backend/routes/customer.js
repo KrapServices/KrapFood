@@ -7,6 +7,8 @@ const router = express.Router();
 
 router.get('/cc/:id', customerService.customerCreditCardInfo);
 
+router.get('/getUser/:id', customerService.getUser);
+
 router.post('/cc/', customerService.customerCreateCreditCard);
 
 router.get('/promotions/', customerService.getCustomerPromotions);
@@ -21,6 +23,10 @@ router.get('/:id', customerService.getCustomerById);
 
 router.delete('/:id', customerService.deleteCustomerById);
 
-router.patch('/', customerService.updateCustomerPassword);
+router.patch('/password', customerService.updateCustomerPassword);
+
+router.patch('/name', customerService.updateCustomerName);
+
+router.patch('/email', customerService.updateCustomerEmail);
 
 module.exports = router;

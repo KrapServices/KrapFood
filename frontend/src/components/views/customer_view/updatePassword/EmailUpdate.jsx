@@ -6,12 +6,11 @@ import {
 import userContext from '../../../../userContext';
 import config from '../../../../config.json';
 
-class PasswordUpdate extends Component {
+class EmailUpdate extends Component {
   constructor() {
     super();
     this.state = {
-      newPassword: '',
-      confirmPassword: '',
+      newEmail: '',
       loading: false,
       success: false,
       error: false,
@@ -27,16 +26,15 @@ class PasswordUpdate extends Component {
 
   async handleSubmit() {
     const { user } = this.context;
-    const { newPassword } = this.state;
+    const { newEmail } = this.state;
     this.setState({
-      newPassword: '',
-      confirmPassword: '',
+      newEmail: '',
       loading: true,
     });
     try {
-      await axios.patch(`${config.localhost}customers/password`, {
+      await axios.patch(`${config.localhost}customers/email`, {
         customerId: user.customerId,
-        password: newPassword,
+        email: newEmail,
       });
       this.setState({
         loading: false,
@@ -54,7 +52,7 @@ class PasswordUpdate extends Component {
 
   render() {
     const {
-      newPassword, confirmPassword, loading, success, error,
+      newEmail, loading, success, error,
     } = this.state;
 
     return (
@@ -65,7 +63,7 @@ class PasswordUpdate extends Component {
             paddingRight: '35vw',
           }}
         >
-          <Header size="huge">Update password</Header>
+          <Header size="huge">Update name</Header>
           <Form
             loading={loading}
             success={success}
@@ -74,41 +72,28 @@ class PasswordUpdate extends Component {
           >
             <Form.Field>
               <Form.Input
-                name="newPassword"
-                value={newPassword}
-                label="Enter New Password"
-                type="password"
-                placeholder="Enter password"
+                name="newEmail"
+                value={newEmail}
+                label="Enter New Email"
+                type="text"
+                placeholder="Enter new Email"
                 required
                 onChange={(event, data) => this.handleChange(event, data)}
               />
             </Form.Field>
-            <Form.Field>
-              <Form.Input
-                name="confirmPassword"
-                value={confirmPassword}
-                label="Confirm New Password"
-                type="password"
-                placeholder="Enter your password again"
-                required
-                onChange={(event, data) => this.handleChange(event, data)}
-                error={newPassword !== confirmPassword}
-              />
-            </Form.Field>
-            <Form.Field />
             <Message
               success
               header="Update successful"
-              content="Your password has been updated."
+              content="Your email has been updated."
             />
             <Message
               error
               header="An error occurred"
-              content="Failed to update your password."
+              content="Failed to update your email."
             />
             <Button
               type="submit"
-              disabled={newPassword.length === 0 || newPassword !== confirmPassword}
+              disabled={newEmail.length === 0}
             >
               Submit
             </Button>
@@ -121,5 +106,5 @@ class PasswordUpdate extends Component {
   }
 }
 
-PasswordUpdate.contextType = userContext;
-export default PasswordUpdate;
+EmailUpdate.contextType = userContext;
+export default EmailUpdate;

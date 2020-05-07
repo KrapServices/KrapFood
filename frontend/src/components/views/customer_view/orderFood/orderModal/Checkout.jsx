@@ -224,9 +224,8 @@ class Checkout extends Component {
         const totalRestaurantDiscount = restaurantPromotions
           .map((x) => x.discount).reduce((prev, curr) => Number(prev) + Number(curr), 0);
         // apply to each item
-        priceList = priceList.map((price) => price * (totalRestaurantDiscount / 100));
+        priceList = priceList.map((price) => price - (price * (totalRestaurantDiscount / 100)));
       }
-
       let result = priceList.reduce((prev, curr) => prev + curr, 0);
       if (Array.from(customerPromotionsApplied).length !== 0) {
         const totalCustomerPromoDiscount = Array.from(customerPromotionsApplied)

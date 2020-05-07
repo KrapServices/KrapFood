@@ -7,7 +7,7 @@ import {
   Header,
   Button,
   Message,
-  Icon,
+  Image,
   Dropdown,
 } from 'semantic-ui-react';
 import { Link, withRouter } from 'react-router-dom';
@@ -27,7 +27,7 @@ const shiftOptions = [
     value: 'full time',
   },
 ];
-
+const src1 = require('./milk.png');
 class RiderSignup extends Component {
   onSelectChange(e) {
     console.log(e.target.value);
@@ -106,7 +106,7 @@ class RiderSignup extends Component {
         >
           <Grid.Column>
             <Header as="h1" to="/">
-              <Icon name="road" size="large" />
+            <Image src={src1}></Image>
               KrapFood
             </Header>
             <Header as="h2" color="teal" textAlign="center">

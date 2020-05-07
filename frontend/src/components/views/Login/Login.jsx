@@ -6,11 +6,12 @@ import {
   Header,
   Button,
   Message,
-  Icon,
+  Image,
 } from 'semantic-ui-react';
 import { Link, withRouter } from 'react-router-dom';
 import ReactRouterPropTypes from 'react-router-prop-types';
 import userContext from '../../../userContext';
+const src1 = require('./milk.png');
 
 class Login extends Component {
   constructor(props) {
@@ -100,11 +101,11 @@ class Login extends Component {
         >
           <Grid.Column style={{ maxWidth: 450 }}>
             <Header as="h1" to="/">
-              <Icon name="road" size="large" />
+              <Image src={src1}></Image>
               KrapFood
             </Header>
             <Header as="h2" color="teal" textAlign="center">
-              Log-in
+              Login
             </Header>
             <Form size="large">
               <Segment stacked>
@@ -127,8 +128,6 @@ class Login extends Component {
                   value={password}
                   onChange={this.handleChange}
                 />
-
-                <Header>Login</Header>
                 <Button.Group>
                   <Button
                     color="blue"
