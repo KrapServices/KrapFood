@@ -68,9 +68,11 @@ class StaffUpdateFood extends Component {
     };
 
     this.updateState = (food) => {
-      const { category, dailyLimit, availability, price, foodName } = food;
+      const {
+        category, dailyLimit, availability, price, foodName,
+      } = food;
       this.setState({
-        category, dailyLimit, availability, price, foodName
+        category, dailyLimit, availability, price, foodName,
       });
     };
   }
@@ -81,16 +83,19 @@ class StaffUpdateFood extends Component {
   }
 
   render() {
-    const { menu, foodName, dailyLimit, price, category } = this.state;
+    const {
+      menu, foodName, dailyLimit, price, category,
+    } = this.state;
     return (
       <Table>
         <Header as="h1">Menu Items</Header>
         <Item.Group divided style={{ textAlign: 'left' }}>
           {menu.map((food) => (
             <Item key={{
-                restaurantId: food.restaurantId,
-                foodName: food.foodName
-              }}>
+              restaurantId: food.restaurantId,
+              foodName: food.foodName,
+            }}
+            >
               <Item.Image src="https://react.semantic-ui.com/images/wireframe/image.png" />
               <Item.Content>
                 <Item.Header as="h1">{food.foodName}</Item.Header>
@@ -128,6 +133,7 @@ class StaffUpdateFood extends Component {
                                 name="food_name"
                                 value={foodName}
                                 onChange={this.handleChange}
+                                disabled="true"
                               />
                             </Form.Field>
                             <Form.Field>
