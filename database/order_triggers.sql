@@ -168,6 +168,11 @@ BEGIN
         SET availability = false
         WHERE restaurant_id = NEW.restaurant_id AND food_name = NEW.food_name;
     END IF;
+    IF (NEW.daily_limit > 0) THEN
+        UPDATE foods
+        SET availability = TRUE
+        WHERE restaurant_id = NEW.restaurant_id AND food_name = NEW.food_name;
+    END IF;
     RETURN NULL;
 END
 $$ LANGUAGE plpgsql;
