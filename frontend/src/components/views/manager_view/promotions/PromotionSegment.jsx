@@ -72,10 +72,14 @@ class PromotionSegment extends Component {
       if (value === 'Custom') {
         this.setState({
           campaign: value,
+          campaignId: '',
           customCampaign: true,
         });
       } else {
-        this.setState({ campaignId: value });
+        this.setState({
+          campaignId: value,
+          customCampaign: false,
+        });
       }
     };
 
@@ -270,7 +274,7 @@ class PromotionSegment extends Component {
               <Form.Field>
                 <Header>New Campaign Name</Header>
                 <input
-                  placeholder="Capaign Name"
+                  placeholder="Campaign Name"
                   name="campaignName"
                   value={campaignName}
                   onChange={this.handleChange}
