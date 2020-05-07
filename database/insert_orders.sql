@@ -1209,5 +1209,6 @@ SET status = 'completed'
 WHERE status = 'delivering'; 
 
 SELECT setval('orders_order_id_seq', (SELECT MAX(order_id) from "orders")); 
+SELECT setval('delivers_delivery_id_seq', (SELECT MAX(delivery_id) from "delivers")); 
 
 COMMIT;
