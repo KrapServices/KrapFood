@@ -123,10 +123,6 @@ class TopBar extends Component {
                         <Icon name="cancel" color="red" />
                         Log Out
                       </Menu.Item>
-                      <Menu.Item onClick={handleDelete}>
-                        <Icon name="user delete" color="red" />
-                        Close this account
-                      </Menu.Item>
                     </>
                   )}
               </Menu>
