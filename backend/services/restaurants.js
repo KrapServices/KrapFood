@@ -1,4 +1,4 @@
-const { query } = require('../database');
+const { query, transact } = require('../database');
 
 // =============================================================================
 // RESTAURANTS
@@ -144,8 +144,8 @@ const createPromotion = async (request, response) => {
       restaurantId, discount, promoName, dateRange,
     } = request.body;
     console.log(dateRange);
-    const result = await transact(async (query) => {
-      const promo = (await query(
+    const result = await transact(async (transactQuery) => {
+      const promo = (await transactQuery(
         `
         INSERT INTO promotions (discount, promo_name, start_time, end_time) 
         VALUES ($1, $2, $3, $4)
@@ -153,7 +153,7 @@ const createPromotion = async (request, response) => {
         `,
         [discount, promoName, new Date(dateRange[0]), new Date(dateRange[1])],
       )).rows[0];
-      const restaurant = (await query(
+      const restaurant = (await transactQuery(
         `
         INSERT INTO offers (promo_id, restaurant_id)
         VALUES ($1, $2)

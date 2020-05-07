@@ -3,11 +3,11 @@
 INSERT INTO foods
     (food_name, price, daily_limit, restaurant_id, category)
 VALUES
-    ('1 test 1', 10, 1000, 1, 'local');
+    ('1 test 1', 10, 100, 1, 'local');
 INSERT INTO foods
-    (food_name, price, restaurant_id, category)
+    (food_name, price, daily_limit, restaurant_id, category)
 VALUES
-    ('1 test 2', 10, 1, 'fast food');
+    ('1 test 2', 10, 10, 1, 'fast food');
 INSERT INTO foods
     (food_name, price, restaurant_id, category)
 VALUES
@@ -17,21 +17,21 @@ INSERT INTO foods
 VALUES
     ('1 test 4', 10, 1, 'chinese');
 INSERT INTO foods
-    (food_name,price, restaurant_id, category)
+    (food_name,price, daily_limit, restaurant_id, category)
 VALUES
-    ('1 test 5', 10, 1, 'western');
+    ('1 test 5', 10, 3, 1, 'western');
 
 
 -- restaurant 2
 
 INSERT INTO foods
-    (food_name,price, restaurant_id, category)
+    (food_name,price, daily_limit, restaurant_id, category)
 VALUES
-    ('2 test 1', 20, 2, 'drinks');
+    ('2 test 1', 20, 10, 2, 'drinks');
 INSERT INTO foods
-    (food_name,price, restaurant_id, category)
+    (food_name,price, daily_limit, restaurant_id, category)
 VALUES
-    ('2 test 2', 20, 2, 'indian');
+    ('2 test 2', 20, 10, 2, 'indian');
 INSERT INTO foods
     (food_name,price, restaurant_id, category)
 VALUES
@@ -48,9 +48,9 @@ VALUES
 -- restaurant 3
 
 INSERT INTO foods
-    (food_name, price, restaurant_id, category)
+    (food_name, price, daily_limit, restaurant_id, category)
 VALUES
-    ('3 test 1', 30, 3,'mains');
+    ('3 test 1', 30, 20, 3, 'mains');
 INSERT INTO foods
     (food_name, price, restaurant_id, category)
 VALUES
@@ -64,9 +64,9 @@ INSERT INTO foods
 VALUES
     ('3 test 4', 30, 3,'drinks');
 INSERT INTO foods
-    (food_name, price, restaurant_id, category)
+    (food_name, price, daily_limit, restaurant_id, category)
 VALUES
-    ('3 test 5', 30, 3, 'fast food');
+    ('3 test 5', 30, 10, 3, 'fast food');
 
 -- restaurant 4
 INSERT INTO foods

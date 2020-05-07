@@ -193,8 +193,8 @@ class CustomerInfo extends Component {
                   promotions.map((promo) => (
                     <Segment key={promo.promoId}>
                       <Header as="h3">{`Discount: ${promo.discount}`}</Header>
-                      <Header as="h3">{`start Time: ${promo.startTime}`}</Header>
-                      <Header as="h3">{`end Time: ${promo.endTime}`}</Header>
+                      <Header as="h3">{`start Time: ${new Date(promo.startTime).toDateString()}`}</Header>
+                      <Header as="h3">{`end Time: ${new Date(promo.endTime).toDateString()}`}</Header>
                     </Segment>
                   ))
                   }

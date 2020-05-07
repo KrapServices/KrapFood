@@ -5,21 +5,26 @@ const createPromotion = async (request, response) => {
     const {
       discount, promoName, dateRange, campaignId,
     } = request.body;
-    const promo = (await query(
-      `
-      INSERT INTO promotions (discount, promo_name, start_time, end_time) 
-      VALUES ($1, $2, $3, $4)
-      RETURNING promo_id, promo_name
-      `,
-      [discount, promoName, new Date(dateRange[0]), new Date(dateRange[1])],
-    )).rows[0];
-    const campaign = (await query(
-      `
-      INSERT INTO includes (campaign_id, promo_id)
-      VALUES ($1, $2)
-      `,
-      [campaignId, promo.promo_id],
-    )).rows[0];
+
+    const promo = await transact(async (transactQuery) => {
+      const p = (await transactQuery(
+        `
+        INSERT INTO promotions (discount, promo_name, start_time, end_time) 
+        VALUES ($1, $2, $3, $4)
+        RETURNING promo_id, promo_name
+        `,
+        [discount, promoName, new Date(dateRange[0]), new Date(dateRange[1])],
+      )).rows[0];
+      await transactQuery(
+        `
+        INSERT INTO includes (campaign_id, promo_id)
+        VALUES ($1, $2)
+        `,
+        [campaignId, p.promo_id],
+      );
+      return p;
+    });
+
     response.status(200).json({
       promo: {
         promoId: promo.promo_id,
@@ -37,8 +42,8 @@ const createCampaign = async (request, response) => {
     const {
       discount, promoName, dateRange, campaignName,
     } = request.body;
-    const result = await transact(async (query) => {
-      const campaign = (await query(
+    const result = await transact(async (transactQuery) => {
+      const campaign = (await transactQuery(
         `
         INSERT INTO promotional_campaigns (campaign_name)
         VALUES ($1)
@@ -46,7 +51,7 @@ const createCampaign = async (request, response) => {
         `,
         [campaignName],
       )).rows[0];
-      const promo = (await query(
+      const promo = (await transactQuery(
         `
         INSERT INTO promotions (discount, promo_name, start_time, end_time) 
         VALUES ($1, $2, $3, $4)
@@ -54,7 +59,7 @@ const createCampaign = async (request, response) => {
         `,
         [discount, promoName, new Date(dateRange[0]), new Date(dateRange[1])],
       )).rows[0];
-      (await query(
+      (await transactQuery(
         `
         INSERT INTO includes (campaign_id, promo_id)
         VALUES ($1, $2)

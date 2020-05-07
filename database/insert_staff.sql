@@ -24,9 +24,9 @@ INSERT INTO users (user_id,email,password,created_at) VALUES (48,'Donec@placerat
 INSERT INTO users (user_id,email,password,created_at) VALUES (49,'orci@lobortisrisusIn.com','FCA17KRQ5UU','2020-04-13 12:00:00');
 INSERT INTO users (user_id,email,password,created_at) VALUES (50,'nascetur@lectusrutrumurna.com','JRB72PRZ7EV','2020-04-13 12:00:00');
 
-INSERT INTO staff (staff_id,restaurant_id) VALUES (26,6);
+INSERT INTO staff (staff_id,restaurant_id) VALUES (26,1);
 INSERT INTO staff (staff_id,restaurant_id) VALUES (27,7);
-INSERT INTO staff (staff_id,restaurant_id) VALUES (28,1);
+INSERT INTO staff (staff_id,restaurant_id) VALUES (28,6);
 INSERT INTO staff (staff_id,restaurant_id) VALUES (29,10);
 INSERT INTO staff (staff_id,restaurant_id) VALUES (30,9);
 INSERT INTO staff (staff_id,restaurant_id) VALUES (31,8);
